@@ -1,6 +1,6 @@
 <h3>Topics covered:</h3> (click on topic to display certificate)
 
-1. [Installing%20Required Software](certificates/01%20Installing%20Required%20Software.pdf)
+1. [Installing Required Software](certificates/01%20Installing%20Required%20Software.pdf)
 2. [PHP Basics](certificates/02%20PHP%20Basics.pdf)
 3. [Programming with PHP](certificates/03%20Programming%20with%20PHP.pdf)
 4. [Creating Dynamic Web Sites](certificates/04%20Creating%20Dynamic%20Web%20Sites.pdf)
