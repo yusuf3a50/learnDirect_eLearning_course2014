@@ -1,0 +1,8 @@
+* { font-family: Verdana, Arial, Helvetica, sans-serif }
+a:active, a:hover, a:link, a:visited    { color: #c00; text-decoration: none }
+body     { font-size: 11pt; line-height: 12pt; background-image: url("../../binary/page/homepage.png"); background-repeat: no-repeat; background-attachment: scroll; margin: 0; padding: 139px 23pt 0 115px }
+h1  { font-size: 16pt; font-weight: bold; line-height: 20pt }
+h3  { font-size: 11pt; font-weight: bold; line-height: 10pt }
+/* when a <div class="p"> directly follows a <h1>, eg. Acrobat 7 homepage */
+div.p {font-size: 9pt; padding:3pt 0;}
+h1 + div.p {margin-top:-12pt;}

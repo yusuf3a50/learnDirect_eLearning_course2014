@@ -1,0 +1,3802 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+</head><body><mledit by="insert_name" date="insert_date" note="insert_note"></mledit>
+
+<script language="JavaScript" src="phps11ac_files/mlclientpage.js"></script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript" src="phps11ac_files/site.js"></script><script language="Javascript" src="phps11ac_files/resource_strings.js"></script><script language="Javascript" src="phps11ac_files/special_cases.js"></script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript">var ThisPage=new MlPage();</script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<title>PHP and MySQL: Web Application Security</title>
+
+<script language="JavaScript">var crsAcronym="phps11";</script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript" src="phps11ac_files/access.js"></script><script language="Javascript" src="phps11ac_files/params.js"></script><script language="Javascript" src="phps11ac_files/courseware.js"></script><script language="Javascript" src="phps11ac_files/phps11.js"></script><script language="Javascript" src="phps11ac_files/printbut.js"></script><table width="97%"><tbody><tr><td align="right"><div id="printButton" class="printbut" onclick="javascript:printPage();" onmouseover="this.style.backgroundPosition='-48px -24px';" onmouseout="this.style.backgroundPosition='-48px 0px';" title="Print"></div></td></tr></tbody></table>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+
+<!--<DPECTPL>access</DPECTPL>-->
+
+<h1>PHP and MySQL: Web Application Security</h1>
+<script language="JavaScript">
+var numAccQuestions =37;
+writeAccIntro();
+</script>You can print this text-only version of this course for future reference.<br>&nbsp;<br> If you wish to use the accessible version of our courses, which includes questions in text-only format, click <b>Text Only</b> on the log on page, and then enter your user ID and password from the Accessibility Log On page.
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<hr>
+<a name="skipped">
+</a><a name="pha001"></a>
+<br><a name="topic1"></a><h2>Lesson 1. Course Introduction</h2><dpecw1>
+
+The most important concept to understand about security is that your Web
+ site will not be either secure or not secure. What it will be is more 
+secure or less secure. Security isn't a switch that you turn on and off;
+ it's a scale that you can move up and down. Also, keep in mind that 
+improved security normally comes at a cost of convenience (to both you, 
+the programmer, and to the end user) and performance. Increased security
+ normally means more code, more checks, and more required of the server.
+ So when developing your Web applications, think about these 
+considerations and make the right decisions — for the particular 
+situation — from the outset. <br>
+The topics discussed here include extended form validation with PHP, 
+accounting for HTML in submitted form data, using type casting, form 
+validation with JavaScript, using regular expressions, and database 
+security.<br>
+This course uses examples that traverse lessons.
+
+</dpecw1><br>
+<a name="phb001"></a><br><a name="topic2"></a><h2>Lesson 2. Preventing Multiple Submissions</h2><dpecw1>
+
+One of the easiest methods of ensuring that data received by a PHP page 
+is secure is to prevent multiple submissions. This means validating that
+ a form is only submitted once, and that the right form has been 
+submitted for that page. <br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a session variable to indicate if a form has been submitted
+	</li>
+	<li>
+Use an identifier code to keep each submission of a form separate
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phb002"></a>
+<br><dpecw1>
+
+<b>* More Secure Form Validation</b><br>
+The golden rule of validating any<i> </i>data received by a PHP page is 
+to assume that it's invalid until it passes the right tests indicating 
+otherwise. At a bare minimum, you should<br>
+<ul>
+	<li>
+Use the superglobals (e.g., <tt><tt>$_POST['name']</tt></tt>) rather than the registered globals (<tt><tt>$name</tt></tt>).
+	</li>
+	<li>
+Check text, password, and text area form inputs for values using <tt><tt>empty()</tt></tt>.
+	</li>
+	<li>
+Check other form inputs for values using <tt><tt>isset()</tt></tt>.
+	</li>
+	<li>
+Check any form input by verifying that it has a positive length.
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phb003"></a>
+<br><dpecw1>
+
+A better way to validate data is to see if it conforms to a certain type
+ (like an integer). An even more exacting method of form validation 
+requires the use of regular expressions. You can also use JavaScript to 
+perform basic validation on the client (within the Web browser) before 
+the data is sent to the server.
+
+</dpecw1><br><dpecw2>
+
+But first, there's an entirely different kind of validation you can use:
+ validating that a form has only been submitted once and that the right 
+form has been submitted to a page. These first two topics are the focus 
+of this lesson.
+
+</dpecw2><br>
+<a name="phb004"></a>
+<br><dpecw1>
+
+A common question I see is how to prevent someone from submitting the 
+same form multiple times. Whether a user repeatedly submits a form on 
+accident or on purpose, such occurrences can be a minor nuisance or a 
+major problem for your Web site. There are many different ways to 
+prevent multiple submissions, and I'll discuss two options here. 
+
+</dpecw1><br>
+<a name="phb005"></a>
+<br><dpecw1>
+
+First, if you are already using sessions, an easy solution is to create a
+ session variable indicating whether a specific form has been submitted 
+or not.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (isset($_SESSION['form_name'])) {&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; // Do not handle the form.</tt><br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; // Handle the form.</tt><br>
+<tt>&nbsp;&nbsp; // Indicate that the form</tt><br>
+<tt>&nbsp;&nbsp; // has been handled.</tt><br>
+<tt>&nbsp;&nbsp; $_SESSION['form_name'] = TRUE;</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br><dpecw2>
+
+This technique is both effective and simple but does require the use of sessions. 
+
+</dpecw2><br>
+<a name="phb006"></a>
+<br><dpecw1>
+
+In the following steps, I'll demonstrate another option, which is viable
+ for applications that use a database to store the submitted 
+information.<br>
+The premise is this: a generated identifier will be stored in the HTML 
+form (as a hidden input). This value will be inserted into the database 
+along with the other submitted information. To prevent repeated 
+submissions, this identifier can be stored in the database only once. A 
+user wishing to submit the form again will have to reload the HTML form 
+so that another unique identifier is created.
+
+</dpecw1><br>
+<a name="phb007"></a>
+<br><dpecjs> Let's examine the steps for preventing multiple form submissions.<br>
+<b>* Step 1</b>
+<br>
+Begin a new PHP document in your text editor or IDE.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>xhtml1-transitional.dtd"</tt>&gt;<br>
+&lt;<tt>html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>xhtml" xml:lang="en" lang="en"</tt> &gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1" /</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Enter Your Comments</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>!- comments.php --</tt>&gt;
+</dpeccode><br>
+<a name="phb008"></a>
+<br><dpecjs><b>*  Step 2</b>
+<br>
+Begin defining the form.
+I'm keeping this form simple, taking only the user's name and comments.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>form action="handle_comments.php"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; method="post"</tt>&gt;<br>
+&lt;<tt>fieldset&gt;</tt>&lt;<tt>legend</tt>&gt;<tt>Enter your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments in the form below:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/legend</tt>&gt;<br>
+&lt;<tt>p</tt>&gt;&lt;<tt>b</tt>&gt;<tt>Name:</tt>&lt;<tt>/b</tt>&gt;&lt;<tt>input type="text"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; name="name" size="20"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="40" /</tt>&gt;&lt;<tt>/p&gt;</tt><br>
+&lt;<tt>p</tt>&gt;&lt;<tt>b</tt>&gt;<tt>Comments: </tt>&lt;<tt>/b</tt>&gt;&lt;<tt>textarea</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; name="comments" rows="3"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cols="40" </tt>&gt;<tt> </tt>&lt;<tt>/textarea</tt>&gt;&lt;<tt>/p&gt;</tt><br>
+&lt;<tt>/fieldset</tt>&gt;<br>
+&lt;<tt>div align="center" </tt>&gt;<tt> </tt>&lt;<tt>input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; type="submit" name="submit"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; value="Submit" /</tt>&gt;&lt;<tt>/div&gt;</tt>
+</dpeccode><br>
+<a name="phb009"></a>
+<br><dpecjs><b>*  Step 3</b>
+<br>
+Store a unique identifier in a hidden form input.
+To achieve the specific goal — avoiding duplicate form submissions — 
+this is the most important line. Each time this page is loaded, a unique
+ 32-character stamp is generated. Doing so requires use of the <tt><tt></tt>md5()<tt></tt>, <tt></tt>uniqid()<tt></tt> </tt>and <tt><tt></tt>rand()<tt></tt></tt> ,  functions.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>input type="hidden" name="stamp"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; value="</tt>&lt;<tt>?php echo md5(uniqid</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; (rand(), true)); ?</tt>&gt;<tt>" /</tt>&gt;<tt> </tt>
+</dpeccode><br>
+<a name="phb010"></a>
+<br><dpecw1>
+	
+Of these, <tt><tt></tt>uniqid()<tt></tt></tt> is the most important; it creates a unique identifier. It's fed the <tt><tt></tt>rand()<tt></tt></tt> function to help generate a more random value. Finally, the returned result is <b>hash</b>ed<i> </i>using <tt><tt></tt>md5()<tt></tt></tt>, which creates a string exactly 32 characters long (a hash is a mathematically calculated representation of a piece of data).<br>
+You do not need to fully comprehend these three functions, just note that the result will be a unique 32-character string.
+	
+</dpecw1><br>
+<a name="phb011"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Complete the form and the page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>/form</tt>&gt;<tt>&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>/body</tt>&gt;<tt><br>
+&nbsp;&nbsp;&nbsp;</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt></dpeccode><br>
+<a name="phb012"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Save the file as <tt><tt></tt>comments.php<tt></tt></tt>, upload to your Web server, and run in your Web browser.
+Note that this has to be a PHP page, not an HTML one, as it has a line of PHP code.&nbsp; 
+<br>
+
+<a name="phb013"></a>
+<br><dpecjs><b>*  Step 6</b>
+<br>
+View the HTML source to see the value of the hidden stamp.&nbsp; 
+<br>
+
+<a name="phb014"></a>
+<br><dpecjs><b>*  Step 7</b>
+<br>
+Reload the page, and then review the HTML source to confirm that the stamp value has changed.&nbsp; 
+<br>
+
+<a name="phb015"></a>
+<br><dpecjs> The completed script is here on this page.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>xhtml1-transitional.dtd"</tt>&gt;<br>
+&lt;<tt>html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>xhtml" xml:lang="en" lang="en"</tt> &gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Enter Your Comments</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>!- comments.php --</tt>&gt;<br>
+&lt;<tt>form action="handle_comments.php" method="post"</tt>&gt;<br>
+&lt;<tt>fieldset&gt;</tt>&lt;<tt>legend</tt>&gt;<tt>Enter your comments in the form below:</tt>&lt;<tt>/legend</tt>&gt;<br>
+&lt;<tt>p</tt>&gt;&lt;<tt>b</tt>&gt;<tt>Name:</tt>&lt;<tt>/b</tt>&gt;&lt;<tt>input type="text" name="name" size="20" maxlength="40"/</tt>&gt;&lt;<tt>/p&gt;</tt><br>
+&lt;<tt>p</tt>&gt;&lt;<tt>b</tt>&gt;<tt>Comments: </tt>&lt;<tt>/b</tt>&gt;&lt;<tt>textarea name="comments" rows="3" cols="40"</tt>&gt;<tt> </tt>&lt;<tt>/textarea</tt>&gt;&lt;<tt>/p&gt;</tt><br>
+&lt;<tt>/fieldset</tt>&gt;<br>
+&lt;<tt>div align="center"</tt>&gt;<tt> </tt>&lt;<tt>input type="submit" name="submit" value="Submit"/</tt>&gt;&lt;<tt>/div&gt;</tt><br>
+&lt;<tt>input type="hidden" name="stamp"value="</tt>&lt;<tt>?php echo</tt><br>
+<tt> md5(uniqid (rand(), true)); ?</tt>&gt;<tt>"/</tt>&gt;<br>
+&lt;<tt>/form</tt>&gt;<br>
+&lt;<tt>/body</tt>&gt;<tt><br>
+</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt>
+</dpeccode><br>
+<a name="phb016"></a>
+<br><dpecw1>
+
+Now that the form itself has been written, a quick PHP page will be made that will handle the form data.
+
+</dpecw1><br>
+<a name="phb017"></a>
+<br><dpecjs><b>*  Writing <tt>handle_comments.php</tt></b>
+<br>
+Let's examine the steps for writing the PHP page to handle the comments.<br>
+<b>* Step 1</b>
+<br>Begin a new PHP document in your text editor or IDE.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"</tt>&gt;<br>
+&lt;<tt>html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml" xml:lang="en" lang="en"</tt>&gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1"/</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Handle Comments</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>?php # handle_comments.php</tt>
+</dpeccode><br>
+<a name="phb018"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Include the database connection script.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; require_once ('./mysql_connect.php'); </tt><br>
+</dpeccode><br><dpecw2>
+
+I haven't included the <tt>mysql_connect.php</tt> script in this lesson, but it will be responsible for connecting to the MySQL server, and it should select the <tt><tt>test</tt></tt><i> </i>database and define the <tt><tt></tt>escape_data()<tt></tt></tt> function.
+
+</dpecw2><br>
+<a name="phb019"></a>
+<br><dpecjs><b>*  Step 3</b>
+<br>
+Validate the name and comments fields.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if (!empty($_POST['name'])) {</tt><br>
+<tt>$n = escape_data($_POST['name']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red" </tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your name.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$n = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['comments'])) {</tt><br>
+<tt>$c = escape_data($_POST</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ['comments']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your comments.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$c = FALSE;</tt><br>
+<tt>} </tt>
+</dpeccode><br>
+<a name="phb020"></a>
+<br><dpecw1>
+	
+To validate the person's name, I check that the <tt><tt></tt><i><tt>name</tt></i><tt></tt></tt><i> </i>value isn't empty. If it isn't, then the value is escaped using the <tt><tt></tt>escape_data()<tt></tt></tt> function and assigned to the <tt><tt></tt>$n<tt></tt></tt> variable. Otherwise, an error message is printed and <tt><tt></tt>$n<tt></tt></tt> is set to <tt><tt></tt>FALSE<tt></tt></tt>. This process is repeated for the comments.
+	
+</dpecw1><br>
+<a name="phb021"></a>
+<br><dpecjs><b>*  Step 4</b>
+<br>
+Validate the stamp.
+Just because the stamp value is a hidden input generated by PHP doesn't 
+mean it shouldn't be validated. The stamp value should always be 32 
+characters long — as the <tt><tt></tt>md5()<tt></tt></tt> function 
+always returns a string of that length — so I can be precise in my 
+validation routine.
+Although the submitted stamp shouldn't contain any problematic 
+characters, you can never be too careful, so the value is also run 
+through <tt><tt></tt>escape_data()<tt></tt></tt>.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if (strlen($_POST['stamp']) == 32 ) {</tt><br>
+<tt>$s = escape_data($_POST['stamp']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red" </tt>&gt;<tt>This</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; page has been accessed in error.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p&gt;';</tt><br>
+<tt>$s = FALSE;</tt><br>
+<tt>}</tt>
+</dpeccode><br>
+<a name="phb022"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+If all tests passed, attempt to insert the new record into the database.
+If all three tests were passed, then <tt><tt></tt>$n<tt></tt></tt>, <tt><tt></tt>$c<tt></tt></tt>, and <tt><tt></tt>$s<tt></tt></tt> will all be true, making this conditional true. Inside the conditional, a simple <tt><tt></tt>INSERT<tt></tt></tt>
+ query is defined and executed. The error suppression operator is used 
+here, and any errors that occur will be handled later in the 
+script.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if ($n &amp;&amp; $c &amp;&amp; $s) {</tt><br>
+<tt>$query = "INSERT INTO comments</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; (name, comment, stamp) VALUES</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('$n', '$c', '$s')";</tt><br>
+<tt>$result = @mysql_query ($query);</tt>
+</dpeccode><br>
+<a name="phb023"></a>
+<br><dpecjs><b>*  Step 6</b>
+<br>
+Report on the results of the query.
+If one row was successfully inserted, then <tt><tt></tt>mysql_affected_rows()<tt></tt></tt> will return <tt><tt></tt><i>1</i><tt></tt></tt>, and a thank-you message is printed. If one row was not inserted (or affected), an error occurred.
+For debugging purposes only, I'll print out the MySQL error and the query itself. &nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if (mysql_affected_rows() == 1) {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;<tt>Thank you for your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments.</tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments could not be added.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>echo mysql_error() . '</tt>&lt;<tt>br /</tt>&gt;&lt;<tt>br /</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query;</tt><br>
+<tt>}</tt>
+</dpeccode><br>
+<a name="phb024"></a>
+<br><dpecjs> While developing the script, you may have errors because of
+ improper query syntax, referring to a table or column that doesn't 
+exist, and so forth. Once you've worked out these quirks, the only error
+ that should occur is if the same form is submitted multiple times.
+In such cases, MySQL will cough up a duplicate key error which is 
+actually what you want. Naturally in a live site you would not reveal 
+this information to the end user. 
+For a live site, you could also change the public error message to 
+something like <i>Your comments have already been processed</i>.&nbsp; 
+<br>
+
+<a name="phb025"></a>
+<br><dpecw1>
+
+<b>* Step 7</b><br>
+Complete the main conditional.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Please&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go back and try again.</tt>&lt;<tt>/font</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>&nbsp;&nbsp; } </tt><br>
+</dpeccode><br><dpecw2>
+
+If <tt><tt></tt>$n<tt></tt></tt> or <tt><tt></tt>$c<tt></tt></tt> or <tt><tt></tt>$s<tt></tt></tt> is not true, then this message is printed.
+
+</dpecw2><br>
+<a name="phb026"></a>
+<br><dpecw1>
+
+<b>* Step 8</b><br>
+Close the database connection and complete the page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; mysql_close();&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; ?</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>/body</tt>&gt;<tt><br>
+&nbsp;&nbsp;&nbsp;</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt></dpeccode><br>
+<a name="phb027"></a>
+<br><dpecjs><b>*  Step 9</b>
+<br>
+Save the file as <tt><tt></tt>handle_comments.php<tt></tt></tt>, upload it to your Web server (in the same directory as <tt><tt></tt>comments.php<tt></tt></tt>),
+ and test by submitting the HTML form.
+If the form is submitted for the first time, meaning that a unique stamp
+ value was used, the data will be inserted into the database and the 
+user will be thanked.&nbsp; 
+<br>
+
+<a name="phb028"></a>
+<br><dpecjs> The complete <tt>handle_comments</tt> script can be found on this page.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"</tt>&gt;<br>
+&lt;<tt>html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml" xml:lang="en" lang="en"</tt>&gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1"/</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Handle Comments</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>?php # handle_comments.php</tt><br>
+<tt>require_once ('./mysql_connect.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; php'); </tt><br>
+<tt>if (!empty($_POST['name'])) {</tt><br>
+<tt>$n = escape_data($_POST['name']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your name.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$n = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['comments'])) {</tt><br>
+<tt>$c = escape_data($_POST</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ['comments']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your comments.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$c = FALSE;</tt><br>
+<tt>} </tt><br>
+<tt>if (strlen($_POST['stamp']) == 32 ) {</tt><br>
+<tt>$s = escape_data($_POST['stamp']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>This</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; page has been accessed in error.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p&gt;';</tt><br>
+<tt>$s = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if ($n &amp;&amp; $c &amp;&amp; $s) {</tt><br>
+<tt>$query = "INSERT INTO comments</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; (name, comment, stamp) VALUES</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('$n', '$c', '$s')"</tt><br>
+<tt>$result = @mysql_query ($query);</tt><br>
+<tt>if (mysql_affected_rows() == 1) {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;<tt>Thank you for your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments.</tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments could not be added.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>echo mysql_error() . '</tt>&lt;<tt>br /</tt>&gt;&lt;<tt>br /</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query;</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Please</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; go back and try again.</tt>&lt;<tt>/font</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} </tt><br>
+<tt>mysql_close();</tt><br>
+<tt>?</tt>&gt;<br>
+&lt;<tt>/body</tt>&gt;<tt><br>
+</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt>
+</dpeccode><br>
+<a name="phb029"></a>
+<br><b>Form Names  <br>  </b>  There's no way using PHP that you can 
+determine a form's name. The only option is to store that value in a 
+hidden form input.  <br><br>  <b>JavaScript  <br>  </b>  If you're 
+comfortable with JavaScript, you can add JavaScript code to your form to
+ ensure that it is submitted only once. Search the Web for examples.  <br><br>  <b><tt><tt>POST</tt></tt> or <tt><tt>GET</tt></tt>  <br>  </b>  As a reminder, it's more secure to use the <tt><tt></tt>POST<tt></tt></tt> method with forms than the <tt><tt></tt>GET<tt></tt></tt>. If your form includes passwords or other sensitive information, you really must use <tt><tt></tt>POST<tt></tt></tt>.  <br><br>  <b>Hidden Inputs  <br>  </b>
+  Remember that hidden inputs in forms are still viewable in the HTML 
+source and therefore aren't a secure way of temporarily storing 
+information. You should never store a password or other secret 
+information there.  <br><br>  
+<a name="phb030"></a>
+
+<script language="JavaScript">insertAccQuestion('1','phb030.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb031"></a>
+
+<script language="JavaScript">insertAccQuestion('2','phb031.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb032"></a>
+
+<script language="JavaScript">insertAccQuestion('3','phb032.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb033"></a>
+<br><dpecw1>
+	
+In this lesson, you learned how to create a session variable which 
+indicates whether a specific form has been submitted. This is an easy 
+and effective technique, but does require the use of sessions, so may 
+not always be applicable.<br>
+You also learned how to create an identifier in your code that places an
+ identifying number in the HTML form. This value will be placed in the 
+database along with other information. Since the identifier can only be 
+stored once, multiple submissions are prevented. To resubmit, the user 
+will need to refresh the HTML, which will create a new identifier.
+	
+</dpecw1><br>
+<a name="phc001"></a><br><a name="topic3"></a><h2>Lesson 3. Validating the Right Form</h2><dpecw1>
+
+While focusing on the data inside a form is an important part of making 
+your PHP sites secure, it is also important to make sure that your site 
+receives data from the right forms.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Use the <tt><tt>test</tt></tt> database for form validation
+	</li>
+	<li>
+Use operators in PHP to check that only appropriate form inputs are received
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phc002"></a>
+<br><dpecw1>
+
+PHP programmers often spend a lot of time fixating on form data — and 
+rightly so — but do not think about the forms themselves. Say you have, 
+as part of your site, a <tt>contact.html</tt> page with a form that is handled by <tt>contact.php</tt>. The assumption is that <tt>contact.php</tt> will be receiving data from <tt>contact.html</tt>, but that's not necessarily the case. 
+
+</dpecw1><br>
+<a name="phc003"></a>
+<br><dpecw1>
+
+The fact of the matter is that malicious users could create their own HTML page with a form whose action attribute is <tt>http://www.yoursite.com/contact.php</tt>.
+ Using this form, they could send any data of any type to your page. If 
+your handling page isn't looking for specific form fields and data, this
+ could be a major security concern. 
+
+</dpecw1><br>
+<a name="phc004"></a>
+<br><dpecw1>
+
+In the following example I'll show a nifty little trick for validating 
+that the received form data matches what is expected. The premise is 
+that you make a list of what form inputs the page should receive and 
+then check for a match. I'll rewrite the <tt>handle_comments.php</tt> using this technique. <ml_ins_href><ml_data_href>php.
+
+</ml_data_href></ml_ins_href></dpecw1><br>
+<br><a name="phc004b"></a>
+<br><dpecw1>
+	
+<dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"</tt>&gt;<br>
+&lt;<tt>html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml"xml:lang="en"lang="en"</tt>&gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1"/</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Handle Comments</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>?php handle_comments.php</tt><br>
+<tt>require_once ('./mysql_connect.</tt><br>
+<tt>php'); </tt><br>
+<tt>if (!empty($_POST['name'])) {</tt><br>
+<tt>$n = escape_data($_POST['name']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your name.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$n = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['comments'])) {</tt><br>
+<tt>$c = escape_data($_POST</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ['comments']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your comments.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$c = FALSE;</tt><br>
+<tt>} </tt><br>
+<tt>if (strlen($_POST['stamp']) == 32 ) {</tt><br>
+<tt>$s = escape_data($_POST['stamp']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>This</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; page has been accessed in error.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p&gt;';</tt><br>
+<tt>$s = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if ($n &amp;&amp; $c &amp;&amp; $s) {</tt><br>
+<tt>$query = "INSERT INTO comments</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; (name, comment, stamp) VALUES</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('$n', '$c', '$s')"</tt><br>
+<tt>$result = @mysql_query ($query);</tt><br>
+<tt>if (mysql_affected_rows() == 1) {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;<tt>Thank you for your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments.</tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments could not be added.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>echo mysql_error() . '</tt>&lt;<tt>br /</tt>&gt;&lt;<tt>br /</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query;</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Please</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; go back and try again.</tt>&lt;<tt>/font</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} </tt><br>
+<tt>mysql_close();</tt><br>
+<tt>?</tt>&gt;<br>
+&lt;<tt>/body</tt>&gt;<tt><br>
+</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt>
+</dpeccode>
+	
+</dpecw1><br><br>
+<a name="phc005"></a>
+<br><dpecw1>
+
+<b>* Using the Test Database</b><br>
+MySQL creates two databases as part of its normal installation process. The first, called <tt>mysql</tt>, is the most important. MySQL access permissions are controlled by this database. 
+
+</dpecw1><br>
+<a name="phc006"></a>
+<br><dpecw1>
+
+The second database is called <tt><tt>test</tt></tt>. This database, 
+appropriately enough, is intended for testing purposes. It is somewhat 
+unique in that anyone has permission to access this database (you do not
+ need to establish a username/password combination for it). Since this 
+first example is unrelated to any other project, I'll create a new table
+ within <tt><tt>test</tt></tt>. Here is the <tt>CREATE</tt> statement required to make the table:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE comments (</tt><br>
+<tt>&nbsp;&nbsp; comment_id INT UNSIGNED NOT NULL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTO_INCREMENT,</tt><br>
+<tt>&nbsp;&nbsp; name VARCHAR(60) NOT NULL, comment TEXT NOT NULL, stamp CHAR(32) NOT NULL,&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; date_entered TIMESTAMP, PRIMARY KEY (comment_id), UNIQUE (stamp)</tt><br>
+<tt>&nbsp;&nbsp; )</tt></dpeccode><br><dpecw2>
+
+To make things easier, I'm storing the person's name in one field, but I
+ generally recommend that you use separate first and last name columns. 
+Also, a <tt>UNIQUE</tt> index is placed on the stamp column, which will help prevent duplicate submissions.
+
+</dpecw2><br>
+<a name="phc007"></a>
+<br><dpecjs> Let's examine the steps for validating a form.<br>
+<b>* Step 1</b>
+<br>
+Open <tt>handle_comments.php</tt> in your text editor or IDE.&nbsp; 
+<br>
+
+<a name="phc008"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+After the initial PHP tag, define what form inputs are expected.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $allowed = array('name', 'comments',&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'submit', 'stamp'); </tt></dpeccode><br><dpecw2>
+
+Using the <tt>array()</tt> function, I create an array of allowed inputs. Remember that you must include the <tt><tt>submit</tt></tt><i> </i>input
+ here, as that will also be passed to this page. Also, the inputs should
+ be listed in the same order as they appear in the form and have the 
+exact same name (so <tt><tt>submit</tt></tt>, not <tt><tt>Submit</tt></tt>).
+
+</dpecw2><br>
+<a name="phc009"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Assign the received variable names to a new array.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $received = array_keys($_POST);&nbsp;&nbsp; </tt></dpeccode><br><dpecw2>
+
+This function — <tt>array_keys()</tt> — returns the names of the keys for a given array. In this case, it should return <tt><tt>name</tt></tt>, <tt><tt>comments</tt></tt>, <tt><tt>submit</tt></tt>, and <tt><tt>stamp</tt></tt><i> </i>(in that order), assuming that the proper form has been submitted to this page.
+
+</dpecw2><br>
+<a name="phc010"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Create a conditional that checks if the two arrays are the same.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if ($allowed == $received) {&nbsp;&nbsp;&nbsp;&nbsp;</tt></dpeccode><br><dpecw2>
+
+You can easily compare one array to another using the equality operator.
+ This conditional merely checks that the received keys (the form input 
+names) exactly match the expected keys. If that's the case, the form can
+ be handled as it was before.
+
+</dpecw2><br>
+<a name="phc011"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+After the <tt>mysql_close()</tt> line, complete the <tt>$allowed == $received</tt> conditional.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; } else {&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;This page has been accessed in error.&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>&nbsp;&nbsp; }</tt></dpeccode><br><dpecw2>
+
+If the submitted inputs do not exactly match the expected inputs, the form is not handled and this error message is printed.
+
+</dpecw2><br>
+<a name="phc012"></a>
+<br><dpecjs><b>*  Step 6</b>
+<br>
+Save the page as <tt>handle_comments.php</tt>, upload to your Web server, and test in your Web browser.
+If the right form with the right inputs was submitted to this page, it will be handled as normal.&nbsp; 
+<br>
+
+<a name="phc013"></a>
+<br><dpecjs><b>*  Step 7</b>
+<br>
+If you'd like to play the role of a hacker, make a fake form that submits different values to the <tt>handle_comments.php</tt> page to see the results.
+If the wrong form inputs are submitted to this page (presumably through malicious intent), the data will be ignored.&nbsp; 
+<br>
+
+<a name="phc014"></a>
+<br><dpecjs>The completed <tt>handle_comments.php</tt> script can be found here. Sections that have been modified are highlighted.
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"</tt>&gt;<br>
+&lt;<tt>html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml"xml:lang="en"lang="en"</tt>&gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1"/</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Handle Comments</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>?php # handle_comments.php</tt><br>
+<tt>$allowed = array('name', 'comments',</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; 'submit', 'stamp'); </tt><br>
+<tt>$received = array_keys($_POST); </tt><br>
+<tt>if ($allowed == $received) { </tt><br>
+<tt>require_once ('./mysql_connect.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; php'); </tt><br>
+<tt>if (!empty($_POST['name'])) {</tt><br>
+<tt>$n = escape_data($_POST['name']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red "</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your name.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$n = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['comments'])) {</tt><br>
+<tt>$c = escape_data($_POST</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ['comments']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your comments.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$c = FALSE;</tt><br>
+<tt>} </tt><br>
+<tt>if (strlen($_POST['stamp']) == 32 ) {</tt><br>
+<tt>$s = escape_data($_POST['stamp']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red "</tt>&gt;<tt>This</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; page has been accessed in error.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p&gt;';</tt><br>
+<tt>$s = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if ($n &amp;&amp; $c &amp;&amp; $s) {</tt><br>
+<tt>$query = "INSERT INTO comments</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; (name, comment, stamp) VALUES</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('$n', '$c', '$s')"</tt><br>
+<tt>$result = @mysql_query ($query);</tt><br>
+<tt>if (mysql_affected_rows() == 1) {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;<tt>Thank you for your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments.</tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red "</tt>&gt;<tt>Your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments could not be added.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>echo mysql_error() . '</tt>&lt;<tt>br /</tt>&gt;&lt;<tt>br /</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query;</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Please</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; go back and try again.</tt>&lt;<tt>/font</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} </tt><br>
+<tt>mysql_close();</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>This page has been accessed in error.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>}</tt><br>
+<tt>?&gt;</tt><br>
+&lt;<tt>/body</tt>&gt;<tt><br>
+</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt>
+</dpeccode><br>
+<a name="phc015"></a>
+
+<script language="JavaScript">insertAccQuestion('4','phc015.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc016"></a>
+
+<script language="JavaScript">insertAccQuestion('5','phc016.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc017"></a>
+
+<script language="JavaScript">insertAccQuestion('6','phc017.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc018"></a>
+<br><a name="topic4"></a><h2>Topic 3.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try adding code validation to your own PHP script. <br>
+<ml_ins_href><ml_data_href>
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpecw2>
+	
+	<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Open your script in either a text editor, or IDE.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+After the initial PHP tag, define what form inputs are expected using the <tt><tt>array()</tt></tt> function and the <tt><tt>$allowed</tt></tt> command.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Assign the received variable names to a new array using the <tt><tt>array_keys()</tt></tt> function.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+Create a conditional that checks if the two arrays match.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+5
+</td>
+<td>
+Complete the <tt><tt>$allows == $received()</tt></tt> conditional to tell your script to only handle forms with the expected inputs.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+6
+</td>
+<td>
+Test the page using both a valid form, and an invalid form.
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+	
+</dpecw2><br>
+<a name="phc019"></a>
+<br><dpecw1>
+	
+In this lesson, you learned that the <tt><tt>test</tt></tt> database is a second database created by MySQL, for testing purposes, during installation. The <tt><tt>test</tt></tt> database is set up so that anyone has permission to access that database. <br>
+You also learned how to make your forms test incoming data to make sure 
+that it follows the form inputs you have predefined. This will allow you
+ to keep data from being submitted that comes from a foreign form.
+	
+</dpecw1><br>
+<a name="phd001"></a><br><a name="topic5"></a><h2>Lesson 4. Handling HTML</h2><dpecw1>
+
+HTML is plain text which is given meaning by Web browsers. If entered 
+into a PHP form, it could cause serious errors with your PHP script. 
+Fortunately, PHP has ways of ensuring that text entered does not get 
+read as HTML.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Define the different functions PHP uses to handle HTML
+	</li>
+	<li>
+Use the HTML handling functions in your PHP scripts
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phd002"></a>
+<br><dpecjs> HTML is simply plain text, like &lt;b&gt;, which is given 
+special meaning by Web browsers (as by making text bold). Because of 
+this fact, your Web site's users could easily add HTML or JavaScript to 
+their form data.
+What's wrong with that, you might ask? &nbsp; 
+<br>
+
+<a name="phd003"></a>
+<br><dpecw1>
+
+Many dynamically driven Web applications take the information submitted 
+by a user, store it in a database, and then redisplay that information 
+on another page. Think of a forum, as just one example.<br>
+At the very least, if users enter HTML code in their data, such code 
+could throw off the layout and aesthetic of your site. Worse yet, bad 
+code could create pop-up windows or redirections to other sites. In the 
+worst case scenario, HTML and JavaScript could be used for what's called
+ cross-site scripting (XSS), a common type of hack.
+
+</dpecw1><br>
+<a name="phd004"></a>
+<br><dpecw1>
+
+PHP includes a handful of functions for handling HTML and other code found within strings. These include:<br>
+<ul>
+	<li>
+<tt>htmlspecialchars()</tt>, which turns &amp;, ', ", &lt;, and &gt; into an HTML entity format (&amp;<tt>amp</tt>, &amp;<tt>quot</tt>, etc.)
+	</li>
+	<li>
+<tt>htmlentities()</tt>, which turns all applicable characters into their HTML entity format
+	</li>
+	<li>
+<tt>strip_tags()</tt>, which removes all HTML and PHP tags
+	</li>
+</ul>
+<br>
+These three functions are roughly listed in order from least disruptive 
+to most. Which you'll want to use depends upon the application at hand. 
+To demonstrate this concept, I'll apply the <tt>htmlspecialchars(</tt>) function to the submitted name and comments data.
+
+</dpecw1><br>
+<a name="phd005"></a>
+<br><dpecw1>
+
+Let's examine the steps for handling HTML in form submissions.<br>
+<b>* Step 1</b><br>
+Open <tt>handle_comments.php</tt> in your text editor or IDE.<br>
+<ml_ins_href><ml_data_href>php script.
+
+</ml_data_href></ml_ins_href></dpecw1><br>
+<br><a name="phd005a"></a>
+<br><dpecw1>
+	
+<dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"</tt>&gt;<br>
+&lt;<tt>html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml"xml:lang="en"lang="en"</tt>&gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1"/</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Handle Comments</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>?php # handle_comments.php</tt><br>
+<tt>$allowed = array('name', 'comments',</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; 'submit', 'stamp'); </tt><br>
+<tt>$received = array_keys($_POST); </tt><br>
+<tt>if ($allowed == $received) { </tt><br>
+<tt>require_once ('./mysql_connect.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; php'); </tt><br>
+<tt>if (!empty($_POST['name'])) {</tt><br>
+<tt>$n = escape_data($_POST['name']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your name.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$n = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['comments'])) {</tt><br>
+<tt>$c = escape_data($_POST</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ['comments']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>You</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; forgot to enter your comments.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>$c = FALSE;</tt><br>
+<tt>} </tt><br>
+<tt>if (strlen($_POST['stamp']) == 32 ) {</tt><br>
+<tt>$s = escape_data($_POST['stamp']);</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>This</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; page has been accessed in error.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p&gt;';</tt><br>
+<tt>$s = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if ($n &amp;&amp; $c &amp;&amp; $s) {</tt><br>
+<tt>$query = "INSERT INTO comments</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; (name, comment, stamp) VALUES</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('$n', '$c', '$s')"</tt><br>
+<tt>$result = @mysql_query ($query);</tt><br>
+<tt>if (mysql_affected_rows() == 1) {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;<tt>Thank you for your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments.</tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; comments could not be added.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>echo mysql_error() . '</tt>&lt;<tt>br /</tt>&gt;&lt;<tt>br /</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query;</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>Please</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; go back and try again.</tt>&lt;<tt>/font</tt>&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>} </tt><br>
+<tt>mysql_close();</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '</tt>&lt;<tt>p</tt>&gt;&lt;<tt>font color="red"</tt>&gt;<tt>This</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; page has been accessed in error.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;<tt>';</tt><br>
+<tt>}</tt><br>
+<tt>?</tt>&gt;<br>
+&lt;<tt>/body</tt>&gt;<tt><br>
+</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt>
+</dpeccode>
+	
+</dpecw1><br><br>
+<a name="phd006"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Change the assignment of the <tt>$n</tt> variable.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $n = escape_data(htmlspecialchars&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($_POST['name'])); </tt></dpeccode><br>
+<a name="phd007"></a>
+<br><dpecw1>
+
+Presumably the name data would be something that might be displayed in a Web application (as on a <tt>view_comments.php</tt> page). To keep submitted information from messing up such a page, it's run through the <tt>htmlspecialchars()</tt> function prior to <tt>escape_data()</tt>.<br>
+So, any double quotation mark in <tt>$_POST['name'] </tt> will be turned into <tt>&amp;<tt>quot</tt></tt><i>;</i>, and <tt>&lt;</tt> and <tt>&gt;</tt> will become <tt>&amp;<tt>lt</tt><i>;</i></tt><i> </i>and <tt>&amp;<tt>gt</tt><i>;</i></tt><i> </i>respectively. Then the <tt>escape_data()</tt> function will do its thing, escaping problematic characters like the single quotation mark.
+
+</dpecw1><br>
+<a name="phd008"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Repeat the change for the comments field.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $c = escape_data(htmlspecialchars&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($_POST['comments']));</tt></dpeccode><br><dpecw2>
+
+As you've already seen, the comments field could be used maliciously, so its value should be run through <tt>htmlspecialchars()</tt> as well.
+
+</dpecw2><br>
+<a name="phd009"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Alter the thank-you message so that it also prints out the safe version of the user's comments.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; echo '&lt;p&gt;Thank you for your comments: &lt;br/&gt;' .</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stripslashes($c).'&lt;/p&gt;';</tt></dpeccode><br><dpecw2>
+
+To demonstrate how the <tt>htmlspecialchars()</tt> function affects a string, I'll print out the value of <tt>$c</tt>. But since <tt>$c</tt> is also derived by calling the <tt>escape_data()</tt> function, I want to strip any slashes from it first.
+
+</dpecw2><br>
+<a name="phd010"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Save the page as <tt>handle_comments.php</tt>, upload to your Web server, and test in your Web browser.
+Thanks to the <tt>htmlspecialchars()</tt> function, malicious code entered into the comments field is rendered inert.&nbsp; 
+<br>
+
+<a name="phd011"></a>
+<br><b><tt>htmlspecialchars()</tt> and <tt>htmlentities()</tt> parameters  <br>  </b>  Both <tt>htmlspecialchars()</tt> and <tt>htmlentities()</tt> take an optional parameter indicating how quotation marks should be handled.  <br><br>  <b><tt>strip_tags()</tt> parameter  <br>  </b>  The <tt>strip_tags()</tt> function takes an optional parameter indicating what tags should not be stripped.  <br><br>  <b><tt>strip_tags()</tt> function  <br>  </b>  The <tt>strip_tags()</tt> function will remove even invalid HTML tags, which may cause problems. For example, <tt>strip_tags()</tt> will yank out all of the code it thinks is an HTML tag, even if it's improperly formed, like <tt>&lt;<tt>b I forgot to close the tag</tt>. </tt>  <br><br>  <b><tt>nl2br()</tt> function  <br>  </b>  Unrelated to security but quite useful is the <tt>nl2br()</tt> function. It turns every return (such as those entered into a text area) into an HTML &lt;br /&gt; tag.  <br><br>  
+<a name="phd012"></a>
+
+<script language="JavaScript">insertAccQuestion('7','phd012.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phd013"></a>
+
+<script language="JavaScript">insertAccQuestion('8','phd013.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phd014"></a>
+
+<script language="JavaScript">insertAccQuestion('9','phd014.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phd015"></a>
+<br><dpecw1>
+	
+In this lesson, you learned about the functions that PHP can use to handle HTML. These include the <tt>htmlspecialchars()</tt> function which turns special symbols into HTML entities; the <tt>htmlentities()</tt> function which turns all applicable characters into HTML entity format; and the <tt>strip_tags()</tt> function which removes all HTML and PHP tags.<br>
+You also learned how to insert each of these functions into your PHP 
+scripts to prevent HTML codes from causing errors in your scripts.
+	
+</dpecw1><br>
+<a name="phe001"></a><br><a name="topic6"></a><h2>Lesson 5. Validating Data</h2><dpecw1>
+
+Type casting allows you to validate that the data in a form is of the 
+appropriate type. When using type casting, you can change a variable's 
+type after it has been assigned a value. This can provide greater 
+security in your PHP scripts. <br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Explain how type casting operates and what benefit it provides
+	</li>
+	<li>
+Use type casting in your PHP scripts
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phe002"></a>
+<br><dpecw1>
+
+For the most part, form validation is rather minimal, often just 
+checking if a variable has any value at all. In many situations, this 
+really is the best you can do.<br>
+For example, there's no clear pattern for what a valid street address is
+ or what a user might enter into a comments field. Still, much of the 
+data you'll work with can be validated in stricter ways. Here I'll cover
+ the more approachable ways you can validate some data by type. 
+
+</dpecw1><br>
+<a name="phe003"></a>
+<br><dpecw1>
+
+PHP supports many types of data: strings, numbers (integers and floats),
+ arrays, and so on. For each of these, there's a specific function that 
+checks if a variable is of that type. You may already be familiar with 
+the <tt>is_numeric()</tt> function, and <tt>is_array()</tt> is a great for confirming a variable's type before attempting to use it in a <tt>foreach</tt> loop. <br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Function</b>
+
+</th><th class="heading" scope="col">
+<b>Checks For</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_array()</tt></tt>
+</td>
+<td>
+Arrays
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_bool()</tt></tt>
+</td>
+<td>
+Booleans (<tt>TRUE</tt>, <tt>FALSE</tt>)
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_float()</tt></tt>
+</td>
+<td>
+Floating-point numbers
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_int()</tt></tt>
+</td>
+<td>
+Integers
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_null()</tt></tt>
+</td>
+<td>
+<tt>NULLs</tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_numeric()</tt></tt>
+</td>
+<td>
+Numeric values, even as a string (e.g., "20")
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_resource()</tt></tt>
+</td>
+<td>
+Resources, like a database connection
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>is_scalar()</tt></tt>
+</td>
+<td>
+Scalar (single-valued) variables
+</td>
+	</tr>
+	<tr valign="top0">
+<td>
+<tt><tt>is_string()</tt></tt>
+</td>
+<td>
+Strings
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phe004"></a>
+<br><dpecw1>
+
+In PHP, you can even change a variable's type, after it's been assigned a value. Doing so is called <b>type casting</b><i> </i>and is accomplished by preceding a variable's name by the type in parentheses:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $var </tt>=<tt> 20.2;</tt><br>
+<tt>&nbsp;&nbsp; echo (int) $var; // 20&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phe005"></a>
+<br><dpecw1>
+
+Depending upon the original and destination types, PHP will convert the variable's value accordingly:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $var </tt>=<tt> 20;</tt><br>
+<tt>&nbsp;&nbsp; echo (float) $var; // 20.0&nbsp;&nbsp; </tt><br>
+</dpeccode><br><dpecw2>
+
+With numeric values, the conversion is straightforward, but with other variable types, more complex rules apply:
+
+</dpecw2><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $var </tt>=<tt> 20;</tt><br>
+<tt>&nbsp;&nbsp; echo (float) $var; // 20.0&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phe006"></a>
+<br><dpecw1>
+
+In most circumstances you don't need to cast a variable from one type to
+ another, as PHP will often automatically do so as needed. But forcibly 
+casting a variable's type can be a good security measure in your Web 
+applications.<br>
+To show how you might use this notion, I'll create a calculator script for determining the total purchase price of an item.
+
+</dpecw1><br>
+<a name="phe007"></a>
+<br><dpecjs><b>*  Using Type Casting</b>
+<br>
+Let's examine the steps for using type casting.<br>
+<b>* Step 1</b><br>
+Begin a new PHP document in your text editor or IDE.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC </tt>"<tt>-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN</tt>"<br>
+"<tt>http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd</tt>"&gt;<br>
+&lt;<tt>html xmlns</tt>="<tt>http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml</tt>"<tt> xml:lang</tt>="<tt>en</tt>"<tt> lang</tt>="<tt>en</tt>"&gt;<br>
+&lt;<tt>head</tt>&gt;<br>
+&lt;<tt>meta http-equiv</tt>="<tt>content-type</tt>"<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content</tt>="<tt>text/html; charset</tt>=<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1</tt>"<tt> /</tt>&gt;<br>
+&lt;<tt>title</tt>&gt;<tt>Widget Cost Calculator</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; </tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>?php # calculator.php</tt>
+</dpeccode><br>
+<a name="phe008"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Check if the form has been submitted. 
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (isset($_POST['submitted'])) {&nbsp;&nbsp;&nbsp;&nbsp;</tt><br>
+</dpeccode><br><dpecw2>
+
+This script will both display the HTML form and handle its submission. By checking for the presence of a specific <tt>$_POST</tt> element, I'll know if the form has been submitted.
+
+</dpecw2><br>
+<a name="phe009"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Cast all the variables to a specific type.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $quantity </tt>=<tt> (int) $_POST[</tt>'<tt>quantity</tt>'<tt>];&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; $price </tt>=<tt> (float) $_POST[</tt>'<tt>price</tt>'<tt>];&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; $tax </tt>=<tt> (float) $_POST[</tt>'<tt>tax</tt>'<tt>];&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phe010"></a>
+<br><dpecjs> The form itself has three text boxes, into which 
+practically anything could be typed (there's no number type of input for
+ HTML forms).
+But I know that the quantity must be an integer and that both price and 
+tax should be floats (contain decimal points). 
+To force the issue, I'll cast each one to a specific type.&nbsp; 
+<br>
+
+<a name="phe011"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Check if the variables have proper values, and then calculate and print the results. 
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if ( ($quantity </tt>&gt;<tt> 0) &amp;&amp; ($price </tt>&gt;<tt> 0)</tt><br>
+<tt>&nbsp;&nbsp; &amp;&amp; ($tax </tt>&gt;<tt> 0)) {</tt><br>
+<tt>&nbsp;&nbsp; $total </tt>=<tt> ($quantity * $price) *</tt><br>
+<tt>&nbsp;&nbsp; (($tax/100) + 1);</tt><br>
+<tt>&nbsp;&nbsp; echo </tt>'&lt;<tt>p</tt>&gt;<tt>The total cost of purchasing</tt><br>
+<tt>&nbsp;&nbsp; </tt>'<tt> . $quantity . </tt>'<tt> widget(s) at $</tt>'<tt> .</tt><br>
+<tt>&nbsp;&nbsp; number_format ($price, 2) . </tt>'<tt> each is $</tt>'<tt> .&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; number_format ($total, 2) .</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>'<tt>.</tt>&lt;<tt>/p</tt>&gt;'<tt>; </tt></dpeccode><br><dpecw2>
+
+Besides knowing what type each variable should be, I also know that they
+ must all be positive numbers. This conditional checks for that prior to
+ performing the calculations. 
+
+</dpecw2><br>
+<a name="phe012"></a>
+<br><dpecw1>
+	
+Essentially the quantity is multiplied by the price.<br>
+This is then multiplied by the tax divided by 100 (so 8% becomes .08) plus 1 (1.08). The <tt>number_format()</tt> function is used to print both the price and total values in the proper format.
+	
+</dpecw1><br>
+<a name="phe013"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+Complete the conditionals.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; echo </tt>'&lt;<tt>p</tt>&gt;&lt;<tt>font color</tt>="<tt>red</tt>"&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please enter a valid quantity, price, and tax rate.</tt>&lt;<tt>/font</tt>&gt;<tt>&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>/p</tt>&gt;'<tt>;</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br>
+<a name="phe014"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Create the HTML form.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; ?</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>h2</tt>&gt;<tt>Widget Cost Calculator</tt>&lt;<tt>/h2</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>form action</tt>="<tt>calculator.php</tt>"<tt> method</tt>="<tt>post</tt>"&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;<tt>Quantity: </tt>&lt;<tt>input type</tt>="<tt>text</tt>"<tt> name</tt>="<tt>quantity</tt>"<tt> size</tt>="<tt>5</tt>"<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength</tt>="<tt>10</tt>"<tt> value</tt>="&lt;<tt>?php if (isset($quantity)) echo&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$quantity; ?</tt>&gt;"<tt> /</tt>&gt;&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;<tt>Price: </tt>&lt;<tt>input type</tt>="<tt>text</tt>"<tt> name</tt>="<tt>price</tt>"<tt> size</tt>="<tt>5</tt>"<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength</tt>="<tt>10</tt>"<tt> value</tt>="&lt;<tt>?php if&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(isset($price)) echo $price;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?</tt>&gt;"<tt> /</tt>&gt;&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;<tt>Tax (%): </tt>&lt;<tt>input type</tt>="<tt>text</tt>"<tt> name</tt>="<tt>tax</tt>"<tt> size</tt>="<tt>5</tt>"<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength</tt>="<tt>10</tt>"<tt> value</tt>="&lt;<tt>?php if (isset($tax)) echo $tax;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?</tt>&gt;"<tt> /</tt>&gt;<tt> (optional)</tt>&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;&lt;<tt>input type</tt>="<tt>submit</tt>"<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name</tt>="<tt>submit</tt>"<tt> value</tt>="<tt>Calculate!</tt>"<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</tt>&gt;&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>input type</tt>="<tt>hidden</tt>"<tt> name</tt>="<tt>submitted</tt>"<tt> value</tt>="<tt>TRUE</tt>"<tt> /</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>/form</tt>&gt;<tt> </tt><br>
+</dpeccode><br><dpecw2>
+
+The HTML form is fairly simple. I did give the inputs a sticky quality, 
+so the user can see what was previously entered. By referring to <tt>$quantity</tt> etc. instead of <tt>$_POST['quantity']</tt> etc., the form will reflect the value for each input as it was type-casted.
+
+</dpecw2><br>
+<a name="phe015"></a>
+<br><dpecw1>
+
+<b>* Step 7</b><br>
+Complete the HTML code.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>/body</tt>&gt;<tt><br>
+&nbsp;&nbsp;&nbsp;</tt>&lt;<tt>/html</tt>&gt;<tt>&nbsp;&nbsp; <br>
+</tt>
+</dpeccode><br>
+<a name="phe016"></a>
+<br><dpecjs><b>*  Step 8</b>
+<br>
+Save the file as <tt>calculator.php</tt>, upload it to your Web server, and test in your Web browser.&nbsp; 
+<br>
+
+<a name="phe017"></a>
+<br><dpecjs> If invalid values are entered, such as floats for the 
+quantity or strings for the price they'll be cast into more appropriate 
+formats.&nbsp; 
+<br>
+
+<a name="phe018"></a>
+<br><dpecjs> The completed <tt>calculator.php </tt>script can be found here.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+&lt;<tt>!DOCTYPE html PUBLIC </tt>"<tt>-//W3C//DTD XHTML 1.0 Transitional//EN</tt>"<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>"<tt>http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd</tt>"&gt;<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>&lt;<tt>html xmlns</tt>="<tt>http://www.w3.org/1999/xhtml</tt>"<tt> xml:lang</tt>="<tt>en</tt>"<tt> lang</tt>="<tt>en</tt>"&gt;<tt>&nbsp;&nbsp; </tt><br>
+&lt;<tt>head</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>meta http-equiv</tt>="<tt>content-type</tt>"<tt> content</tt>=<br>
+<tt>&nbsp;&nbsp; </tt>"<tt>text/html; charset</tt>=<tt>iso-8859-1</tt>"<tt> /</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>title</tt>&gt;<tt>Widget Cost Calculator</tt>&lt;<tt>/title</tt>&gt;<br>
+&lt;<tt>/head</tt>&gt;<br>
+&lt;<tt>body</tt>&gt;<br>
+&lt;<tt>?php # calculator.php</tt><br>
+<tt>&nbsp;&nbsp; // Check if the form has been submitted.</tt><br>
+<tt>&nbsp;&nbsp; if (isset($_POST[</tt>'<tt>submitted</tt>'<tt>])) {</tt><br>
+<tt>&nbsp;&nbsp; // Cast all the variables to a specific type.</tt><br>
+<tt>&nbsp;&nbsp; $quantity </tt>=<tt> (int) $_POST[</tt>'<tt>quantity</tt>'<tt>];</tt><br>
+<tt>&nbsp;&nbsp; $price </tt>=<tt> (float) $_POST[</tt>'<tt>price</tt>'<tt>];</tt><br>
+<tt>&nbsp;&nbsp; $tax </tt>=<tt> (float) $_POST[</tt>'<tt>tax</tt>'<tt>];</tt><br>
+<tt>&nbsp;&nbsp; // All variables should be positive!</tt><br>
+<tt>&nbsp;&nbsp; if ( ($quantity </tt>&gt;<tt> 0) &amp;&amp; ($price </tt>&gt;<tt> 0) &amp;&amp; ($tax </tt>&gt;<tt> 0)) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Calculate the total.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$total </tt>=<tt> ($quantity * $price) * (($tax/100) + 1);</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; // Print the result.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; echo </tt>'&lt;<tt>p</tt>&gt;<tt>The total cost of purchasing </tt>'<tt> . $quantity . </tt>'<br>
+<tt>widget(s) at $</tt>'<tt> . number_format ($price, 2) . </tt>'<tt> each is $</tt>'<tt> .</tt><br>
+<tt>number_format ($total, 2) . </tt>'<tt>.</tt>&lt;<tt>/p</tt>&gt;'<tt>;</tt><br>
+<tt>&nbsp;&nbsp; } else { // Invalid submitted values.</tt><br>
+<tt>&nbsp;&nbsp; echo </tt>'&lt;<tt>p</tt>&gt;&lt;<tt>font color</tt>="<tt>red</tt>"&gt;<tt>Please enter a valid quantity, price, and tax rate.</tt>&lt;<tt>/font</tt>&gt;&lt;<tt>/p</tt>&gt;'<tt>;&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>} // End of main isset() IF.&nbsp;&nbsp; </tt><br>
+<tt>// Leave the PHP section and create the HTML form.</tt><br>
+<tt>?</tt>&gt;<br>
+&lt;<tt>h2</tt>&gt;<tt>Widget Cost Calculator</tt>&lt;<tt>/h2</tt>&gt;<br>
+&lt;<tt>form action</tt>="<tt>calculator.php</tt>"<tt> method</tt>="<tt>post</tt>"&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;<tt>Quantity: </tt>&lt;<tt>input type</tt>="<tt>text</tt>"<tt> name</tt>="<tt>quantity</tt>"<tt> size</tt>="<tt>5</tt>"<br>
+<tt>maxlength</tt>="<tt>10</tt>"<tt> value</tt>="&lt;<tt>?php if (isset($quantity)) echo $quantity;</tt><br>
+<tt>?</tt>&gt;"<tt> /</tt>&gt;&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;<tt>Price: </tt>&lt;<tt>input type</tt>="<tt>text</tt>"<tt> name</tt>="<tt>price</tt>"<tt> size</tt>="<tt>5</tt>"<br>
+<tt>maxlength</tt>="<tt>10</tt>"<tt> value</tt>="&lt;<tt>?php if (isset($price)) echo $price; ?</tt>&gt;"<br>
+<tt>/</tt>&gt;&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;<tt>Tax (%): </tt>&lt;<tt>input type</tt>="<tt>text</tt>"<tt> name</tt>="<tt>tax</tt>"<tt> size</tt>="<tt>5</tt>"<br>
+<tt>maxlength</tt>="<tt>10</tt>"<tt> value</tt>="&lt;<tt>?php if (isset($tax)) echo $tax; ?</tt>&gt;"<tt> /</tt>&gt;<br>
+<tt>(optional)</tt>&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>p</tt>&gt;&lt;<tt>input type</tt>="<tt>submit</tt>"<tt> name</tt>="<tt>submit</tt>"<tt> value</tt>="<tt>Calculate!</tt>"<br>
+<tt>/</tt>&gt;&lt;<tt>/p</tt>&gt;<br>
+<tt>&nbsp;&nbsp; </tt>&lt;<tt>input type</tt>="<tt>hidden</tt>"<tt> name</tt>="<tt>submitted</tt>"<tt> value</tt>="<tt>TRUE</tt>"<tt> /</tt>&gt;<br>
+&lt;<tt>/form</tt>&gt;<br>
+&lt;<tt>/body</tt>&gt;<tt><br>
+</tt>&lt;<tt>/html</tt>&gt;<tt>
+</tt>
+</dpeccode><br>
+<a name="phe019"></a>
+<br><b>Type casting numbers  <br>  </b>  You should definitely use type 
+casting when working with numbers within SQL queries. Numbers aren't 
+quoted in queries, so if a string is somehow used in a number's place, 
+there will be a SQL syntax error.  If you type cast such variables to an
+ integer or float first, the query may not work (in terms of returning a
+ record) but will still be syntactically valid.  <br><br>  <b>Regular expressions  <br>  </b>
+  As I implied, regular expressions are a more advanced method of data 
+validation and are sometimes your best bet.  But using type-based 
+validation, when feasible, will certainly be faster (in terms of 
+processor speed) and less prone to programmer error.  <br><br>  <b><tt>gettype()</tt> function  <br>  </b>  The <tt>gettype()</tt> function returns the type of a submitted variable.  <br><br>  
+<a name="phe020"></a>
+
+<script language="JavaScript">insertAccQuestion('10','phe020.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phe021"></a>
+
+<script language="JavaScript">insertAccQuestion('11','phe021.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phe022"></a>
+
+<script language="JavaScript">insertAccQuestion('12','phe022.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phe024"></a>
+<br><dpecw1>
+	
+In this lesson, you learned that type casting is a procedure that PHP 
+uses to check a variable's type, and then to change it if the variable 
+entered is not the kind of variable you assigned. This can be useful 
+when dealing with numeric values, as well as providing an extra level of
+ security.<br>
+You also learned how to code type casting into your scripts, including 
+the different functions that you would use, and the proper way to format
+ the code.
+	
+</dpecw1><br>
+<a name="phf001"></a><br><a name="topic7"></a><h2>Lesson 6. JavaScript Form Validation</h2><dpecw1>
+
+JavaScript is a client-side technology that is able to automate some 
+processes in your PHP scripts. This can provide an additional level of 
+security and convenience for your users.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Explain what JavaScript can add to your PHP scripts
+	</li>
+	<li>
+Use JavaScript to validate a form
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phf002"></a>
+<br><dpecw1>
+
+JavaScript is not a true security measure in itself, but rather an added
+ level of security and a convenience to your users. Because JavaScript 
+is a client-side technology (whereas PHP is server-side), incorporating 
+it into your pages can save users the hassle of having to send the form 
+data back to the server before seeing if there are problems.<br>
+Instead, you can use JavaScript to immediately run through some tests 
+and then, if the data passes, send the form information along to PHP.
+
+</dpecw1><br>
+<a name="phf003"></a>
+<br><dpecjs> I say that JavaScript in itself is not a security measure 
+because it can be easily turned off in a user's browser, rendering it 
+completely useless. It is critical that you view JavaScript in this 
+light and continue to use PHP as your primary security measure.
+As a demonstration of this, I'll create a form for submitting URLs. Some
+ basic, easy-to-follow JavaScript will be incorporated to validate the 
+data in the Web browser.&nbsp; 
+<br>
+
+<a name="phf004"></a>
+<br><dpecjs> Let's examine the steps for validating forms using JavaScript.<br>
+<b>* Step 1</b>
+<br>
+Create a new HTML document in your text editor.
+For this example, I'll be making one HTML page that displays the form and a separate PHP script that handles it.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type" content="text/html; charset=&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt>
+</dpeccode><br>
+<a name="phf005"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Create a JavaScript section and begin a function.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;script type="text/javascript"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language="Javascript"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!-// Hide script contents from old&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;browsers.</tt><br>
+<tt>&nbsp;&nbsp; function check_data(my_form) {</tt><br>
+<tt>&nbsp;&nbsp; var problem = false; </tt><br>
+</dpeccode><br><dpecw2>
+
+JavaScript can go anywhere within an HTML document using the script tags, but preferably it'll be placed within the HTML head. 
+
+</dpecw2><br>
+<a name="phf006"></a>
+<br><dpecw1>
+
+The <tt>check_data()</tt> function will be called when the form is 
+submitted. Its only purpose will be to validate all the form inputs. 
+This function receives one argument: the form being validated. The <tt>problem</tt>
+ variable (variables in JavaScript do not use an initial dollar sign) 
+will be used as a flag indicating if there are any problems.
+
+</dpecw1><br>
+<a name="phf007"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Validate that the user entered a name.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (my_form.name.value == "") { </tt><br>
+<tt>&nbsp;&nbsp; alert ("Enter your name."); </tt><br>
+<tt>&nbsp;&nbsp; my_form.name.value = "*** Name";&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; my_form.name.focus();</tt><br>
+<tt>&nbsp;&nbsp; problem = true;</tt><br>
+<tt>&nbsp;&nbsp; } </tt><br>
+</dpeccode><br><dpecw2>
+
+A barebones validation checks that the field isn't empty. To do so, I refer to the field's value, using the <tt><i>formname</i>.<i>fieldname</i>. value</tt> syntax. If the user did not enter a value, then an alert pop-up window will be created by the <tt>alert()</tt> line.
+
+</dpecw2><br>
+<a name="phf008"></a>
+<br><dpecjs> Next, the <tt><i>name</i></tt><i> </i>field will be given the value of <i>*** Name </i>to highlight it, and the user's attention will be directed to the name field in the Web browser via JavaScript's <tt>focus()</tt> method. Finally, if there was a problem, the <tt>problem</tt> variable is set to <tt><i>true</i></tt>.&nbsp; 
+<br>
+
+<a name="phf009"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Repeat the process for the email address and the URL.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (my_form.email.value == "") {</tt><br>
+<tt>&nbsp;&nbsp; alert ("Enter your email</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;address.");</tt><br>
+<tt>&nbsp;&nbsp; my_form.email.value = "*** Email&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address"; </tt><br>
+<tt>&nbsp;&nbsp; my_form.email.focus(); </tt><br>
+<tt>&nbsp;&nbsp; problem = true;</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; if (my_form.url.value == "") </tt><br>
+<tt>&nbsp;&nbsp; { alert ("Enter the URL."); </tt><br>
+<tt>&nbsp;&nbsp; my_form.url.value = "*** URL"; </tt><br>
+<tt>&nbsp;&nbsp; my_form.url.focus();</tt><br>
+<tt>&nbsp;&nbsp; problem = true;</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br><dpecw2>
+
+The two validation routines are variants on the steps taken to check the name input, replacing instances of <tt><i>name</i></tt><i> </i>with <tt><i>emai</i></tt><i>l </i>and <tt><i>url</i></tt><i> </i>accordingly.
+
+</dpecw2><br>
+<a name="phf010"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+Validate that a URL category was selected.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if ((my_form.url_category.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selectedIndex == 0) "" (my_form.&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url_category.value == 0) ) {</tt><br>
+<tt>&nbsp;&nbsp; alert ("Please select a category</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for this URL.");</tt><br>
+<tt>&nbsp;&nbsp; problem = true;</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br><dpecw2>
+
+Using JavaScript on pull-down menus is one of the many ways in which Web browsers differ. The <tt>my_form.url_category.value == 0</tt> code will work for some browsers, but you have to use <tt>my_form.url_category.selectedIndex == 0</tt> for others to function properly. I've included both as my conditional with an <tt>OR</tt> (the double pipe) linking them.
+
+</dpecw2><br>
+<a name="phf011"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Check if there was a problem and then complete the JavaScript.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (problem) {&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; return false;</tt><br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; return true;</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; //--&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/script&gt;</tt><br>
+</dpeccode><br><dpecw2>
+
+The logic here may seem a little backward, so I'll explain in detail. The value returned by this function — <tt><tt>true</tt></tt><i> </i>or <tt><tt>false</tt></tt> — determines whether or not the form will be submitted to the handling page (<tt><tt>true</tt></tt><i> </i>means go ahead and submit the data). If a problem was found, then <tt><tt>false</tt></tt><i> </i>should be returned, indicating that the form data should not be submitted.
+
+</dpecw2><br>
+<a name="phf012"></a>
+<br><dpecw1>
+
+Turning to the <tt>problem</tt> variable, it was initially assigned the value of <tt><tt>false</tt></tt><i> </i>(i.e., no problem exists). If the form passed all four tests, <tt>problem</tt> will still be equal to <tt><tt>false</tt></tt><i> </i>and the function can return <tt><tt>true</tt></tt>, indicating that the data is valid. If the form failed one or more tests, <tt>problem</tt> will be equal to <tt><tt>true</tt></tt>, so the function should return <tt><tt>false</tt></tt>, leaving the user on this form page.
+
+</dpecw1><br>
+<a name="phf013"></a>
+<br><dpecw1>
+
+<b>* Step 7</b><br>
+Complete the HTML head, begin the body, and start the form.
+
+</dpecw1><br><dpeccode>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- submit_url.html --&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;form name="url_form"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action="handle_submit_url.php"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method="post" onsubmit="return&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check_data(this)"&gt; </tt><br>
+</dpeccode><br><dpecw2>
+
+When validating forms with JavaScript, the most important line of code 
+is this last one here, which begins the form. In it, I have named the 
+form (<tt><tt>url_form</tt></tt>) and requested that when the submit button is pressed (<tt>onsubmit</tt>), the <tt>check_data()</tt> function be called. The function call passes the current object — in JavaScript <tt>this</tt> always refers to the current object — to the <tt>check_data()</tt> function.
+
+</dpecw2><br>
+<a name="phf014"></a>
+<br><dpecw1>
+
+<b>* Step 8</b><br>
+Complete the form.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;fieldset&gt;&lt;legend&gt;Enter your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;information in the form below:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/legend&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Your Name:&lt;/b&gt; &lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="text" name="name" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength="60" /&gt;&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Email Address:&lt;/b&gt; &lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="text" name="email" size="40"&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength="60" /&gt; &lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;URL:&lt;/b&gt; &lt;input type="text"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name="url" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength="80" /&gt;&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;URL Category:&lt;/b&gt; &lt;select</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name="url_category"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option&gt;Choose One&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="3"&gt;Code Libraries</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="6"&gt;General Database</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="5"&gt;General MySQL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="1"&gt;General PHP</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="4"&gt;Programming</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="2"&gt;Web Development</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/select&gt;&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/fieldset&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;div align="center"&gt;&lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type="submit" name="submit"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value="Submit" /&gt;&lt;/div&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/form&gt; </tt><br>
+</dpeccode><br>
+<a name="phf015"></a>
+<br><dpecw1>
+
+<b>* Step 9</b><br>
+Finish the HTML page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt><br>
+</dpeccode><br>
+<a name="phf016"></a>
+<br><dpecjs><b>*  Step 10</b>
+<br>
+Save the file as <tt>submit_url.html</tt> and test in your Web browser. 
+You do not need to upload this to your Web server if you would prefer 
+not to, since it's a simple HTML page. In any case, once the form passes
+ validation, you'll see a <tt><tt>Page Not Found</tt></tt><i> </i>error because the handling script has yet to be written.&nbsp; 
+<br>
+
+<a name="phf017"></a>
+<br><dpecw1>
+
+Alternatively, you can check for empty fields by seeing if their length —
+ the number of characters entered — is less than or equal to 0. The code
+ would be:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (my_form.inputname.value.&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length &lt;= 0)</tt><br>
+</dpeccode><br>
+<a name="phf018"></a>
+<br><dpecjs> The completed <tt>submit_url.html</tt> script can be found here.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt><br>
+<tt>&lt;script type="text/javascript"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; language="Javascript"&gt;</tt><br>
+<tt>&lt;!-// Hide script contents from old browsers.</tt><br>
+<tt>function check_data(my_form) {</tt><br>
+<tt>var problem = false; //Flag variable.</tt><br>
+<tt>//Validate the name.</tt><br>
+<tt>if (my_form.name.value == "") { </tt><br>
+<tt>alert ("Enter your name."); </tt><br>
+<tt>my_form.name.value = "*** Name"; </tt><br>
+<tt>my_form.name.focus();</tt><br>
+<tt>problem = true;</tt><br>
+<tt>} </tt><br>
+<tt>//Validate the email.</tt><br>
+<tt>if (my_form.email.value == "") {</tt><br>
+<tt>alert ("Enter your email</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; address.");</tt><br>
+<tt>my_form.email.value = "*** Email</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Address"; </tt><br>
+<tt>my_form.email.focus(); </tt><br>
+<tt>problem = true;</tt><br>
+<tt>}</tt><br>
+<tt>//Validate the URL.</tt><br>
+<tt>if (my_form.url.value == "") </tt><br>
+<tt>{ alert ("Enter the URL."); </tt><br>
+<tt>my_form.url.value = "*** URL"; </tt><br>
+<tt>my_form.url.focus();</tt><br>
+<tt>problem = true;</tt><br>
+<tt>}</tt><br>
+<tt>//Validate the URL category.</tt><br>
+<tt>if ((my_form.url_category.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; selectedIndex == 0) "" (my_form.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; url_category.value == 0) ) {</tt><br>
+<tt>alert ("Please select a category</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; for this URL.");</tt><br>
+<tt>problem = true;</tt><br>
+<tt>}</tt><br>
+<tt>//Return true/false based upon problem</tt><br>
+<tt>if (problem) {</tt><br>
+<tt>return false;</tt><br>
+<tt>} else {</tt><br>
+<tt>return true;</tt><br>
+<tt>}</tt><br>
+<tt>}//End of function definition</tt><br>
+<tt>//--&gt;</tt><br>
+<tt>&lt;/script&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;!- submit_url.html --&gt;</tt><br>
+<tt>&lt;form name="url_form"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; action="handle_submit_url.php"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; method="post" onsubmit="return</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; check_data(this)"&gt; </tt><br>
+<tt>&lt;fieldset&gt;&lt;legend&gt;Enter your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; information in the form below:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/legend&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Your Name:&lt;/b&gt; &lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; type="text" name="name" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="60" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Email Address:&lt;/b&gt; &lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; type="text" name="email" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="60" /&gt; &lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;URL:&lt;/b&gt; &lt;input type="text"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; name="url" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="80" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;URL Category:&lt;/b&gt; &lt;select</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; name="url_category"&gt;</tt><br>
+<tt>&lt;option&gt;Choose One&lt;/option&gt;</tt><br>
+<tt>&lt;option value="3"&gt;Code Libraries</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="6"&gt;General Database</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="5"&gt;General MySQL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="1"&gt;General PHP</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="4"&gt;Programming</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="2"&gt;Web Development</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;/select&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;/fieldset&gt;</tt><br>
+<tt>&lt;div align="center"&gt;&lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; type="submit" name="submit"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; value="Submit" /&gt;&lt;/div&gt;</tt><br>
+<tt>&lt;/form&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt>
+</dpeccode><br>
+<a name="phf019"></a>
+<br><dpecw1>
+	
+JavaScript does support regular expressions, although only in more 
+recent versions of the language. For the code to be more 
+backward-compatible, I avoided using JavaScript regular expressions 
+here. <br>
+Online surveys claim that anywhere between 10 and 20 percent of Web users do not have JavaScript enabled in their Web browsers. <br>
+Using JavaScript for security is kind of like having a <i>This house is protected by… </i>sticker
+ on your site's window: it implies that security measures are in force, 
+but it does no actual protection on its own (because people can disable 
+JavaScript).
+	
+</dpecw1><br>
+<a name="phf020"></a>
+
+<script language="JavaScript">insertAccQuestion('13','phf020.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phf021"></a>
+
+<script language="JavaScript">insertAccQuestion('14','phf021.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phf022"></a>
+
+<script language="JavaScript">insertAccQuestion('15','phf022.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phf023"></a>
+<br><dpecw1>
+	
+In this lesson, you learned that JavaScript can be used to add both 
+security and convenience to the users of your page. JavaScript is 
+client-side based, so it can save form data and check the data for 
+problems before it transmits to your server. This can save time and 
+provide some security for the users. However, it is not a true security 
+measure because users can always turn JavaScript off on their browsers.<br>
+You also learned the syntax and coding to add JavaScript into your Web pages to enable it to validate forms.
+	
+</dpecw1><br>
+<a name="phg001"></a><br><a name="topic8"></a><h2>Lesson 7. Defining a Pattern with Regular Expressions</h2><dpecw1>
+
+Regular expressions establish patterns that can be applied to strings of
+ text in PHP. Before you can use regular expressions, however, you first
+ must define the pattern.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Define the symbols used in regular expressions
+	</li>
+	<li>
+Group characters together
+	</li>
+	<li>
+Use character classes to match types of strings
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phg002"></a>
+<br><dpecw1>
+
+<b>* Regular Expressions</b><br>
+Regular expressions are an amazingly powerful (but tedious) tool 
+available in most of today's programming languages. Think of regular 
+expressions as an elaborate system of matching patterns. You first write
+ the pattern and then use one of PHP's built-in functions to apply the 
+pattern to a text string (regular expressions are normally used with 
+strings). 
+
+</dpecw1><br>
+<a name="phg003"></a>
+<br><dpecw1>
+	
+PHP supports two types of regular expressions: POSIX Extended and 
+Perl-compatible (PCRE). The POSIX version is somewhat less powerful and 
+potentially slower than PCRE but is far easier to learn. For this 
+reason, I'll cover POSIX regular expressions here.<br>
+With both types of regular expressions, PHP has two functions for simple
+ pattern matches (one case-sensitive and one not) and two for matching 
+patterns and replacing matched text with other text (again, one 
+case-sensitive and one not).<br>
+Although I'll be using the POSIX functions here, if you are already 
+comfortable with the Perl-compatible syntax, you need only replace the 
+names of the POSIX functions with the PCRE equivalents in the following 
+examples (and change the patterns accordingly).
+	
+</dpecw1><br>
+<a name="phg004"></a>
+<br><dpecw1>
+	
+Some text editors, such as BBEdit and emacs, allow you to use regular 
+expressions to match and replace patterns within and throughout several 
+documents.<br>
+Another difference between POSIX and PCRE regular expressions is that 
+the latter can be used on binary data while the former cannot.
+	
+</dpecw1><br>
+<a name="phg005"></a>
+<br><dpecw1>
+
+<b>* Defining a Pattern</b><br>
+Before you can use one of PHP's built-in regular expression functions, 
+you have to be able to define a pattern that the function will use for 
+matching purposes. PHP has a number of rules for creating a pattern. You
+ can use these rules separately or in combination, making your pattern 
+either quite simple or very complex.<br>
+Before I get into the rules, though, a word on the effectiveness of 
+regular expressions. For most cases, it is nearly impossible to write a 
+pattern that is 100 percent accurate! The goal, then, is to create a 
+pattern that catches most invalid submissions but allows for all valid 
+submissions.<br>
+In other words, err on the side of being too permissive. Like most 
+security systems, regular expressions are a deterrent, not an absolutely
+ perfect fix. 
+
+</dpecw1><br>
+<a name="phg006"></a>
+<br><dpecw1>
+	
+To explain how patterns are created, I'll start by introducing the 
+symbols used in regular expressions, then discuss how to group 
+characters together, and finish with character classes. Once all of this
+ has been covered, you can begin to use this knowledge within PHP 
+functions. As a formatting rule, I'll define my patterns within straight
+ quotes ('pattern') and will indicate what the corresponding pattern 
+matches in <i>italics</i>. 
+	
+</dpecw1><br>
+<a name="phg007"></a>
+<br><dpecw1>
+
+The first type of character you will use for defining patterns is a <b>literal</b>. A literal is a value that is written exactly as it is interpreted. For example, the pattern 'a' will match the letter <i>a</i>, 'ab' will match <i>ab</i>,
+ and so forth. Therefore, assuming a case-insensitive search is 
+performed, 'rom' will match any of the following strings since they all 
+contain <i>rom</i>:<br>
+<ul>
+	<li>
+CD-ROM
+	</li>
+	<li>
+Rommel crossed the desert.
+	</li>
+	<li>
+I'm writing a <i>roman à clef</i>.
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phg008"></a>
+<br><dpecw1>
+
+Along with literals, your patterns will use <b>metacharacters</b>. These are special symbols that have a meaning beyond their literal value. While 'a' simply means <i>a</i>, the period (.) will match any single character ('.' matches <i>a</i>, <i>b</i>, <i>c</i>,
+ the underscore, a space, etc.). To match any metacharacter, you will 
+need to escape it, much as you escape a quotation mark to print it. 
+Hence '\.' will match the period itself. <br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Character</b>
+
+</th><th class="heading" scope="col">
+<b>Name</b>
+
+</th><th class="heading" scope="col">
+<b>Meaning</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+^&nbsp;
+</td>
+<td>
+caret
+</td>
+<td>
+Indicates the beginning of a string
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>$</tt>
+</td>
+<td>
+dollar sign
+</td>
+<td>
+Indicates the end of a string
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>.</tt>
+</td>
+<td>
+period
+</td>
+<td>
+Any single character
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>"</tt>
+</td>
+<td>
+pipe
+</td>
+<td>
+Alternatives
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phg009"></a>
+<br><dpecw1>
+
+Two metacharacters specify where certain characters must be found. There is the caret (<tt>ˆ</tt>), which will match a string that begins with the letter following the caret. There is also the dollar sign (<tt>$</tt>), for anything that ends with the preceding letter.<br>
+Accordingly, <tt>'^a'</tt> will match any string beginning with an a, while <tt>'a$'</tt> will correspond to any string ending with an a. Therefore, <tt>'^a$'</tt> will only match a (a string that both begins and ends with a).
+
+</dpecw1><br>
+<a name="phg010"></a>
+<br><dpecw1>
+
+Regular expressions also make use of the pipe (<tt>"</tt>) as the equivalent of <i>or</i>. Therefore, <tt>'a"b'</tt> will match strings containing either <i>a </i>or <i>b</i>. (Using the pipe within patterns is called <b>alternation</b><i> </i>or <b>branching</b>). 
+
+</dpecw1><br>
+<a name="phg011"></a>
+<br><dpecw1>
+
+Next, there are three metacharacters that allow for multiple occurrences: <tt>'a*'</tt> will match zero or more <i>a</i>'s (no <i>a</i>'s, <i>a</i>, <i>aa</i>, <i>aaa</i>, etc.); <tt>'a+'</tt> matches one or more <i>a</i>'s (<i>a</i>, <i>aa</i>, <i>aaa</i>, etc., but there must be at least one); and <tt>'a?'</tt> will match up to one <i>a </i>(<i>a </i>or no <i>a</i>'s match). These metacharacters all act as quantifiers in your patterns, as do the curly braces. 
+
+</dpecw1><br>
+<a name="phg012"></a>
+<br><dpecw1>
+
+To match a certain quantity of a letter, put the quantity between curly braces (<tt>{}</tt>), stating a specific number, just a minimum, or both a minimum and a maximum. Thus, <tt>'a{3}'</tt> will match <i>aaa</i>; <tt>'a{3,}'</tt> will match <i>aaa</i>, <i>aaaa</i>, etc. (three or more <i>a</i>'s); and <tt>'a{3,5}'</tt> will match just <i>aaa</i>, <i>aaaa</i>, and <i>aaaaa</i><i> </i>(between three and five).<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Character</b>
+
+</th><th class="heading" scope="col">
+<b>Meaning</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt>?</tt>
+</td>
+<td>
+0 or 1
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>*</tt>
+</td>
+<td>
+0 or more
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>+</tt>
+</td>
+<td>
+1 or more
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>{x}</tt>
+</td>
+<td>
+Exactly x occurrences
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>{x, y}</tt>
+</td>
+<td>
+Between x and y (inclusive)
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>{x,}</tt>
+</td>
+<td>
+At least x occurrences
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phg013"></a>
+<br><dpecw1>
+
+Once you comprehend the basic symbols, then you can begin to use 
+parentheses to group characters into more involved patterns. Grouping 
+works as you might expect: <tt>'(abc)'</tt> will match <i>abc</i>, <tt>'(trout)'</tt> will match <i>trout</i>.<br>
+Think of parentheses as being used to establish a new literal of a larger size. So <tt>'(yes)"(no)'</tt> accepts either of those two words in their entirety. 
+
+</dpecw1><br>
+<a name="phg014"></a>
+<br><dpecw1>
+
+Regardless of how you combine your literals into various groups, they 
+will only ever be useful for matching specific strings. But what if you 
+wanted to match any four-letter lowercase word or any number sequence? 
+For this, you define and utilize <b>character classes</b>.
+
+</dpecw1><br>
+<a name="phg015"></a>
+<br><dpecw1>
+
+Classes are created by placing characters within square brackets (<tt>[]</tt>). For example, you can match any one vowel with <tt>'[aeiou]'</tt> (by comparison, <tt>'(aeiou)'</tt> would match that entire five-character string).<br>
+Another option is you can use the hyphen to indicate a range of characters: <tt>'[a-z]'</tt> is any single lowercase letter and <tt>'[A-Z]'</tt> is any uppercase, <tt>'[A-Za-z]'</tt> is any letter in general, and <tt>'[0-9]'</tt> matches any digit. As an example, <tt>'[a-z]{3}'</tt> would match <i>abc</i>, <i>def</i>, <i>oiw</i>, etc. 
+
+</dpecw1><br>
+<a name="phg016"></a>
+<br><dpecw1>
+	
+PHP has already defined some classes that will be most useful to you in your programming. These use a syntax like <tt>[[:<i>name</i>:]]</tt>. The <tt>[[:alpha:]]</tt> class matches letters and is the equivalent of <tt>'[A-Za-z]'</tt>.
+	
+</dpecw1><br>
+<a name="phg017"></a>
+<br><dpecw1>
+
+By defining your own classes and using those already defined in PHP, you can make better patterns for regular expressions.<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Class</b>
+
+</th><th class="heading" scope="col">
+<b>Meaning</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt>[a-z]</tt>
+</td>
+<td>
+Any lowercase letter
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>[a-zA-Z]</tt>
+</td>
+<td>
+Any letter
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt>[0-9]</tt>
+</td>
+<td>
+Any number
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>[ \f\r\t\n\v]</tt></tt>
+</td>
+<td>
+Any white space
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>[aeiou]</tt></tt>
+</td>
+<td>
+Any vowel
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>[[:alnum:]]</tt></tt>
+</td>
+<td>
+Any letter or number
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>[[:alpha:]]</tt></tt>
+</td>
+<td>
+Any letter (same as <tt>[a-zA-Z]</tt>)
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>[[:blank:]]</tt></tt>
+</td>
+<td>
+Any tabs or spaces
+</td>
+	</tr>
+	<tr valign="top0">
+<td>
+<tt><tt>[[:digit:]]</tt></tt>
+</td>
+<td>
+Any number (same as [0-9])
+</td>
+	</tr>
+	<tr valign="top1">
+<td>
+<tt><tt>[[:lower:]]</tt></tt>
+</td>
+<td>
+Any lowercase letter
+</td>
+	</tr>
+	<tr valign="top2">
+<td>
+<tt><tt>[[:upper:]]</tt></tt>
+</td>
+<td>
+Any uppercase letter
+</td>
+	</tr>
+	<tr valign="top3">
+<td>
+<tt><tt>[[:punct:]]</tt></tt>
+</td>
+<td>
+Punctuation characters (. , ; : -)
+</td>
+	</tr>
+	<tr valign="top4">
+<td>
+<tt><tt>[[:space:]]</tt></tt>
+</td>
+<td>
+Any white space
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phg018"></a>
+<br><b>Escaped characters  <br>  </b>  Because many escaped characters 
+within double quotation marks have special meaning, I advocate using 
+single quotation marks to define your patterns.  For example, to match a
+ backslash using single quotes, you would code \\\\ (the one slash 
+indicates that the next slash should be treated literally). To match a 
+backslash in double quotes, you would have to code \\\\\\\\.  <br><br>  <b>Curly braces  <br>  </b>
+  When using curly braces to specify a number of characters, you must 
+always include the minimum number. The maximum is optional: <tt>'a{3}'</tt> and <tt>'a{3,}'</tt> are acceptable, but <tt>'a{,3}'</tt> is not.  <br><br>  <b>Special characters  <br>  </b>  To include special characters (<tt>ˆ.[]$()|*?{}\\</tt>) in a pattern, they need to be escaped (a backslash put before them).  <br><br>  <b>Square brackets  <br>  </b>
+  Within the square brackets (i.e., in a class definition), the caret 
+symbol, which is normally used to indicate an accepted beginning of a 
+string, is used to exclude a character.  <br><br>  <b>Dollar signs and periods  <br>  </b>  The dollar sign and period have no special meaning inside of a class.  <br><br>  <b>Words without punctuation  <br>  </b>  To match any word that does not use punctuation, use <tt>'ˆ[[:alpha:]]+$'</tt> (which states that the string must begin and end with only letters).  <br><br>  <b>Regular expressions and literal strings  <br>  </b>
+  You should never use regular expressions if you're trying to just 
+match a literal string. In such cases, use one of PHP's string 
+functions, which will be faster.  <br><br>  
+<a name="phg019"></a>
+
+<script language="JavaScript">insertAccQuestion('16','phg019.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phg020"></a>
+
+<script language="JavaScript">insertAccQuestion('17','phg020.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phg021"></a>
+
+<script language="JavaScript">insertAccQuestion('18','phg021.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phg023"></a>
+<br><dpecw1>
+	
+In this lesson, you learned how regular expressions are used to find 
+text strings in PHP and apply certain patterns to them. You first 
+learned about the different symbols that are used when defining regular 
+expressions. Some symbols are literal matches, while other symbols, 
+known as metacharacters, have a meaning beyond their literal match.<br>
+You also learned how you use parentheses to group characters into more 
+involved patterns. Rather than matching a single character, you can 
+match entire words by using parentheses.<br>
+Finally, you learned how to create character classes by using square 
+brackets. Classes allow you match a type of symbol, or any symbol in a 
+range, rather than simply making a literal match. You can define your 
+own classes, or use the ones pre-defined in PHP. 
+	
+</dpecw1><br>
+<a name="phh001"></a><br><a name="topic9"></a><h2>Lesson 8. Matching Regular Expression Patterns</h2><dpecw1>
+
+Once you have defined your patterns, you then need to tell PHP how to match those patterns, and what to do with those matches.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Identify the functions PHP uses to match patterns
+	</li>
+	<li>
+Perform pattern matching in your PHP scripts
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phh002"></a>
+<br><dpecw1>
+
+Two functions are built in to PHP expressly for the purpose of matching a pattern within a string: <tt>ereg()</tt> and <tt>eregi()</tt> (Perl-compatible regular expressions use <tt>preg_match()</tt> instead). The only difference between the two is that <tt>ereg()</tt> treats patterns as case-sensitive, whereas <tt>eregi()</tt> is case-insensitive, making it less particular.<br>
+The latter is generally recommended for common use, unless you need to 
+be more explicit (perhaps for security purposes). Both functions will be
+ evaluated to <tt>TRUE</tt> if the pattern is matched, <tt>FALSE</tt> if it is not.
+
+</dpecw1><br>
+<a name="phh003"></a>
+<br><dpecw1>
+
+Here are two ways to use these functions (you can also hybridize the methods):
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; ereg('</tt><i><tt>pattern</tt></i><tt>', '</tt><i><tt>string</tt></i><tt>');&nbsp;&nbsp; </tt><br>
+</dpeccode><br><dpecw2>
+
+The second method is easier to digest, but the first saves a step or 
+two. If you find the examples that follow to be cumbersome, start by 
+separating out the pattern itself as a variable.
+
+</dpecw2><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; ereg('</tt><i><tt>pattern</tt></i><tt>', '</tt><i><tt>string</tt></i><tt>');&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phh004"></a>
+<br><dpecjs>Let's examine the steps for matching patterns.<br>
+<b>* Step 1</b>
+<br>
+Create a new PHP document in your text editor.
+This script will receive the data from the form on <tt>submit_url.html</tt>. <ml_ins_href><ml_data_href>html.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<br>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;?php handle_submit_url.php </tt>
+</dpeccode><br>
+<br><a name="phh004a"></a>
+<br><dpecw1>
+	
+<dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt><br>
+<tt>&lt;script type="text/javascript"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; language="Javascript"&gt;</tt><br>
+<tt>&lt;!-// Hide script contents from old browsers.</tt><br>
+<tt>function check_data(my_form) {</tt><br>
+<tt>var problem = false; //Flag variable.</tt><br>
+<tt>//Validate the name.</tt><br>
+<tt>if (my_form.name.value == "") { </tt><br>
+<tt>alert ("Enter your name."); </tt><br>
+<tt>my_form.name.value = "*** Name"; </tt><br>
+<tt>my_form.name.focus();</tt><br>
+<tt>problem = true;</tt><br>
+<tt>} </tt><br>
+<tt>//Validate the email.</tt><br>
+<tt>if (my_form.email.value == "") {</tt><br>
+<tt>alert ("Enter your email</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; address.");</tt><br>
+<tt>my_form.email.value = "*** Email</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Address"; </tt><br>
+<tt>my_form.email.focus(); </tt><br>
+<tt>problem = true;</tt><br>
+<tt>}</tt><br>
+<tt>//Validate the URL.</tt><br>
+<tt>if (my_form.url.value == "") </tt><br>
+<tt>{ alert ("Enter the URL."); </tt><br>
+<tt>my_form.url.value = "*** URL"; </tt><br>
+<tt>my_form.url.focus();</tt><br>
+<tt>problem = true;</tt><br>
+<tt>}</tt><br>
+<tt>//Validate the URL category.</tt><br>
+<tt>if ((my_form.url_category.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; selectedIndex == 0) "" (my_form.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; url_category.value == 0) ) {</tt><br>
+<tt>alert ("Please select a category</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; for this URL.");</tt><br>
+<tt>problem = true;</tt><br>
+<tt>}</tt><br>
+<tt>//Return true/false based upon problem</tt><br>
+<tt>if (problem) {</tt><br>
+<tt>return false;</tt><br>
+<tt>} else {</tt><br>
+<tt>return true;</tt><br>
+<tt>}</tt><br>
+<tt>}//End of function definition</tt><br>
+<tt>//--&gt;</tt><br>
+<tt>&lt;/script&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;!- submit_url.html --&gt;</tt><br>
+<tt>&lt;form name="url_form"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; action="handle_submit_url.php"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; method="post" onsubmit="return</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; check_data(this)"&gt; </tt><br>
+<tt>&lt;fieldset&gt;&lt;legend&gt;Enter your</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; information in the form below:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/legend&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Your Name:&lt;/b&gt; &lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; type="text" name="name" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="60" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Email Address:&lt;/b&gt; &lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; type="text" name="email" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="60" /&gt; &lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;URL:&lt;/b&gt; &lt;input type="text"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; name="url" size="40"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="80" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;URL Category:&lt;/b&gt; &lt;select</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; name="url_category"&gt;</tt><br>
+<tt>&lt;option&gt;Choose One&lt;/option&gt;</tt><br>
+<tt>&lt;option value="3"&gt;Code Libraries</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="6"&gt;General Database</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="5"&gt;General MySQL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="1"&gt;General PHP</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="4"&gt;Programming</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;option value="2"&gt;Web Development</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/option&gt;</tt><br>
+<tt>&lt;/select&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;/fieldset&gt;</tt><br>
+<tt>&lt;div align="center"&gt;&lt;input</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; type="submit" name="submit"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; value="Submit" /&gt;&lt;/div&gt;</tt><br>
+<tt>&lt;/form&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt>
+</dpeccode>
+	
+</dpecw1><br><br>
+<a name="phh005"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Create the error-checking variables.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; $message = '&lt;font color="red"&gt;The</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;following errors occurred:&lt;br /&gt;';&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; $problem = FALSE; </tt><br>
+</dpeccode><br><dpecw2>
+
+The <tt><tt></tt>$message</tt> variable will be used to store the accumulated errors. The <tt>$problem</tt> variable (like its JavaScript counterpart) will be used to test for problems.
+
+</dpecw2><br>
+<a name="phh006"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Validate the submitted name.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (!eregi ('&nbsp;[[:alpha:]\.\' \-]</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{4,}$', stripslashes(trim($_POST&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br><dpecw2>
+
+This conditional will check the submitted name against a particular 
+pattern. If the submitted value does not meet the criteria of the 
+regular expression, the <tt><tt></tt>$problem<tt></tt></tt> variable will be set to <tt><tt></tt>TRUE<tt></tt></tt>.<br>
+The pattern in question is a class consisting of <tt><tt></tt>[:alpha:]<tt></tt></tt>
+ (all letters), the period, the apostrophe, a blank space, and the dash.
+ The pattern says that the name must begin and end with these characters
+ (meaning only those are allowed) and must be at least four characters 
+long.<br>
+Each of the inputs will be stripped of any slashes (presuming that Magic
+ Quotes is on) and trimmed of extraneous white spaces (both of which 
+could invalidate a regular expression).
+
+</dpecw2><br>
+<a name="phh007"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Validate the email address.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (!eregi ('&nbsp;[[:alnum:]][a-z0-9_\.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\-]*@[a-z0-9\.\-]+\.[a-z]{2,4}$',&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stripslashes(trim($_POST</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['email'])))) {</tt><br>
+<tt>&nbsp;&nbsp; $problem = TRUE;</tt><br>
+<tt>&nbsp;&nbsp; $message .= '&lt;p&gt;Please enter a</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid email address.&lt;/p&gt;';</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br><dpecw2>
+
+Email addresses and URLs are notoriously difficult to validate with 
+absolute accuracy. The pattern I am using here mandates that the email 
+address begin with a letter or number and then continue with some 
+combination of letters, numbers, the underscore, the period, and the 
+hyphen.<br>
+An email address must have an <tt><tt></tt>@<tt></tt></tt>, which will 
+be followed by some combination of letters, numbers, the period, and the
+ hyphen. Finally, there will be a period, followed by a two to 
+four-letter string (e.g., <tt><tt></tt>com, edu, uk, info<tt></tt></tt>).
+
+</dpecw2><br>
+<a name="phh008"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+Validate the URL.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (!eregi ('&nbsp;((http"https"ftp)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;://)?([[:alnum:]\-\.])+(\.)([[:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alnum:]]){2,4}([[:alnum:]/+=%&amp;_&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\.~?\-]*)$', stripslashes(trim</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($_POST['url'])))) {</tt><br>
+<tt>&nbsp;&nbsp; $problem = TRUE;</tt><br>
+<tt>&nbsp;&nbsp; $message .= '&lt;p&gt;Please enter a</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid URL.&lt;/p&gt;';</tt><br>
+<tt>&nbsp;&nbsp; } </tt><br>
+</dpeccode><br><dpecw2>
+
+To validate the URL, I first check for the optional <tt><tt></tt>http://<tt></tt></tt>, <tt><tt></tt>https://<tt></tt></tt>, or <tt><tt></tt>ftp://<tt></tt></tt>. Then I want to see letters, numbers, or the dash, followed by a period (<tt><tt></tt><i>sitename</i>.<tt></tt></tt>), followed by a two to four-letter string (<tt><tt></tt>com<tt></tt></tt>, <tt><tt></tt>edu<tt></tt></tt>,
+ etc.). Finally, I allow for the possibility of many other characters, 
+which would constitute a specific filename, parameters being passed to 
+it, and so forth.
+
+</dpecw2><br>
+<a name="phh009"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Validate the URL category.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (!isset($_POST['url_category'])&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OR !is_numeric($_POST['url_</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;category'])) {</tt><br>
+<tt>&nbsp;&nbsp; $message .= '&lt;p&gt;Please select a</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid URL category.&lt;/p&gt;';</tt><br>
+<tt>&nbsp;&nbsp; $problem = TRUE;</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br><dpecw2>
+
+Since the <tt><tt></tt>url_category<tt></tt></tt> comes from a pull-down menu and should be a number, I can verify it without regular expressions.
+
+</dpecw2><br>
+<a name="phh010"></a>
+<br><dpecw1>
+
+<b>* Step 7</b><br>
+Create the conditional checking on the status of the tests.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (!$problem) {</tt><br>
+<tt>&nbsp;&nbsp; echo '&lt;p&gt;Thank you for the URL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submission.&lt;/p&gt;';</tt><br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; echo $message;</tt><br>
+<tt>&nbsp;&nbsp; echo '&lt;/font&gt;&lt;p&gt;Please go back and&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try again.&lt;/p&gt;';</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br><dpecw2>
+
+If no problem occurred, a simple thank you is displayed. If any problem was found, the error message is displayed.
+
+</dpecw2><br>
+<a name="phh011"></a>
+<br><dpecw1>
+
+<b>* Step 8</b><br>
+Complete the PHP code and the HTML page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ?&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/body&gt;&nbsp;&nbsp;&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;/html&gt;</tt><br>
+</dpeccode><br>
+<a name="phh012"></a>
+<br><dpecjs><b>*  Step 9</b>
+<br>
+Save the file as <tt><tt></tt>handle_submit_url.php<tt></tt></tt>, upload to your Web server (in the same directory as <tt><tt></tt>submit_url.html<tt></tt></tt>), and test in your Web browser.
+If the submitted data matches the appropriate patterns, a thank you message is printed.&nbsp; 
+<br>
+
+<a name="phh013"></a>
+<br><dpecjs> If any data fails to match the regular expressions, error messages are displayed.&nbsp; 
+<br>
+
+<a name="phh014"></a>
+<br><dpecjs>This script handles the <tt><tt></tt>submit_url.html<tt></tt></tt> form using primarily regular expressions to validate the submitted data.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;?php # handle_submit_url.php</tt><br>
+<tt>// Initialize the variables.</tt><br>
+<tt>$message = '&lt;font color="red"&gt;The following errors occurred:&lt;br /&gt;';</tt><br>
+<tt>$problem = FALSE;</tt><br>
+<tt>// Check the name.</tt><br>
+<tt>if (!eregi ('^[[:alpha:]\.\' \-]{4,}$', stripslashes(trim($_POST['name'])))) {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>$message .= '&lt;p&gt;Please enter a valid name.&lt;/p&gt;';</tt><br>
+<tt>} </tt><br>
+<tt>// Check the email address.</tt><br>
+<tt>if (!eregi ('^[[:alnum:]][a-z0-9_\.\-]*@[a-z0-9\.\-]+\.[a-z]{2,4}$', stripslashes(trim($_POST['email'])))) {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>$message .= '&lt;p&gt;Please enter a valid email address.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check the URL.</tt><br>
+<tt>if (!eregi ('</tt><tt>^</tt><tt>((http"https"ftp)://)?([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',
+ stripslashes(trim($_POST['url'])))) {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>$message .= '&lt;p&gt;Please enter a valid URL.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check the URL category.</tt><br>
+<tt>if (!isset($_POST['url_category']) OR</tt><br>
+<tt>!is_numeric($_POST['url_category'])) {</tt><br>
+<tt>$message .= '&lt;p&gt;Please select a valid URL category.&lt;/p&gt;';</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!$problem) { // Nothing went wrong.</tt><br>
+<tt>// Do whatever with the submitted information.</tt><br>
+<tt>echo '&lt;p&gt;Thank you for the URL submission.&lt;/p&gt;';</tt><br>
+<tt>} else { // At least one test failed.</tt><br>
+<tt>echo $message;</tt><br>
+<tt>echo '&lt;/font&gt;&lt;p&gt;Please go back and try again.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt>
+</dpeccode><br>
+<a name="phh015"></a>
+<br><b>Other examples  <br>  </b>  Although it demonstrates good 
+dedication to programming to learn how to write and execute your own 
+regular expressions, numerous working examples are available by 
+searching the Internet.  <br><br>  <b>Case sensitivity  <br>  </b>  Remember that regular expressions in PHP are case-sensitive by default. The <tt><tt></tt>eregi()<tt></tt></tt> function overrules this standard behavior.  <br><br>  <b>Matching exact strings  <br>  </b>  If you are looking to match an exact string within another string, use the <tt><tt></tt>strstr()<tt></tt></tt>
+ function, which is faster than regular expressions.  In fact, as a rule
+ of thumb, you should use regular expressions only if the task at hand 
+cannot be accomplished using any other function or technique.  <br><br>  
+<a name="phh016"></a>
+
+<script language="JavaScript">insertAccQuestion('19','phh016.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phh017"></a>
+
+<script language="JavaScript">insertAccQuestion('20','phh017.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phh018"></a>
+<br><dpecw1>
+	
+In this lesson, you learned that PHP uses the <tt><tt></tt>ereg()<tt></tt></tt> and <tt><tt></tt>eregi()<tt></tt></tt>
+ functions to find patterns within a string and match them. You can use 
+this matching feature to tell your PHP scripts to perform a certain 
+behavior if a user input matches that pattern.<br>
+You also learned how to format those functions within your PHP scripts. Both <tt><tt></tt>ereg()<tt></tt></tt> and <tt><tt></tt>eregi()<tt></tt></tt> functions use the same format, but you should remember that <tt><tt></tt>ereg()<tt></tt></tt> is case-sensitive, while <tt><tt></tt>eregi()<tt></tt> </tt>is not.
+	
+</dpecw1><br>
+<a name="phi001"></a><br><a name="topic10"></a><h2>Lesson 9. Matching and Replacing Patterns</h2><dpecw1>
+
+In addition to functions which match strings, PHP has functions which 
+allow you to match a pattern and replace it with a different pattern or 
+specific text.<br>
+&nbsp;<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Define the different functions used for finding and replacing patterns
+	</li>
+	<li>
+Use pattern replacement functions in your PHP scripts
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phi002"></a>
+<br><dpecw1>
+
+While the <tt><tt></tt>ereg()<tt></tt></tt> and <tt><tt></tt>eregi()<tt></tt></tt>
+ functions are great for validating a string, you can take your 
+programming one step further by matching a pattern and then replacing it
+ with a slightly different pattern or with specific text. The syntax for
+ doing so is
+
+</dpecw1><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;ereg_replace('<i>pattern</i>', '<i>replace</i>', '<i>string</i>');&nbsp;&nbsp; <br>
+or<br>
+<tt>&nbsp;&nbsp; </tt>$<i>pattern</i> = '<i>pattern</i>';<br>
+&nbsp;&nbsp;&nbsp;$<i>replace</i> = '<i>replace</i>';<br>
+&nbsp;&nbsp;&nbsp;$<i>string</i> = '<i>string</i>';<br>
+&nbsp;&nbsp;&nbsp;eregi_replace($<i>pattern</i>, $<i>replace</i>, $<i>string</i>);<br>
+</dpeccode><br>
+<a name="phi003"></a>
+<br><dpecw1>
+
+The <tt><tt></tt>ereg_replace()<tt></tt></tt> function is case-sensitive, whereas <tt><tt></tt>eregi_replace()<tt></tt></tt>
+ is not. One reason you might want to use either function would be to 
+turn a user-entered Web site address (a URL) into a clickable HTML link.
+ There is a related concept to discuss that is involved with these two 
+functions: back referencing.
+
+</dpecw1><br>
+<a name="phi004"></a>
+<br><dpecw1>
+
+In a ZIP code matching pattern — <tt><tt></tt>'&nbsp;([0-9]{5})(\-[0-9]{4})?$'<tt></tt></tt>
+ — there are two groupings within parentheses (the first representing 
+the obligatory initial five digits and the second representing the 
+optional dash plus four-digit extension).<br>
+Within a regular expression pattern, PHP will automatically number parenthetical groupings beginning at 1.<br>
+<b>Back referencing</b> allows you to refer to each individual section 
+by using a double backslash in front of the corresponding number. For 
+example, if you match the ZIP code <i>94710-0001 </i>with this pattern, referring back to <tt><tt></tt>\\1<tt></tt></tt> will give you <i>94710</i>. The code <tt><tt></tt>\\0<tt></tt></tt> refers to the whole initial string.
+
+</dpecw1><br>
+<a name="phi005"></a>
+<br><dpecjs>Let's examine the steps for matching and replacing patterns.<br>
+<b>* Step 1</b>
+<br>
+Open <tt><tt></tt>handle_submit_url.php<tt></tt></tt> in your text editor.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;?php # handle_submit_url.php</tt><br>
+<tt>// Initialize the variables.</tt><br>
+<tt>$message = '&lt;font color="red"&gt;The following errors occurred:&lt;br /&gt;';</tt><br>
+<tt>$problem = FALSE;</tt><br>
+<tt>// Check the name.</tt><br>
+<tt>if (!eregi ('^[[:alpha:]\.\' \-]{4,}$', stripslashes(trim($_POST['name'])))) {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>$message .= '&lt;p&gt;Please enter a valid name.&lt;/p&gt;';</tt><br>
+<tt>} </tt><br>
+<tt>// Check the email address.</tt><br>
+<tt>if (!eregi ('^[[:alnum:]][a-z0-9_\.\-]*@[a-z0-9\.\-]+\.[a-z]{2,4}$', stripslashes(trim($_POST['email'])))) {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>$message .= '&lt;p&gt;Please enter a valid email address.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check the URL.</tt><br>
+<tt>if (!eregi ('</tt><tt>^</tt><tt>((http"https"ftp)://)?([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',
+ stripslashes(trim($_POST['url'])))) {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>$message .= '&lt;p&gt;Please enter a valid URL.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check the URL category.</tt><br>
+<tt>if (!isset($_POST['url_category']) OR</tt><br>
+<tt>!is_numeric($_POST['url_category'])) {</tt><br>
+<tt>$message .= '&lt;p&gt;Please select a valid URL category.&lt;/p&gt;';</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!$problem) { // Nothing went wrong.</tt><br>
+<tt>// Do whatever with the submitted information.</tt><br>
+<tt>echo '&lt;p&gt;Thank you for the URL submission.&lt;/p&gt;';</tt><br>
+<tt>} else { // At least one test failed.</tt><br>
+<tt>echo $message;</tt><br>
+<tt>echo '&lt;/font&gt;&lt;p&gt;Please go back and try again.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt>
+</dpeccode><br>
+<a name="phi006"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Add the following to the email validation.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; $email = eregi_replace ('^[[:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alnum:]][a-z0-9_\.\-]*@[a-z0-9\.&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\-]+\.[a-z]{2,4}$', '&lt;a href=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"mailto:\\0"&gt;Email&lt;/a&gt;',</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stripslashes(trim($_POST</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['email'])));</tt><br>
+<tt>&nbsp;&nbsp; } </tt><br>
+</dpeccode><br>
+<a name="phi007"></a>
+<br><dpecw1>
+
+If the email address passed the original regular expression, I'll run it through <tt>eregi_replace()</tt> using that same pattern. This function will turn an email address (say <tt>jane.smith@yourdomain.com</tt>) into the HTML code
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;a href="mailto:jane.smith@yourdomain.com"&gt;Email&lt;/a&gt;.&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phi008"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Replace the URL validation with these lines:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if (eregi ('^((http"https"ftp)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;://)([[:alnum:]\-\.])+(\.)([[:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~?\-]*)$', stripslashes(trim</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($_POST['url'])))) {</tt><br>
+<tt>&nbsp;&nbsp; $url = eregi_replace ('^((http"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https"ftp)://)([[:alnum:]\-\.])+</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(\.)([[:alnum:]]){2,4}([[:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alnum:]/+=%&amp;_\.~?\-]*)$', '&lt;a</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;href="\\0"&gt;\\0&lt;/a&gt;', stripslashes&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(trim($_POST['url'])));</tt><br>
+<tt>&nbsp;&nbsp; } elseif (eregi ('^([[:alnum:]</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\-\.])+(\.)([[:alnum:]]){2,4}</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;([[:alnum:]/+=%&amp;_\.~?\-]*)$',</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stripslashes(trim($_POST['url']</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)))) {</tt><br>
+<tt>&nbsp;&nbsp; $url = eregi_replace ('^([[:</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alnum:]\-\.])+(\.)([[:alnum:]])</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{2,4}([[:alnum:]/+=%&amp;_\.~?\-</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]*)$', '&lt;a href="http://\\0"&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\\0&lt;/a&gt;', stripslashes(trim</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($_POST['url'])));</tt><br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; $problem = TRUE;</tt><br>
+<tt>&nbsp;&nbsp; $message .= '&lt;p&gt;Please enter a</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valid URL.&lt;/p&gt;';</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br>
+<a name="phi009"></a>
+<br><dpecw1>
+	
+This is a more complicated extension of the previous example. Here I'll first test for whether or not the initial <tt><tt>http://</tt></tt><tt>, </tt><tt><tt>https://</tt></tt><tt>, </tt>or<tt> </tt><tt><tt>ftp://</tt></tt> string is present. If it is (and the URL matches the overall pattern), the entire URL will be used in creating an HTML link.<br>
+If that initial string is not present, the HTML link will manually include it, followed by the submitted value.
+	
+</dpecw1><br>
+<a name="phi010"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Change the problem conditional so that the first part reads:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; echo "&lt;p&gt;Thank you for the URL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submission. We have received</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the following information:&lt;/p&gt;&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n{$_POST['name']}&lt;br /&gt;\</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n$email&lt;br /&gt;\n$url";</tt><br>
+</dpeccode><br><dpecw2>
+
+The thank you message will now also print out the submitted values, including the reformatted email address and URL.
+
+</dpecw2><br>
+<a name="phi011"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Save the file, upload to your Web server, and test in your Web browser.
+The form now prints out the values submitted and creates links using the email address and URL.&nbsp; 
+<br>
+
+<a name="phi012"></a>
+<br><dpecjs><b>* Step 6</b>
+<br>
+View the page source to see the results of the <tt>eregi_replace()</tt> function.
+The HTML source of the page shows the generated links.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;p&gt;Thank you for the URL submission. We have received the following informtaion:&lt;/p&gt;</tt><br>
+<tt>Jack Johnson&lt;br /&gt;</tt><br>
+<tt>&lt;a href="mailto:JackJohnson@yourdomain.com"&gt;Email&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&lt;a href="http://www.yourdomain.com/index.html"&gt;</tt><br>
+<tt>www.yourdomain.com/index.html&lt;/a&gt;&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt><br>
+<br>
+</dpeccode><br>
+<a name="phi013"></a>
+<br><dpecjs>The modified version of the <tt>handle_submit_url.php</tt> script uses <tt>eregi_replace()</tt> to create new strings based upon matched patterns in existing ones.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;title&gt;Submit a URL&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;?php # handle_submit_url.php</tt><br>
+<tt># 2nd version</tt><br>
+<tt>// Initialize the variables.</tt><br>
+<tt>$message = '&lt;font color="red"&gt;The following errors occurred:&lt;br /&gt;';</tt><br>
+<tt>$problem = FALSE;</tt><br>
+<tt>// Check the name.</tt><br>
+<tt>if (!eregi ('^[[:alpha:]\.\' \-]{4,}$', stripslashes(trim($_POST['name'])))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$problem = TRUE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$message .= '&lt;p&gt;Please enter a valid name.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check the email address.</tt><br>
+<tt>if (!eregi ('^[[:alnum:]][a-z0-9_\.\-]*@[a-z0-9\.\-]+\.[a-z]{2,4}$', stripslashes(trim($_POST['email'])))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$problem = TRUE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$message .= '&lt;p&gt;Please enter a valid email address.&lt;/p&gt;';</tt><br>
+<tt>} else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$email = eregi_replace 
+('^[[:alnum:]][a-z0-9_\.\-]*@[a-z0-9\.\-]+\.[a-z]{2,4}$', '&lt;a 
+href="mailto:\\0"&gt;Email&lt;/a&gt;', 
+stripslashes(trim($_POST['email'])));</tt><br>
+<tt>}</tt><br>
+<tt>// Check the URL.</tt><br>
+<tt>if (eregi </tt><br>
+<tt>('^((http"https"ftp)://)([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',
+ stripslashes(trim($_POST['url'])))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$url = eregi_replace 
+('^((http"https"ftp)://)([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',
+ '&lt;a href="\\0"&gt;\\0&lt;/a&gt;', 
+stripslashes(trim($_POST['url'])));</tt><br>
+<tt>} elseif (eregi 
+('^([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',
+ stripslashes(trim($_POST['url'])))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$url = eregi_replace 
+('^([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',
+ '&lt;a href="http://\\0"&gt;\\0&lt;/a&gt;', 
+stripslashes(trim($_POST['url'])));</tt><br>
+<tt>} else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$problem = TRUE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$message .= '&lt;p&gt;Please enter a valid URL.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check the URL category.</tt><br>
+<tt>if (!isset($_POST['url_category']) OR !is_numeric($_POST['url_category'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$message .= '&lt;p&gt;Please select a valid URL category.&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!$problem) { // Nothing went wrong.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>// Do whatever with the submitted information.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>echo "&lt;p&gt;Thank you for the URL 
+submission. We have received the following 
+information:&lt;/p&gt;\n{$_POST['name']}&lt;br /&gt;\n$email&lt;br 
+/&gt;\n$url";</tt><br>
+<tt>} else { // At least one test failed.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>echo $message;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>echo '&lt;/font&gt;&lt;p&gt;Please go back and try again.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt>
+</dpeccode><br>
+<a name="phi014"></a>
+<br><b><tt>ereg()</tt> and <tt>eregi()</tt> functions  <br>  </b>  The <tt>ereg()</tt> and <tt>eregi()</tt>
+ functions will also return matched patterns in an optional third 
+argument, meaning that the code in this example could be replicated 
+using those two functions.  <br><br>  <b><tt>split()</tt> function  <br>  </b>  PHP's <tt>split()</tt> function works like <tt>explode()</tt> in that it turns a string into an array, but it allows you to use regular expressions to define your separator.  <br><br>  <b><tt>preg_replace ()</tt> function  <br>  </b>  The Perl-compatible version of the <tt>ereg_replace()</tt> function is <tt>preg_replace()</tt>.  <br><br>  
+<a name="phi015"></a>
+
+<script language="JavaScript">insertAccQuestion('21','phi015.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phi016"></a>
+
+<script language="JavaScript">insertAccQuestion('22','phi016.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phi017"></a>
+<br><dpecw1>
+	
+In this lesson, you learned that you can use the <tt>ereg_replace()</tt> and <tt>eregi_replace()</tt>
+ functions to find and replace strings that are entered by a user. This 
+can be used to change a user-entered piece of data into a clickable HTML
+ link, for example.<br>
+You also learned how to use those functions in your PHP scripts. Both functions use the same syntax, but <tt>ereg_replace()</tt> is case-sensitive, while <tt>eregi_replace()</tt> is not, which should be considered when deciding which to use. 
+	
+</dpecw1><br>
+<a name="phj001"></a><br><a name="topic11"></a><h2>Lesson 10. Database Security and Encryption</h2><dpecw1>
+
+Securing your MySQL database is essential for your PHP scripts. As a 
+part of this security, you should be familiar with each of the 
+encryption functions MySQL has available.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Identify common security practices for your databases
+	</li>
+	<li>
+Define each of the encryption functions used by MySQL
+	</li>
+	<li>
+Use the encryption functions in MySQL
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phj002"></a>
+<br><dpecw1>
+
+I should mention a few of the security issues to consider when using and
+ administering your databases. I will also demonstrate a few more MySQL 
+functions that can be used to encrypt and decrypt data.
+
+</dpecw1><br>
+<a name="phj003"></a>
+<br><dpecw1>
+
+<b>* Security Practices</b><br>
+If you have administrative-level control over your database, you should keep in mind the following:<br>
+<ul>
+	<li>
+Do not allow anonymous users to connect to MySQL.
+	</li>
+	<li>
+Always require a password to connect to MySQL.
+	</li>
+	<li>
+Require users to also specify a hostname. This limits from what 
+computers users can and cannot access MySQL (although this requirement 
+can be tedious).
+	</li>
+	<li>
+Assign each user the absolute minimum required privileges.
+	</li>
+	<li>
+Limit the root user to <tt><tt>localhost</tt></tt> access only.
+	</li>
+	<li>
+Delete the <tt>test</tt> database, which, by default, any user can access.
+	</li>
+	<li>
+Delete unused user accounts.
+	</li>
+	<li>
+When storing sensitive information in a table, particularly passwords, protect the data first using an encryption function.
+	</li>
+	<li>
+Validate user-submitted data before inserting it into a database.
+	</li>
+	<li>
+Use the <tt><tt>.php</tt></tt> extension for the file containing your database connectivity information.
+	</li>
+	<li>
+If at all possible, store the database connection script outside of the Web root directory.
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phj004"></a>
+<br><dpecw1>
+
+<b>* Encryption</b><br>
+MySQL has several encryption and decryption functions built into the software. You should be familiar with the <tt><tt></tt>SHA()<tt></tt></tt> function, which is often used to encrypt passwords stored in a database. Another function, <tt><tt></tt>ENCRYPT()<tt></tt></tt>, is like <tt><tt></tt>SHA()<tt></tt></tt> in that it encrypts a string but differs in that you can add a <tt><tt>salt</tt></tt><i> </i>parameter to help randomize the encryption process.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; INSERT INTO users (username, password)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUES ('trout', ENCRYPT('password',&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'salt')); </tt><br>
+</dpeccode><br><dpecw2>
+
+<tt><tt></tt>ENCRYPT()<tt></tt></tt> uses the Unix <tt><tt></tt>crypt()<tt></tt></tt>
+ software, so it may not be available on your particular system (in 
+particular, on Windows). MySQL has another encryption function called <tt><tt></tt>DES_ENCRYPT()<tt></tt></tt>, usable only over an SSL connection. 
+
+</dpecw2><br>
+<a name="phj005"></a>
+<br><dpecw1>
+
+Both the <tt><tt></tt>SHA()<tt></tt></tt> and <tt><tt></tt>ENCRYPT()<tt></tt></tt>
+ functions create an encrypted string that cannot be decrypted. This is a
+ great safety feature because it means that stored information cannot be
+ retrieved in readable form. 
+
+</dpecw1><br>
+<a name="phj006"></a>
+<br><dpecw1>
+
+If you require data to be stored in an encrypted form that can be decrypted, you'll need to use either <tt><tt></tt>ENCODE()<tt></tt></tt> and <tt><tt></tt>DECODE()<tt></tt></tt> or <tt><tt></tt>AES_ENCRYPT()<tt></tt></tt> and <tt><tt></tt>AES_DECRYPT()<tt></tt></tt>. These functions also take a <tt><tt>salt</tt></tt><i> </i>argument, which helps to randomize the encryption.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; INSERT INTO users (username, password)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUES ('trout', ENCODE('password',&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'salt'));</tt><br>
+<tt>&nbsp;&nbsp; SELECT DECODE(password, 'salt') AS</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passwd FROM users WHERE username=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'trout';</tt><br>
+</dpeccode><br><dpecw2>
+
+The <tt><tt></tt>AES_ENCRYPT()<tt></tt></tt> function is considered to 
+be the most secure encryption option, but it is only available as of 
+MySQL version 4.0.2. Because of this restriction, I'll begin by 
+demonstrating <tt><tt></tt>ENCODE()<tt></tt></tt> and <tt><tt></tt>DECODE()<tt></tt></tt>. To do so, I'll run some queries on the <tt><tt>test</tt></tt><i> </i>database using the mysql client. 
+
+</dpecw2><br>
+<a name="phj007"></a>
+<br><dpecw1>
+
+<b>* Encrypting and Decrypting Data</b><br>
+Let's examine the steps for encrypting and decrypting data.<br>
+<b>* Step 1</b><br>
+Log into the mysql client and select the <tt><tt>test</tt></tt><i> </i>database.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; USE test;&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phj008"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Create a new <tt><tt>encode</tt></tt><i> </i>table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE encode (</tt><br>
+<tt>&nbsp;&nbsp; id INT UNSIGNED NOT NULL&nbsp;&nbsp;&nbsp;&nbsp;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTO_INCREMENT, </tt><br>
+<tt>&nbsp;&nbsp; card_number TINYBLOB, </tt><br>
+<tt>&nbsp;&nbsp; PRIMARY KEY (id)</tt><br>
+<tt>&nbsp;&nbsp; );</tt><br>
+</dpeccode><br>
+<a name="phj009"></a>
+<br><dpecjs> This table, <tt><tt>encode</tt></tt>, will contain fields for just an <tt><tt></tt>id<tt></tt></tt> and a (credit) <tt><tt></tt>card_number<tt></tt></tt>. The <tt><tt></tt>card_number<tt></tt></tt> will be encrypted using <tt><tt></tt>ENCODE()<tt></tt></tt> so that it can be decoded. <tt><tt></tt>ENCODE()<tt></tt></tt> returns a binary value that ought to be stored in a <tt><tt></tt>BLOB<tt></tt></tt> (or <tt><tt></tt>TINYBLOB<tt></tt></tt> here) column type.&nbsp; 
+<br>
+
+<a name="phj010"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Insert a new record.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; INSERT INTO encode (id, card_number)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUES (NULL, </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENCODE(1234567890123456, 'eLL10tT'));&nbsp;&nbsp;&nbsp;&nbsp;</tt><br>
+</dpeccode><br>
+<a name="phj011"></a>
+<br><dpecjs> Here I am adding a new record to the table, using the <tt><tt></tt>ENCODE()<tt></tt></tt> function with a salt of <tt><tt>eLL10tT</tt></tt><i> </i>to encrypt the card number. Always try to use a unique salt with your encryption functions.&nbsp; 
+<br>
+
+<a name="phj012"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Retrieve the record in an unencrypted form.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; SELECT id, DECODE(card_number,</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'eLL10tT') AS cc FROM encode;&nbsp;&nbsp;&nbsp;&nbsp;</tt><br>
+</dpeccode><br>
+<a name="phj013"></a>
+<br><dpecjs> This query returns all of the records, decrypting the credit card number in the process. Any value stored using <tt><tt></tt>ENCODE()<tt></tt></tt> can be retrieved (and matched) using <tt><tt></tt>DECODE()<tt></tt></tt>, as long as the same salt is used (here, <tt><tt>eLL10tT</tt></tt>).&nbsp; 
+<br>
+
+<a name="phj014"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+Check out the table's contents without using decryption.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; SELECT * FROM encode;&nbsp;&nbsp;&nbsp;&nbsp;</tt><br>
+</dpeccode><br>
+<a name="phj015"></a>
+<br><dpecjs> As you can see in the figure, the encrypted version of the 
+credit card number is unreadable. This is exactly the kind of security 
+measure required by e-commerce applications.&nbsp; 
+<br>
+
+<a name="phj016"></a>
+<br><b>Secure salt storage  <br>  </b>  When using <tt><tt></tt>ENCRYPT()<tt></tt></tt>, <tt><tt></tt>ENCODE()<tt></tt></tt>, or <tt><tt></tt>DECODE()<tt></tt></tt> from a PHP script, be sure to store the salt in a secure place.  <br><br>  <b>Using <tt>SHA()</tt> and <tt>AES_ENCRYPT()</tt>  <br>  </b>  As a rule of thumb, use <tt><tt></tt>SHA()<tt></tt></tt> for information that will never need to be viewable, such as passwords and perhaps usernames.  Use <tt><tt></tt>AES_ENCRYPT()<tt></tt></tt> (or <tt><tt></tt>ENCODE()<tt></tt></tt>
+ on older versions of MySQL) for information that needs to be protected 
+but may need to be viewable at a later date, such as credit card 
+information, Social Security numbers, addresses (perhaps), and so forth 
+ <br><br>  <b>Non-available <tt>ENCRYPT</tt> results  <br>  </b>  The <tt><tt></tt>ENCRYPT()<tt></tt></tt> function will return a <tt><tt></tt>NULL<tt></tt></tt> value if it is not available on an operating system.  <br><br>  
+<a name="phj017"></a>
+
+<script language="JavaScript">insertAccQuestion('23','phj017.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phj018"></a>
+
+<script language="JavaScript">insertAccQuestion('24','phj018.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phj019"></a>
+
+<script language="JavaScript">insertAccQuestion('25','phj019.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phj020"></a>
+<br><dpecw1>
+	
+In this lesson, you learned about some of the ways in which you can 
+maintain security over your databases. These include controlling access 
+privileges, requiring passwords and logins, deleting unused accounts, 
+and using encryption functions.<br>
+You also learned about the different encrypting and decrypting functions that MySQL has built in. These include the <tt><tt>SHA()</tt></tt>, <tt><tt>ENCRYPT()</tt></tt> and <tt><tt>DES_ENCRYPT()</tt></tt> functions, which each create encrypted strings that cannot be decrypted. You can also use the <tt><tt>ENCODE()</tt></tt> and <tt><tt>DECODE()</tt></tt> or <tt><tt>AES_ENCRYPT()</tt></tt> and <tt><tt>AES_DECRYPT()</tt></tt> functions to create encrypted data which can later be decrypted.<br>
+Finally, you learned how to use the encryption functions with your MySQL databases. You specifically used the <tt><tt>ENCODE()</tt></tt> function, but the process is identical for each of the functions.
+	
+</dpecw1><br>
+<a name="phk001"></a><br><a name="topic12"></a><h2>Lesson 11. Secure Salt Storage</h2><dpecw1>
+
+Using a secure encryption function and storing your encryption salt in a
+ secure location are both ways that you can improve the security of your
+ site and databases.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Use secure encryption functions in your PHP scripts
+	</li>
+	<li>
+Store your encryption salt in a database table
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phk002"></a>
+<br><dpecw1>
+
+While using <tt><tt>ENCRYPT()</tt></tt> and <tt><tt>DECRYPT()</tt> </tt>can
+ add a level of security to your Web applications by encrypting and 
+decrypting sensitive data, there's still room for improvement. For 
+starters, the <tt><tt></tt>AES_ENCRYPT()<tt></tt></tt> function is a more secure option and is recommend if you are using MySQL 4.0.2 or later. Its syntax is the same as that of the <tt><tt></tt>ENCODE()<tt></tt></tt> function:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; INSERT INTO users (username, userpass)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUES ('trout', </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AES_ENCRYPT('password', 'salt'))</tt><br>
+<tt>&nbsp;&nbsp; SELECT AES_DECRYPT(userpass, 'salt') AS&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passwd FROM users WHERE username=</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'trout' </tt><br>
+</dpeccode><br>
+<a name="phk003"></a>
+<br><dpecw1>
+
+Another issue is the encryption salt, which is key to the encryption 
+process. In order for a Web application to use a salt in its queries, 
+PHP must store this value somewhere, most likely in the database 
+connection script (as a constant).<br>
+But storing this value in a plain text format on the server makes it 
+more vulnerable. Instead, I'll store the salt in a database table.
+
+</dpecw1><br>
+<a name="phk004"></a>
+<br><dpecw1>
+
+To use it in a query without going through PHP, I then select it and 
+assign the value to a MySQL user-set variable. To just establish a user 
+defined variable, use this SQL command:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SELECT @</tt><i><tt>var</tt></i><tt>:='</tt><i><tt>value</tt></i><tt>'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt><br>
+</dpeccode><br><dpecw2>
+
+To define a variable based upon a value stored in a table, the syntax is:
+
+</dpecw2><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SELECT @</tt><i><tt>var</tt></i><tt>:='</tt><i><tt>value</tt></i><tt>'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phk005"></a>
+<br><dpecw1>
+
+Once you've established<tt> <tt>@var</tt></tt>, it can be used in other queries:
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; INSERT INTO encode (card_number) </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUES(AES_ENCRYPT(1234567890123456, @var))&nbsp;&nbsp; </tt><br>
+</dpeccode><br><dpecw2>
+
+The following sequence of steps will demonstrate this approach in action. 
+
+</dpecw2><br>
+<a name="phk006"></a>
+<br><dpecjs><b>*  Using a Database-Stored Salt</b>
+<br>
+Let's examine the steps for using database-stored salt.<br>
+<b>* Step 1</b><br>
+Log into the mysql client and select the <tt><tt>test</tt></tt><i> </i>database, if you haven't already.&nbsp; 
+<br>
+
+<a name="phk007"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Empty the <tt><tt>encode</tt></tt><i> </i>table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; TRUNCATE TABLE encode;&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phk008"></a>
+<br><dpecjs> Because I'm going to be using a different encryption 
+function, I'll want to clear out all the existing data before 
+repopulating it. The <tt><tt></tt>TRUNCATE<tt></tt></tt> command is the best way to do so.&nbsp; 
+<br>
+
+<a name="phk009"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Create and populate an <tt><tt>aes_salt</tt></tt> table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE aes_salt (</tt><br>
+<tt>&nbsp;&nbsp; salt VARCHAR(12) NOT NULL</tt><br>
+<tt>&nbsp;&nbsp; );</tt><br>
+<tt>&nbsp;&nbsp; INSERT INTO aes_salt (salt) VALUES&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;('0bfuscate');</tt><br>
+</dpeccode><br>
+<a name="phk010"></a>
+<br><dpecjs> This table, <tt><tt>aes_salt</tt></tt>, will store the encryption salt value in its one column. The <tt><tt></tt>INSERT<tt></tt></tt> query stores the salt, which will be retrieved and assigned to a user-defined variable as needed.&nbsp; 
+<br>
+
+<a name="phk011"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Retrieve the stored salt value and use it to insert a new record into the <tt><tt>encode</tt></tt><i> </i>table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; SELECT @salt:=salt FROM aes_salt; </tt><br>
+<tt>&nbsp;&nbsp; INSERT INTO encode (card_number)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUES (</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AES_ENCRYPT(1234567890123456, @salt));&nbsp;&nbsp; </tt><br>
+</dpeccode><br>
+<a name="phk012"></a>
+<br><dpecjs> The first line retrieves the stored salt value from the <tt><tt>aes_salt</tt></tt><i> </i>table and assigns this to <tt><tt></tt>@salt<tt></tt></tt>. Then a standard <tt><tt></tt>INSERT<tt></tt></tt> query is run to add a record to the <tt><tt>encode</tt></tt><i> </i>table. In this case, <tt><tt></tt>@salt<tt></tt></tt> is used in the query instead of a hard-coded salt value.&nbsp; 
+<br>
+
+<a name="phk013"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+Decrypt the stored card number.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; SELECT @salt:=salt FROM aes_salt; </tt><br>
+<tt>&nbsp;&nbsp; SELECT id, AES_DECRYPT(card_number,&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; @salt) AS cc FROM encode; </tt><br>
+</dpeccode><br>
+<a name="phk014"></a>
+<br><dpecjs> The first step retrieves the salt value so that it can be 
+used for decryption purposes. (If you followed these steps without 
+closing the MySQL session, this step wouldn't actually be necessary, as <tt><tt></tt>@salt<tt></tt></tt> would already be established.)
+The <tt><tt></tt>@salt<tt></tt></tt> variable is then used with the <tt><tt></tt>AES_DECRYPT()<tt></tt></tt> function.&nbsp; 
+<br>
+
+<a name="phk015"></a>
+<br><b>Variable choice  <br>  </b>  User variables are particular to 
+each connection. When one script or one mysql client session connects to
+ MySQL and establishes a variable, only that one script or session has 
+access to that variable.  <br><br>  <b>MySQL version  <br>  </b>  Prior to version 5.0 of MySQL, user variable names are case-sensitive.  <br><br>  <b><tt><tt>LIMIT</tt></tt> clause  <br>  </b>  You cannot use a user-defined variable as a parameter in a <tt><tt></tt>LIMIT<tt></tt></tt> clause.  <br><br>  <b>Caution on user-defined variables  <br>  </b>  Never establish and use a user-defined variable within the same SQL statement.  <br><br>  
+<a name="phk016"></a>
+
+<script language="JavaScript">insertAccQuestion('26','phk016.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phk017"></a>
+
+<script language="JavaScript">insertAccQuestion('27','phk017.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phk018"></a>
+
+<script language="JavaScript">insertAccQuestion('28','phk018.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phk019"></a>
+<br><a name="topic13"></a><h2>Topic 11.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try storing your encryption salt in a database table using MySQL.
+
+</dpecw1><br><dpecw2>
+	
+	<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Log into the mysql client and load the <tt>test</tt> database.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+If you have an already existing <tt>encode</tt> table, empty it using the <tt>TRUNCATE TABLE</tt> command. If you do not have an <tt>encode</tt> table, you will need to create one.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Create a table for the salt and populate it.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+Retrieve the stored salt value from that table and use it to insert a new record into your <tt>encode</tt> table.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+5
+</td>
+<td>
+Decrypt that stored value using the salt.
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+	
+</dpecw2><br>
+<a name="phk020"></a>
+<br><dpecw1>
+	
+In this lesson, you learned that you can use the <tt>AES_ENCRYPT()</tt> function for encryption purposes, which is a more secure option than <tt>ENCRYPT()</tt> or <tt>ENCODE()</tt>. It is only available on MySQL 4.0.2 or later, however, which means not all users can use it.<br>
+You also learned that storing your encryption salt in a database table 
+is more secure than storing it in plain text format on the server. You 
+learned how to create a table for the salt, and how to use the salt to 
+encrypt and decrypt.
+	
+</dpecw1><br>
+<a name="phl001"></a>
+<br><a name="topic14"></a><h2>Lesson 12. Course in Review</h2><dpecw1>
+
+This lesson allows you an opportunity to review the principles and practices that you have learned in this course.<br>
+It reviews the material presented in this course through questions, activities, and exercises.
+
+</dpecw1><br>
+<a name="phl002"></a>
+
+<script language="JavaScript">insertAccQuestion('29','phl002.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl004"></a>
+
+<script language="JavaScript">insertAccQuestion('30','phl004.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl005"></a>
+
+<script language="JavaScript">insertAccQuestion('31','phl005.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl006"></a>
+
+<script language="JavaScript">insertAccQuestion('32','phl006.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl007"></a>
+
+<script language="JavaScript">insertAccQuestion('33','phl007.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl008"></a>
+
+<script language="JavaScript">insertAccQuestion('34','phl008.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl009"></a>
+
+<script language="JavaScript">insertAccQuestion('35','phl009.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl010"></a>
+
+<script language="JavaScript">insertAccQuestion('36','phl010.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl011"></a>
+
+<script language="JavaScript">insertAccQuestion('37','phl011.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phl013"></a>
+<br><a name="topic15"></a><h2>Topic 12.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try defining, matching and replacing a pattern in your PHP script to turn an entered e-mail address into a clickable HTML link.
+
+</dpecw1><br><dpecw2>
+	
+	<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Define the pattern. You will probably need to use character classes.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+Determine what needs to be added to the input to turn it into a clickable link.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Determine what user-entered string will be modified.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+Use the <tt>$pattern = 'pattern';</tt>, <tt>$replace = 'replace';</tt> and <tt>$string = 'string';</tt> inputs to define each variable in your script.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+5
+</td>
+<td>
+Add the <tt>eregi_replace()</tt> function to your script.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+6
+</td>
+<td>
+Upload your script to your Web server and test the function.
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+	
+</dpecw2><br>
+<script language="JavaScript">
+<!--
+writeCopyrightInfo();
+var totalTopics =15;
+//-->
+</script><br><br><center>© 2006 MindLeaders, Inc. All Rights Reserved.
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+</center></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></body></html>

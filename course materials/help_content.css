@@ -1,0 +1,78 @@
+/* version 0.1 */
+
+.choption { display: run-in }
+.dt { display: run-in }
+.fig .dd { display: inline }
+.fig .dlentry { display: inline }
+.fig .dt { display: inline }
+.note .ph { display: inline }
+.ph { display: inline }
+.sup { display: inline }
+.term { display: inline }
+.tm { display: inline }
+
+.body  { margin: 0px; padding: 0px 0px 12pt 12pt }
+.choption { font-weight: bold }
+.choption:after { content: "&nbsp;" }
+.dt { font-weight: bold }
+.dt:after { content: "&nbsp;" }
+.fig .desc { font-style: italic; font-size: 8pt; line-height: 12pt }
+.fig .dlentry { font-style: italic; font-size: 8pt; line-height: 12pt }
+.fig .dlentry:after { content: "&nbsp; " }
+.fig .dt { font-weight: bold; font-size: 8pt; line-height: 12pt  }
+.fig .dt:after { content: " " }
+.fig img { margin: 0px; padding: 0px 0px 3pt }
+.fig { margin: 0px; padding: 0px 0px 11pt }
+.link { font-size: 8.5pt; line-height: 12pt; padding-bottom: 3pt }
+.note .ph { font-weight: bold }
+.note { font-style: italic; font-size: 8pt; line-height: 12pt; margin: 0px; padding: 0px 0px 6pt }
+.chdesc { font-size: 8pt; line-height: 12pt; margin: 0px; padding: 0px 0px 6pt }
+.dd { font-size: 8pt; line-height: 12pt; margin: 0px; padding: 0px 0px 6pt }
+.p { font-size: 8.5pt; line-height: 12pt; margin: 0px; padding: 0px 0px 9pt }
+.ph { font-weight: bold }
+.related-links  { margin: 0px; padding: 0px 0px 23pt 12pt; }
+.related-links:before   { font-style: italic; font-weight: bold; font-size: 8.5pt; line-height: 14pt; content: "See also" }
+.section { font-weight: bold; font-size: 9pt; line-height: 12pt; margin: 0px; padding: 0px 0px 3pt }
+.sup { font-size: smaller; font-weight: lighter; vertical-align: super }
+.term { color: #006; font-weight: bold }
+.title { font-weight: bold; font-size: 9pt; line-height: 12pt; margin: 0px; padding: 0px 0px 3pt }
+.tm { font-size: smaller; font-weight: lighter; vertical-align: super }
+body   { font-size: 8.5pt; line-height: 12pt; font-family: Verdana, Arial, Helvetica, sans-serif; margin: 0; padding: 12pt }
+h1 { font-weight: bold; font-size: 14pt; line-height: 19pt; margin: 0px; padding: 0pt 0px 20px }
+img  { margin: 0px 0px -2px; padding: 0px }
+li { padding-bottom: 3pt }
+ul { margin-top: 0px; margin-bottom: 0px; padding-top: 0px; padding-bottom: 0px; margin-left: 12pt }
+ul { padding-left: 12pt }
+ol > ul { margin: 0 12pt 3pt 12pt; padding: 0px }
+table  { margin: 0px 0px 6pt; padding: 0px }
+td  { font-size: 8.5pt; line-height: 9.5pt; padding: 3pt }
+th  { font-weight: bold; font-size: 8.5pt; line-height: 9.5pt; padding: 3pt }
+
+ul > div.p { padding-bottom: 0; margin-bottom: 0 }
+
+td > div.p { font-size: 8pt;}
+th > .p, td > .p { padding: 0px 0px 3pt }
+th, td { padding: 5pt }
+a:link { color: #c00 }
+a:visited { color: #966} /* this seems to do nothing */
+a:hover { text-decoration: none } 
+
+ol.ol { margin-top: 0 }
+
+div.p > ul.ul { margin-top: 3pt }
+div.p > div.note { padding-top: 8px }
+li > div.note { padding-top: 5px }
+
+div.keyword { display: inline; font-style: italic }
+
+ul div.p + div.fig > img { padding-top: 11px; }
+div.dd div.fig > img { padding-top: 11px; }
+
+ul div.fig > img { padding-top: 7px; }
+/* this next rule to negate the one above since we treat an <ul> inside a <ol> differently */
+ol ul div.fig > img { padding-top: 0px; }
+
+div.singlestep + div.itemgroup > div.fig > img { margin-top: 11px; }
+div.singlestep + div.itemgroup > div.note { margin-top: 7px; }
+
+ul + div.fig, div.p > div.fig { margin-top: 11px; }

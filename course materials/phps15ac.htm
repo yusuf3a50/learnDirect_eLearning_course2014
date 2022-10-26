@@ -1,0 +1,3831 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+</head><body><mledit by="insert_name" date="insert_date" note="insert_note"></mledit>
+
+<script language="JavaScript" src="phps15ac_files/mlclientpage.js"></script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript" src="phps15ac_files/site.js"></script><script language="Javascript" src="phps15ac_files/resource_strings.js"></script><script language="Javascript" src="phps15ac_files/special_cases.js"></script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript">var ThisPage=new MlPage();</script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<title>PHP and MySQL: E-Commerce Example</title>
+
+<script language="JavaScript">var crsAcronym="phps15";</script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript" src="phps15ac_files/access.js"></script><script language="Javascript" src="phps15ac_files/params.js"></script><script language="Javascript" src="phps15ac_files/courseware.js"></script><script language="Javascript" src="phps15ac_files/phps15.js"></script><script language="Javascript" src="phps15ac_files/printbut.js"></script><table width="97%"><tbody><tr><td align="right"><div id="printButton" class="printbut" onclick="javascript:printPage();" onmouseover="this.style.backgroundPosition='-48px -24px';" onmouseout="this.style.backgroundPosition='-48px 0px';" title="Print"></div></td></tr></tbody></table>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+
+<!--<DPECTPL>access</DPECTPL>-->
+
+<h1>PHP and MySQL: E-Commerce Example</h1>
+<script language="JavaScript">
+var numAccQuestions =20;
+writeAccIntro();
+</script>You can print this text-only version of this course for future reference.<br>&nbsp;<br> If you wish to use the accessible version of our courses, which includes questions in text-only format, click <b>Text Only</b> on the log on page, and then enter your user ID and password from the Accessibility Log On page.
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<hr>
+<a name="skipped">
+</a><a name="pha001"></a>
+<br><a name="topic1"></a><h2>Lesson 1. Course Introduction</h2><dpecw1>
+
+In this course, I'll develop a Web application, an e-commerce site. 
+Despite the recent economic slump and the devaluation of Web sites, 
+e-commerce still plays a vital role on the Internet and is a prominent 
+use of PHP and MySQL. <br>
+In this example, I'll design a site for the purpose of selling prints of
+ art. Unfortunately, to write and explain the entire application is 
+beyond the scope of this course. Furthermore, some aspects of e-commerce
+ — like how you handle the money — are extremely particular to each 
+individual site. Trying to demonstrate such a process would be a waste 
+of space. With these restrictions in mind, the focus in this course is 
+on the core functionality of an e-commerce site: populating a catalog as
+ an administrator, displaying products to the public, creating a 
+shopping cart, and storing orders in a database.<br>
+From a technological standpoint, this application will use the Improved 
+MySQL Extension functions, which require that you are using PHP 5 with 
+MySQL 4.1.3 or later. If the server you are using does not meet these 
+requirements, you will need to make the necessary modifications to the 
+PHP scripts. For the most part, this is a matter of replacing <tt>mysqli_<i>something</i>()</tt> with <tt>mysql_<i>something</i>()</tt>,
+ as well as making minor modifications to the order of the function's 
+arguments. Throughout this course I will repeatedly add reminders as to 
+what changes will be required if you are using the older software.<br>
+This course uses examples that traverse lessons.
+
+</dpecw1><br>
+<a name="phb001"></a><br><a name="topic2"></a><h2>Lesson 2. Creating the Database</h2><dpecw1>
+
+The first step to designing an e-commerce site involves planning out and
+ creating the database in MySQL. In addition, you will want to consider 
+the security of the site.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Use normalization to design a database
+	</li>
+	<li>
+Create a database in MySQL
+	</li>
+	<li>
+Explain the three broad areas of security to consider for your site
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phb002"></a>
+<br><dpecw1>
+
+The e-commerce site in this example will use the simply named <tt><tt>ecommerce</tt></tt><i> </i>database. I'll explain each table's role prior to creating the database in MySQL.<br>
+With any type of e-commerce application there are three broad kinds of 
+data to be stored: the product information (what is being sold), the 
+customer information (who is making purchases), and the order 
+information (what was purchased and by whom). Going through the 
+normalization process, I've come up with five tables. 
+
+</dpecw1><br>
+<a name="phb003"></a>
+<br><dpecw1>
+
+The first two tables store all of the products being sold. For this example, the site will be selling artistic prints. The <tt><tt>artists</tt></tt><i> </i>table
+ stores the information for the artists whose work is being sold. This 
+table contains just a minimum of information (the artists' first, 
+middle, and last names), but you could easily add the artists' birth and
+ death dates, biographical data, and so forth.<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Column</b>
+
+</th><th class="heading" scope="col">
+<b>Type</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt><tt>artist_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(3) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>first_name</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(20) default NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>middle_name</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(20) default NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>last_name</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(30) NOT NULL</tt></tt>
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phb004"></a>
+<br><dpecw1>
+
+The <tt><tt>prints</tt></tt><i> </i>table is the main products table for
+ the site. It stores the print names, prices, and other relevant 
+details. It is linked to the <tt><tt>artists</tt></tt><tt> </tt>table using the <tt><tt>artist_id</tt></tt>.<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Column</b>
+
+</th><th class="heading" scope="col">
+<b>Type</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt><tt>print_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(4) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>artist_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(3) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>print_name</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(60) NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>price</tt></tt>
+</td>
+<td>
+<tt><tt>DECIMAL(6,2) NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>size</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(60) default NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>description</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(255) default NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>image_name</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(30) NOT NULL</tt></tt>
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phb005"></a>
+<br><dpecw1>
+
+The <tt><tt>customers</tt></tt><i> </i>table does exactly what you'd 
+expect: it records the personal information for each client. At the 
+least, it reflects the person's first name, last name, email address, 
+password, and shipping address, as well as the date registered. 
+Presumably the combination of the email address and password would allow
+ the user to log in, shop, and access his or her account.<br>
+Since it's fairly obvious what information this table would store, I'll define it with only the three essential columns for now.<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Column</b>
+
+</th><th class="heading" scope="col">
+<b>Type</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt><tt>customer_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(5) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>email</tt></tt>
+</td>
+<td>
+<tt><tt>VARCHAR(40) NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>pass</tt></tt>
+</td>
+<td>
+<tt><tt>CHAR(40) NOT NULL</tt></tt>
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phb006"></a>
+<br><dpecw1>
+
+The final two tables store all of the order information. There are any 
+number of ways you could do this, but I've chosen to store general order
+ information — the total, the date, and the customer's ID — in an <tt><tt>orders</tt></tt><i> </i>table.
+ This table could also have separate columns reflecting the shipping 
+cost, the amount of sales tax, any discounts that applied, and so on.<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Column</b>
+
+</th><th class="heading" scope="col">
+<b>Type</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt><tt>order_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(10) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>customer_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(5) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>total</tt></tt>
+</td>
+<td>
+<tt><tt>DECIMAL(10,2) NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>order_date</tt></tt>
+</td>
+<td>
+<tt><tt>TIMESTAMP NOT NULL</tt></tt>
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phb007"></a>
+<br><dpecw1>
+
+The <tt><tt>order_contents</tt></tt><i> </i>table will store the actual items that were sold, including the quantity and price. The <tt><tt>order_contents</tt></tt><i> </i>table is essentially a middleman, used to avoid the many-to-many relationship between <tt><tt>prints</tt></tt><i> </i>and <tt><tt>orders</tt></tt><i> </i>(each print can be in multiple orders, and each order can have multiple prints). <br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Column</b>
+
+</th><th class="heading" scope="col">
+<b>Type</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+<tt><tt>oc_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(10) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>order_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(10) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>print_id</tt></tt>
+</td>
+<td>
+<tt><tt>INT(4) UNSIGNED NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>quantity</tt></tt>
+</td>
+<td>
+<tt><tt>TINYINT UNSIGNED NOT NULL DEFAULT</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>price</tt></tt>
+</td>
+<td>
+<tt><tt>DECIMAL(6,2) NOT NULL</tt></tt>
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+<tt><tt>ship_date</tt></tt>
+</td>
+<td>
+<tt><tt>DATETIME DEFAULT NULL</tt></tt>
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+<br>
+In order to be able to use transactions, the two order tables will use 
+the InnoDB storage engine. The others will use the default MyISAM type.<br>
+We'll begin by examining the steps for creating the database.
+
+</dpecw1><br>
+<a name="phb008"></a>
+<br><dpecw1>
+
+<b>* Step 1</b><br>
+Log in to the mysql client and create the <tt><tt>ecommerce</tt></tt><i> </i>database, if it doesn't already exist.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE DATABASE ecommerce;&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; USE ecommerce;</tt>
+</dpeccode><br><dpecw2>
+
+For these steps, you can use either the mysql client or another tool like phpMyAdmin.
+
+</dpecw2><br>
+<a name="phb009"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Create the <tt><tt>artists</tt></tt><i> </i>table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE artists (</tt><br>
+<tt>&nbsp;&nbsp; artist_id INT(3) UNSIGNED NOT NULL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTO_INCREMENT,</tt><br>
+<tt>&nbsp;&nbsp; first_name VARCHAR(20) default NULL, middle_name VARCHAR(20)</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default NULL, last_name VARCHAR(30) NOT NULL,</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PRIMARY KEY (artist_id),</tt><br>
+<tt>&nbsp;&nbsp; KEY full_name (last_name, first_name)</tt><br>
+<tt>&nbsp;&nbsp; ) ENGINE=MyISAM; </tt>
+</dpeccode><br>
+<a name="phb010"></a>
+<br><dpecjs> This table stores just four pieces of information for each artist. Of these, only <tt><tt>last_name</tt></tt><i> </i>is required (is defined as <tt>NOT NULL</tt>), as there are single-named artists (e.g., Christo).
+I've added definitions for the indexes (or keys) as well. The primary key is the <tt><tt>artist_id</tt></tt>, and an index is placed on the combination of the first and last name, which may be used in an <tt>ORDER BY</tt> clause.&nbsp; 
+<br>
+
+<a name="phb011"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Create the <tt><tt>prints</tt></tt><i> </i>table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE prints (</tt><br>
+<tt>&nbsp;&nbsp; print_id INT(4) UNSIGNED NOT NULL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTO_INCREMENT,</tt><br>
+<tt>&nbsp;&nbsp; artist_id INT(3) UNSIGNED NOT NULL, </tt><br>
+<tt>&nbsp;&nbsp; print_name VARCHAR(60) NOT NULL, </tt><br>
+<tt>&nbsp;&nbsp; price decimal(6,2) NOT NULL,</tt><br>
+<tt>&nbsp;&nbsp; size VARCHAR(60) default NULL, </tt><br>
+<tt>&nbsp;&nbsp; description VARCHAR(255) default NULL,&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; image_name VARCHAR(30) NOT NULL, </tt><br>
+<tt>&nbsp;&nbsp; PRIMARY KEY (print_id),</tt><br>
+<tt>&nbsp;&nbsp; KEY artist_id (artist_id), </tt><br>
+<tt>&nbsp;&nbsp; KEY print_name (print_name), </tt><br>
+<tt>&nbsp;&nbsp; KEY price (price)</tt><br>
+<tt>&nbsp;&nbsp; ) ENGINE=MyISAM; </tt>
+</dpeccode><br>
+<a name="phb012"></a>
+<br><dpecjs> All of the columns in the <tt><tt>prints</tt></tt> table are required except for the <tt><tt>size</tt></tt> and <tt><tt>description</tt></tt>.
+I've also set indexes on the <tt><tt>artist_id</tt></tt>, <tt><tt>print_name</tt></tt>, and <tt><tt>price</tt></tt> fields, each of which may be used in queries. You could add to this table an <tt><tt>in_stock</tt></tt> field, to indicate the availability of products.&nbsp; 
+<br>
+
+<a name="phb013"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Create the <tt><tt>customers</tt></tt><i> </i>table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE customers (</tt><br>
+<tt>&nbsp;&nbsp; customer_id INT(5) UNSIGNED NOT NULL&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; AUTO_INCREMENT,</tt><br>
+<tt>&nbsp;&nbsp; email VARCHAR(40) NOT NULL, </tt><br>
+<tt>&nbsp;&nbsp; pass CHAR(40) NOT NULL, </tt><br>
+<tt>&nbsp;&nbsp; PRIMARY KEY (customer_id), </tt><br>
+<tt>&nbsp;&nbsp; KEY email_pass (email, pass)</tt><br>
+<tt>&nbsp;&nbsp; ) ENGINE=MyISAM; </tt>
+</dpeccode><br>
+<a name="phb014"></a>
+<br><dpecjs> You could throw in the other appropriate fields (name, 
+address, phone number, the registration date, etc.). As I won't be 
+dealing with those values — or user management at all — in this course, 
+I've omitted them.&nbsp; 
+<br>
+
+<a name="phb015"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+Create the <tt><tt>orders</tt></tt><i> </i>table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE orders (</tt><br>
+<tt>&nbsp;&nbsp; order_id INT(10) UNSIGNED NOT NULL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTO_INCREMENT,</tt><br>
+<tt>&nbsp;&nbsp; customer_id INT(5) UNSIGNED NOT NULL, total decimal(10,2)&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOT NULL, order_date TIMESTAMP,</tt><br>
+<tt>&nbsp;&nbsp; PRIMARY KEY (order_id),</tt><br>
+<tt>&nbsp;&nbsp; KEY customer_id (customer_id), </tt><br>
+<tt>&nbsp;&nbsp; KEY order_date (order_date)</tt><br>
+<tt>&nbsp;&nbsp; ) ENGINE=InnoDB; </tt>
+</dpeccode><br>
+<a name="phb016"></a>
+<br><dpecjs> All of the orders fields are required, and three indexes have been created. Notice that a foreign key column here, like <tt><tt>customer_id</tt></tt>, is of the same exact type as its corresponding primary key (<tt><tt>customer_id</tt></tt> in the <tt><tt>customers</tt></tt> table).
+The <tt><tt>order_date</tt></tt> field will store the date and time an order was entered. Being defined as a <tt>TIMESTAMP</tt>, it will automatically be given the current value when a record is inserted. 
+Finally, because I'll want to use transactions with the <tt><tt>orders</tt></tt><i> </i>and <tt><tt>order_contents</tt></tt><i> </i>tables, both will use the InnoDB storage engine.&nbsp; 
+<br>
+
+<a name="phb017"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Create the <tt><tt>order_contents</tt></tt> table.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; CREATE TABLE order_contents (</tt><br>
+<tt>&nbsp;&nbsp; oc_id INT(10) UNSIGNED NOT NULL</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUTO_INCREMENT,</tt><br>
+<tt>&nbsp;&nbsp; order_id INT(10) UNSIGNED NOT NULL, print_id INT(4)&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNSIGNED NOT NULL, quantity TINYINT</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNSIGNED NOT NULL DEFAULT 1,</tt><br>
+<tt>&nbsp;&nbsp; price decimal(6,2) NOT NULL, </tt><br>
+<tt>&nbsp;&nbsp; ship_date DATETIME default NULL, </tt><br>
+<tt>&nbsp;&nbsp; PRIMARY KEY (oc_id),</tt><br>
+<tt>&nbsp;&nbsp; KEY order_id (order_id), </tt><br>
+<tt>&nbsp;&nbsp; KEY print_id (print_id), </tt><br>
+<tt>&nbsp;&nbsp; KEY ship_date (ship_date)</tt><br>
+<tt>&nbsp;&nbsp; ) ENGINE=InnoDB;</tt>
+</dpeccode><br>
+<a name="phb018"></a>
+<br><dpecjs> In order to have a normalized database structure, I've 
+separated out each order into its general information — the customer, 
+the order date, and the total amount — and its specific information — 
+the actual items ordered and in what quantity.
+The table has foreign keys to the <tt><tt>orders</tt></tt><i> </i>and <tt><tt>prints</tt></tt><i> </i>tables. The <tt><tt>quantity</tt></tt><i> </i>has a set default value of <tt>1</tt>. The <tt><tt>ship_date</tt></tt><i> </i>is defined as a <tt>DATETIME</tt>, so that it can have a <tt>NULL</tt> value, meaning that the item has not yet shipped.
+Again, this table must use the InnoDB storage engine in order to be part of a transaction. &nbsp; 
+<br>
+
+<a name="phb019"></a>
+<br><dpecw1>
+	
+You may be curious why I'm storing the price in the table when that information is already present in the <tt><tt>prints</tt></tt><i> </i>table. The reason is simply this: the price of a product may change. The <tt><tt>prints</tt></tt><i> </i>table indicates the current price of an item; the <tt><tt>order_contents</tt></tt><i> </i>table indicates the price at which an item was purchased.
+	
+</dpecw1><br>
+<a name="phb020"></a>
+<br><b>Product IDs  <br>  </b>  Depending upon what a site is selling, it would have different tables in place of <tt><tt>artists</tt></tt><i> </i>and <tt><tt>prints</tt></tt>.
+  The most important attribute of any e-commerce database is that there 
+is a products table that lists the individual items being sold with a 
+product ID associated with each.  So a large, red polo shirt would have 
+one ID, which is different than a large, blue polo shirt's ID, which is 
+different than a medium, blue polo shirt's ID.  Unique, individual 
+product identifiers let you track orders and product quantities.  <br><br>  <b>Multiple addresses  <br>  </b>
+  If you wanted to store multiple addresses for users — home, billing, 
+friends, etc. — create a separate addresses table. In this table store 
+all of that information, including the address type, and link those 
+records back to the customers table using the customer ID as a 
+primary-foreign key.  <br><br>  
+<a name="phb021"></a>
+<br><dpecw1>
+
+<b>* Security</b><br>
+With respect to an e-commerce site, there are three broad security 
+considerations. The first is how the data is stored on the server. You 
+need to protect the MySQL database itself and the directory where 
+session information is stored.
+
+</dpecw1><br>
+<a name="phb022"></a>
+<br><dpecw1>
+
+The second security consideration has to do with protecting access to 
+sensitive information. The administrative side of the site, which would 
+have the ability to view orders and customer records, must be 
+safeguarded to the highest level. 
+
+</dpecw1><br>
+<a name="phb023"></a>
+<br><dpecw1>
+
+The third factor is protecting the data during transition. By the time 
+the customer gets to the checkout process (where credit card and 
+shipping information comes in), secure transactions must be used. To do 
+so entails establishing a Secure Sockets Layer (SSL) on your server with
+ a valid certificate and then changing to an <tt><tt>https://</tt></tt> URL.<br>
+Also be aware of what information is being sent via email, since those 
+messages are frequently not transmitted through secure avenues.
+
+</dpecw1><br>
+<a name="phb024"></a>
+
+<script language="JavaScript">insertAccQuestion('1','phb024.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb025"></a>
+
+<script language="JavaScript">insertAccQuestion('2','phb025.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb026"></a>
+
+<script language="JavaScript">insertAccQuestion('3','phb026.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb027"></a>
+
+<script language="JavaScript">insertAccQuestion('4','phb027.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb028"></a>
+<br><a name="topic3"></a><h2>Topic 2.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try creating a database for use in an e-commerce site.<br>
+<ml_ins_href><ml_data_href>
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpecw2>
+
+<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Determine what items you are going to sell, and what information you 
+will need to provide. Consider both information you will need from the 
+customers, and information that you need to supply to the customers, or 
+use to keep track of products.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+Use the principles of normalization to determine how many tables you will need.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Plan out the columns that will need to be in each table. Make sure each 
+table has a primary key, and includes any foreign keys you need to 
+relate the tables.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+After you have figured out which columns you need, assign each column a type to be entered into MySQL. 
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+5
+</td>
+<td>
+Create a new database in MySQL. Title the database something simple and logical.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+6
+</td>
+<td>
+Create each of the tables in MySQL.
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw2><br>
+<a name="phb029"></a>
+<br><dpecw1>
+	
+In this lesson, you learned how to plan out the database for an 
+e-commerce site. You learned that you should normalize the database and 
+include three different types of data: product information, customer 
+information and order information. This will require you to create at 
+least three different tables, and may require more.<br>
+You also learned how to assign columns and variables within those 
+tables, and how to  create a database, tables and columns in MySQL.<br>
+Finally, you learned about the three broad areas of security to consider
+ for your e-commerce site. These include how the data is stored on the 
+server, protecting access to sensitive information, and protecting data 
+during transmission.
+	
+</dpecw1><br>
+<a name="phc001"></a><br><a name="topic4"></a><h2>Lesson 3. The Administration Side</h2><dpecw1>
+
+The first thing you will want to do is create a script that allows you 
+to add products to your inventory, so that customers are able to buy 
+them. Before you do that, however, you must create a script to connect 
+to your MySQL database. <br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Write a script to connect to the MySQL database
+	</li>
+	<li>
+Write a script for adding items to the database
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phc002"></a>
+<br><dpecw1>
+
+Improved MySQL Extension functions require that you have<br>
+<ul>
+	<li>
+PHP 5 or greater
+	</li>
+	<li>
+MySQL 4.1.3 or greater
+	</li>
+	<li>
+Improved MySQL Extension support enabled in PHP
+	</li>
+</ul>
+<br>
+In case you don't meet all of these criteria or if you would just prefer
+ to use the standard MySQL functions, I'll include the alternative code 
+in these first two examples. You'll see it commented out in the scripts,
+ but it won't be present in the step-by-step sequences. 
+
+</dpecw1><br>
+<a name="phc003"></a>
+<br><dpecw1>
+	
+To keep a complicated process more simple, none of the examples will use
+ the kind of error management techniques you would want on a live site. 
+When you're ready to make an actual e-commerce application, incorporate 
+the proper error management techniques.
+	
+</dpecw1><br>
+<a name="phc004"></a>
+<br><dpecjs><b>* Step 1</b>
+<br>
+Create a new PHP document.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php # Script 14.1 - mysql_connect.php</tt>
+</dpeccode><br>
+<a name="phc005"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Define the database connection constants.
+Naturally you will need to use a username/password/hostname combination that has access to your MySQL database.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php # Script 14.1 - mysql_connect.php</tt><br>
+<tt>define ('DB_USER', 'username'); </tt><br>
+<tt>define ('DB_PASSWORD', 'password'); </tt><br>
+<tt>define ('DB_HOST', 'localhost'); </tt><br>
+<tt>define ('DB_NAME', 'ecommerce'); </tt><br>
+</dpeccode><br>
+<a name="phc006"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Connect to MySQL and select the database.
+Although you may want to use more advanced error-management techniques, for the sake of brevity and development, I'll use the <tt><tt></tt>die()<tt></tt></tt> function if a connection error occurs. 
+Again, this code uses the <tt><tt></tt>mysqli_*<tt></tt></tt> functions. See the commented-out code in the completed script later in this lesson to see how the standard <tt><tt></tt>mysql_*<tt></tt></tt> functions connect to MySQL and select the database.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php # Script 14.1 - mysql_connect.php</tt><br>
+<tt>define ('DB_USER', 'username'); </tt><br>
+<tt>define ('DB_PASSWORD', 'password'); </tt><br>
+<tt>define ('DB_HOST', 'localhost'); </tt><br>
+<tt>define ('DB_NAME', 'ecommerce'); </tt><br>
+<tt>$dbc = mysqli_connect (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) OR</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; die ('Could not connect to MySQL: ' . mysqli_connect_error() );</tt><br>
+<tt> </tt>
+</dpeccode><br>
+<a name="phc007"></a>
+<br><dpecjs><b>* Step 4</b>
+<br>
+Define the <tt><tt></tt>escape_data()<tt></tt></tt> function and 
+complete the PHP page.
+&nbsp;The function takes a string of data as its lone argument. It then 
+checks to see if Magic Quotes is enabled. If so, the slashes are 
+stripped from the data to avoid over-escaping the string.
+Next, the database connection is made available via the <tt><tt></tt>global<tt></tt></tt> statement and the string is run through the <tt><tt></tt>mysqli_real_escape_string()<tt></tt></tt> function.
+Finally, the processed string is returned by the function.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php # Script 14.1 - mysql_connect.php</tt><br>
+<tt>define ('DB_USER', 'username'); </tt><br>
+<tt>define ('DB_PASSWORD', 'password'); </tt><br>
+<tt>define ('DB_HOST', 'localhost'); </tt><br>
+<tt>define ('DB_NAME', 'ecommerce'); </tt><br>
+<tt>$dbc = mysqli_connect (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) OR</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; die ('Could not connect to MySQL: ' . mysqli_connect_error() );</tt><br>
+<tt>function escape_data ($data) {</tt><br>
+<tt>if (ini_get('magic_quotes_gpc')) {</tt><br>
+<tt>$data = stripslashes($data);</tt><br>
+<tt>}</tt><br>
+<tt>global $dbc;</tt><br>
+<tt>$data = mysqli_real_escape_string ($dbc, trim($data));</tt><br>
+<tt>return $data;</tt><br>
+<tt>}</tt><br>
+<tt> </tt>
+</dpeccode><br>
+<a name="phc008"></a>
+<br><dpecjs><b>* Step 5</b>
+<br>
+Complete the PHP script, save it and upload to your Web server (outside of the Web document root).
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php # Script 14.1 - mysql_connect.php</tt><br>
+<tt>define ('DB_USER', 'username'); </tt><br>
+<tt>define ('DB_PASSWORD', 'password'); </tt><br>
+<tt>define ('DB_HOST', 'localhost'); </tt><br>
+<tt>define ('DB_NAME', 'ecommerce'); </tt><br>
+<tt>$dbc = mysqli_connect (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) OR</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; die ('Could not connect to MySQL: ' . mysqli_connect_error() );</tt><br>
+<tt>function escape_data ($data) {</tt><br>
+<tt>if (ini_get('magic_quotes_gpc')) {</tt><br>
+<tt>$data = stripslashes($data);</tt><br>
+<tt>}</tt><br>
+<tt>global $dbc;</tt><br>
+<tt>$data = mysqli_real_escape_string ($dbc, trim($data));</tt><br>
+<tt>return $data;</tt><br>
+<tt>}</tt><br>
+<tt>?&gt;</tt><br>
+<tt> </tt>
+</dpeccode><br>
+<a name="phc009"></a>
+<br><dpecw1>
+	
+The structure for this site will be designed with keeping security in 
+mind as much as possible. The MySQL connection script and the <tt><tt>uploads</tt></tt><i> </i>directory (where images will be stored) are not within the Web directory (they aren't available via <tt><tt>http://</tt></tt>) .
+	
+</dpecw1><br>
+<a name="phc010"></a>
+<br><dpecjs>The <tt><tt></tt>mysql_connect.php<tt></tt></tt> script connects to the database, using the Improved MySQL Extension functions, and defines a function for handling data.
+You may have to enable <tt>php_mysqli.dll</tt> in <tt>php.ini</tt> for this code to work properly.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php # Script 14.1 - mysql_connect.php</tt><br>
+<tt>// This file contains the database access information for the database.</tt><br>
+<tt>// This file also establishes a connection to MySQL and selects the database.</tt><br>
+<tt>// Set the database access information as constants.</tt><br>
+<tt>define ('DB_USER', 'newuser');</tt><br>
+<tt>define ('DB_PASSWORD', 'newpass');</tt><br>
+<tt>define ('DB_HOST', 'localhost');</tt><br>
+<tt>define ('DB_NAME', 'ecommerce');</tt><br>
+<tt>// Make the connnection and then select the database.</tt><br>
+<tt>// Improved MySQL Version:</tt><br>
+<tt>$dbc = mysqli_connect (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) OR 
+die ('Could not connect to MySQL: ' . mysqli_connect_error() );</tt><br>
+<tt>/* Standard MySQL Version:</tt><br>
+<tt>$dbc = mysql_connect (DB_HOST, DB_USER, DB_PASSWORD) OR die ('Could not connect to MySQL: ' . mysql_error() );</tt><br>
+<tt>mysql_select_db (DB_NAME) OR die ('Could not select the database: ' . mysql_error() );</tt><br>
+<tt>*/</tt><br>
+<tt>// Create a function for escaping the data.</tt><br>
+<tt>function escape_data ($data) {</tt><br>
+<tt>// Address Magic Quotes.</tt><br>
+<tt>if (ini_get('magic_quotes_gpc')) {</tt><br>
+<tt>$data = stripslashes($data);</tt><br>
+<tt>}</tt><br>
+<tt>// Improved MySQL Version:</tt><br>
+<tt>global $dbc;</tt><br>
+<tt>$data = mysqli_real_escape_string($dbc, trim($data));</tt><br>
+<tt>/* Standard MySQL Version:</tt><br>
+<tt>// Check for mysql_real_escape_string() support.</tt><br>
+<tt>if (function_exists('mysql_real_escape_string')) {</tt><br>
+<tt>global $dbc; // Need the connection.</tt><br>
+<tt>$data = mysql_real_escape_string (trim($data), $dbc);</tt><br>
+<tt>} else {</tt><br>
+<tt>$data = mysql_escape_string (trim($data));</tt>
+<tt>} */</tt><br>
+<tt>// Return the escaped value.</tt><br>
+<tt>return $data;</tt><br>
+<tt>} // End of function.</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phc011"></a>
+<br><dpecjs><b>*  Creating <tt></tt></b><tt>
+<br>add_print.php</tt><b>* :</b>
+Let's examine the steps for creating the <tt>add_print.php</tt> script.
+<b>* Step 1</b>
+Create a new PHP document, beginning with the HTML head.
+Normally, I would create a template system for the administrative side, 
+but since I'll be writing only this one administrative script, I'll do 
+without.&nbsp; 
+<br>
+</dpecjs><br><br>
+<a name="phc012"></a>
+<br><dpecjs><b>*  Step 2</b>
+<br>
+Include the database connection script and check if the form has been submitted. 
+The administration folder will be located inside of the main (<tt><tt>html</tt></tt>)
+ folder and is therefore two directories above the connection script. 
+Keep your directory structure in mind when including files.&nbsp; 
+<br>
+</dpecjs><br><br>
+<a name="phc013"></a>
+<br><dpecjs><b>*  Step 3</b>
+<br>
+Validate the print's name.&nbsp; 
+<br>
+</dpecjs><br><br>
+<a name="phc014"></a>
+<br><dpecjs> This is one of the required fields in the <tt><tt>prints</tt></tt><i> </i>table
+ and should be checked for a value. I could also choose to use regular 
+expressions here, but I'm assuming that the site's administrator will 
+not want to undermine the integrity of the application. If no value is 
+entered, an error message is printed.&nbsp; 
+<br>
+
+<a name="phc015"></a>
+<br><dpecjs><b>*  Step 4</b>
+<br>
+Handle the image file, if one was selected. &nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/</tt><br>
+<tt>xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Add a Print&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;?php add_print.php</tt><br>
+<tt>require_once ('../../mysql_connect.php');</tt><br>
+<tt>if (isset($_POST['submitted'])) {</tt><br>
+<tt>if (!empty($_POST['print_name'])) {</tt><br>
+<tt>$pn = escape_data($_POST['print_name']);</tt><br>
+<tt>} else {</tt><br>
+<tt>$pn = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; Please enter the print\'s name!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>if (is_uploaded_file ($_ FILES['image']['tmp_name'])) {</tt><br>
+<tt>if (move_uploaded_file($_FILES ['image']['tmp_name'], "../../</tt><br>
+<tt>uploads/{$_FILES['image']['name']}")) {</tt><br>
+<tt>echo '&lt;p&gt;The file has been uploaded!&lt;/p&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;</tt><br>
+<tt>The file could not be moved.</tt><br>
+<tt>&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>$i = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>$i = $_FILES['image']['name'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$i = FALSE;</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phc016"></a>
+<br><dpecjs> The <tt><tt></tt>is_uploaded_file()<tt></tt></tt> function returns <tt><tt></tt>TRUE<tt></tt></tt> if a file was uploaded and <tt><tt></tt>FALSE<tt></tt></tt> if not. If a file was uploaded, the script will attempt to move the file over to the <tt><tt>uploads</tt></tt><i> </i>directory. Messages are printed indicating its success in doing so. 
+Finally, the <tt><tt></tt>$i<tt></tt></tt> variable will be set to 
+either the name of the file or an empty string. This is one area of the 
+script that could be easily improved. You could rename the print using 
+the print's ID from the database. You could also validate that the image
+ is of the right size and type. To keep an already busy script more 
+manageable, I'm assuming that the administrator will use this page 
+properly.&nbsp; 
+<br>
+
+<a name="phc017"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Validate the size, price, and description inputs.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if (is_uploaded_file ($_ FILES['image']['tmp_name'])) {</tt><br>
+<tt>if (move_uploaded_file($_FILES ['image']['tmp_name'], "../../</tt><br>
+<tt>uploads/{$_FILES['image']['name']}")) {</tt><br>
+<tt>echo '&lt;p&gt;The file has been uploaded!&lt;/p&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;</tt><br>
+<tt>The file could not be moved.</tt><br>
+<tt>&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>$i = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>$i = $_FILES['image']['name'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$i = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['size'])) {</tt><br>
+<tt>$s = escape_data($_POST['size']);</tt><br>
+<tt>} else {</tt><br>
+<tt>$s = '&lt;i&gt;Size information not available.&lt;/i&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>if (is_numeric($_POST['price'])) {</tt><br>
+<tt>$p = (float) $_POST['price'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$p = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; Please enter the print\'s price!</tt><br>
+<tt>&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['description'])) {</tt><br>
+<tt>$d = escape_data($_POST ['description']);</tt><br>
+<tt>} else {</tt><br>
+<tt>$d = '&lt;i&gt;No description available.&lt;/i&gt;';</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phc018"></a>
+<br><dpecjs> The size and description values are optional, but the price
+ is not. As a basic validity test, I ensure that the submitted price is a
+ number (it should be a decimal) using the <tt><tt></tt>is_numeric()<tt></tt></tt>
+ function. If the value is numeric, I type-cast it as a floating-point 
+number just to be safe. An error message will be printed if no price or 
+an invalid price is entered.
+If the size and description inputs are not used, I'll set the <tt><tt></tt>$s<tt></tt></tt> and <tt><tt></tt>$d<tt></tt></tt> variables to default messages. These default messages will then be displayed on the public side.&nbsp; 
+<br>
+
+<a name="phc019"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Check if a new artist is being entered.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; if ($_POST['artist'] == 'new') {</tt><br>
+<tt>&nbsp;&nbsp; $query = 'INSERT INTO artists (first_name, middle_name,&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; last_name) VALUES ('; </tt>
+</dpeccode><br>
+<a name="phc020"></a>
+<br><dpecw1>
+
+To enter the print's artist, the administrator will have two choices: select an existing artist (from the records in the <tt><tt>artists</tt></tt><i> </i>table)
+ using a pull-down menu or enter the name of a new artist. If a new 
+artist is being entered, the record will have to be inserted into the <tt><tt>artists</tt></tt><i> </i>table before the print is added to the <tt><tt>prints</tt></tt><i> </i>table. 
+
+</dpecw1><br>
+<a name="phc021"></a>
+<br><dpecjs><b>*  Step 7</b>
+<br>
+Finish assembling the query.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if (!empty($_POST['first_name'])) {</tt><br>
+<tt>$query.="'" . escape_data ($_POST['first_name']) . "', ";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query .='NULL, ';</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['middle_name'])) {</tt><br>
+<tt>$query .="'" . escape_data ($_POST['middle_name']) . "', ";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query .='NULL, ';</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['last_name'])) {</tt><br>
+<tt>$query.="'" . escape_data ($_POST['last_name']) . "')";</tt><br>
+<tt>$result=mysqli_query($dbc, $query);</tt><br>
+<tt>$a=mysqli_insert_id($dbc);</tt><br>
+<tt>} else {</tt><br>
+<tt>$a=FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; Please enter the artist\'s name!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt>
+</dpeccode><br>
+<a name="phc022"></a>
+<br><dpecjs> The artist's first and middle names are optional fields, 
+whereas the last name is not (since there are artists referred to by 
+only one name). Depending upon whether the inputs have a value, either 
+the first and middle names will be added to the query or <tt><tt></tt>NULL<tt></tt></tt> will be.
+The final query created by this process will be like <tt><tt></tt>INSERT…VALUES (NULL, NULL,'Christo')<tt></tt></tt> or <tt><tt></tt>INSERT…VALUES ('John', 'Singer', 'Sargeant')<tt></tt></tt>. Because the last name is a required field, an error message is printed if it's omitted for a new artist record.
+If the new artist was added to the database, the artist's ID will be retrieved (for use in the print's <tt><tt></tt>INSERT<tt></tt></tt> query) using the <tt><tt></tt>mysqli_<tt>insert</tt>_id()<tt></tt></tt> function.&nbsp; 
+<br>
+
+<a name="phc023"></a>
+<br><dpecjs><b>*  Step 8</b>
+<br>
+Complete the artist conditional.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if (!empty($_POST['first_name'])) {</tt><br>
+<tt>$query .= "'" . escape_data ($_POST['first_name']) . "', ";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query .= 'NULL, ';</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['middle_name'])) {</tt><br>
+<tt>$query .= "'" . escape_data ($_POST['middle_name']) . "', ";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query .= 'NULL, ';</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['last_name'])) {</tt><br>
+<tt>$query .= "'" . escape_data ($_POST['last_name']) . "')";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>$a = mysqli_insert_id($dbc);</tt><br>
+<tt>} else {</tt><br>
+<tt>$a = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; Please enter the artist\'s name!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} elseif ( ($_POST['artist'] == 'existing') &amp;&amp; ($_POST</tt><br>
+<tt>['existing'] &gt; 0)) {</tt><br>
+<tt>$a = (int) $_POST['existing'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$a = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Please enter or select the </tt><br>
+<tt>print\'s artist!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phc024"></a>
+<br><dpecjs> If the administrator opted to use an existing artist, then a
+ check is made that an artist was selected from the pull-down menu. If 
+this condition failed, then an error message is printed.&nbsp; 
+<br>
+
+<a name="phc025"></a>
+<br><dpecjs><b>*  Step 9</b>
+<br>
+Insert the record into the database.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>} elseif ( ($_POST['artist'] == 'existing') &amp;&amp; ($_POST</tt><br>
+<tt>['existing'] &gt; 0)) {</tt><br>
+<tt>$a = (int) $_POST['existing'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$a = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Please enter or select the </tt><br>
+<tt>print\'s artist!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>if ($pn &amp;&amp; $p &amp;&amp; $a &amp;&amp; $i) {</tt><br>
+<tt>$query = "INSERT INTO prints (artist_id, print_name, price, </tt><br>
+<tt>size, description, image_name) VALUES ($a, '$pn', $p, '$s', '$d', '$i')";</tt><br>
+<tt>if ($result = mysqli_query ($dbc, $query)) {</tt><br>
+<tt>echo '&lt;p&gt;The print has been added.&lt;/p&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; Your submission could not be </tt><br>
+<tt>processed due to a system error.&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phc026"></a>
+<br><dpecjs> If the four required fields (<tt><tt>print_name</tt>, <tt>price</tt>, <tt>artist_id</tt>, </tt>and<tt> <tt>image_name</tt></tt>)
+ have proper values, the print will be added to the database. Messages 
+will be sent to the Web browser indicating the success of running the 
+query.
+If you are using the older MySQL functions, you'll need to change the 
+code accordingly. And if you encounter MySQL errors, use the standard 
+debugging methods: printing out the query, using <tt><tt></tt>mysqli_error()<tt></tt></tt> or <tt><tt></tt>mysql_error()<tt></tt></tt>, and so on.&nbsp; 
+<br>
+
+<a name="phc027"></a>
+<br><dpecw1>
+
+<b>* Step 10</b><br>
+Complete the conditionals.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt; Please click "back" and try again.&lt;/font&gt;&lt;/p&gt;';&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt>
+</dpeccode><br><dpecw2>
+
+The first <tt><tt></tt>else<tt></tt></tt> statement applies when one of the four validation tests fails. The second <tt><tt></tt>else<tt></tt></tt> will be used to display the form if it has not been submitted.
+
+</dpecw2><br>
+<a name="phc028"></a>
+<br><dpecjs><b>*  Step 11</b>
+<br>
+Begin creating the HTML form.
+Because this form will allow a user to upload a file, I must include the <tt><tt></tt>enctype<tt></tt></tt> in the form tag and the <tt><tt></tt>MAX_FILE_SIZE<tt></tt></tt> hidden input.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>} else {</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; Please click "back" and try</tt><br>
+<tt>again.&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;form enctype="multipart/form-data" action="add_print.php"method="post"&gt;</tt><br>
+<tt>&lt;input type="hidden" name="MAX_FILE_SIZE" value="524288" /&gt;</tt><br>
+<tt>&lt;fieldset&gt;&lt;legend&gt;Fill out the form to add a print to the catalog:&lt;/legend&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Print Name:&lt;/b&gt; &lt;input type="text" name="print_name" size="30"</tt><br>
+<tt>maxlength="60" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Image:&lt;/b&gt; &lt;input type="file" name="image" /&gt;</tt><br>
+<tt>&lt;small&gt;The file name should not include spaces or other invalid</tt><br>
+<tt>characters and should have a file extension.&lt;/small&gt;&lt;/p&gt;</tt><br>
+</dpeccode><br>
+<a name="phc029"></a>
+<br><dpecjs><b>*  Step 12</b>
+<br>
+Create the artist pull-down menu.
+The artist pull-down menu will be dynamically generated from the records stored in the <tt><tt>artists</tt></tt><i> </i>table
+ using this PHP code. It's prefaced by a radio button so that the 
+administrator can select an existing artist or enter a new one. The 
+MySQL <tt><tt></tt>CONCAT_WS()<tt></tt></tt> function — short for <tt><tt>concatenate with separator</tt></tt>
+ — is used to retrieve the artist's entire name as one value. If you are
+ confused by the query's syntax, run it in the mysql client or other 
+interface to see the results.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>} else {</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; Please click "back" and try</tt><br>
+<tt>again.&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;form enctype="multipart/form-data" action="add_print.php"method="post"&gt;</tt><br>
+<tt>&lt;input type="hidden" name="MAX_FILE_SIZE" value="524288" /&gt;</tt><br>
+<tt>&lt;fieldset&gt;&lt;legend&gt;Fill out the form to add a print to the catalog:&lt;/legend&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Print Name:&lt;/b&gt; &lt;input type="text" name="print_name" size="30"</tt><br>
+<tt>maxlength="60" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Image:&lt;/b&gt; &lt;input type="file" name="image" /&gt;</tt><br>
+<tt>&lt;small&gt;The file name should not include spaces or other invalid</tt><br>
+<tt>characters and should have a file extension.&lt;/small&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Artist:&lt;/b&gt;</tt><br>
+<tt>&lt;p&gt;&lt;input type="radio" name="artist" value="existing" /&gt; Existing =&gt;</tt><br>
+<tt>&lt;select name="existing"&gt;&lt;option&gt; Select One&lt;/option&gt;</tt><br>
+<tt>&lt;?php</tt><br>
+<tt>$query = "SELECT artist_id, CONCAT_WS(' ', first_name,</tt><br>
+<tt>middle_name, last_name) AS name FROM artists ORDER BY last_name, </tt><br>
+<tt>first_name ASC";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>while ($row = mysqli_fetch_array ($result, MYSQLI_ASSOC)) {</tt><br>
+<tt>echo "&lt;option value=\"{$row ['artist_id']}\"&gt;{$row</tt><br>
+<tt>['name']}&lt;/option&gt;\n";</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;/select&gt;&lt;/p&gt;</tt><br>
+</dpeccode><br>
+<a name="phc030"></a>
+<br><dpecw1>
+
+<b>* Step 13</b><br>
+Create the inputs for adding a new artist.
+
+</dpecw1><br><dpeccode>
+<tt>&nbsp;&nbsp; &lt;p&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;input type="radio" name="artist" value="new" /&gt; New =&gt;</tt><br>
+<tt>&nbsp;&nbsp; First Name: &lt;input type="text" name="first_name" size="10"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength="20" /&gt;</tt><br>
+<tt>&nbsp;&nbsp; Middle Name: &lt;input type="text" name="middle_name" size="10"&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength="20" /&gt;</tt><br>
+<tt>&nbsp;&nbsp; Last Name: &lt;input type="text" name="last_name" size="10"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxlength="30" /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/p&gt;</tt>
+</dpeccode><br><dpecw2>
+
+Rather than create a separate form for adding artists to the database, 
+the administrator will have the option of doing so directly here. The 
+PHP code that handles the form will create a new database record using 
+the new artist information.
+
+</dpecw2><br>
+<a name="phc031"></a>
+<br><dpecjs><b>*  Step 14</b>
+<br>
+Complete the HTML form.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;p&gt;</tt><br>
+<tt>&lt;input type="radio" name="artist" value="new" /&gt; New =&gt;</tt><br>
+<tt>First Name: &lt;input type="text" name="first_name" size="10"</tt><br>
+<tt>maxlength="20" /&gt;</tt><br>
+<tt>Middle Name: &lt;input type="text" name="middle_name" size="10"</tt><br>
+<tt>maxlength="20" /&gt;</tt><br>
+<tt>Last Name: &lt;input type="text" name="last_name" size="10"</tt><br>
+<tt>maxlength="30" /&gt;</tt><br>
+<tt>&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Price:&lt;/b&gt; &lt;input type="text" name="price"</tt><br>
+<tt>rows="5"&gt;&lt;/textarea&gt;&lt;/p&gt;</tt><br>
+<tt>size="10" maxlength="10" /&gt; &lt;small&gt;Do not include the dollar sign</tt><br>
+<tt>or commas.&lt;/small&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Size:&lt;/b&gt; &lt;input type="text" name="size" size="30"</tt><br>
+<tt>maxlength="60" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;textarea name="description" cols="40" </tt><br>
+<tt>rows="5"&gt;&lt;/textarea&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;/fieldset&gt;</tt><br>
+<tt>&lt;div align="center"&gt;&lt;input type="submit" name="submit"</tt><br>
+<tt>value="Submit" /&gt;&lt;/div&gt;</tt><br>
+<tt>&lt;input type="hidden" name="submitted" value="TRUE" /&gt;</tt><br>
+<tt>&lt;/form&gt;</tt><br>
+</dpeccode><br>
+<a name="phc032"></a>
+<br><dpecw1>
+
+<b>* Step 15</b><br>
+Complete the PHP conditional and the HTML page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;&nbsp;&nbsp; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt>
+</dpeccode><br><dpecw2>
+
+This last bit of PHP code — the curly brace — completes the <tt><tt></tt>else<tt></tt></tt> part of the conditional (that displays the form if it hasn't been submitted). Then save the file as <tt><tt></tt>add_print.php<tt></tt></tt>.
+
+</dpecw2><br>
+<a name="phc033"></a>
+<br><dpecw1>
+
+<b>* Step 16</b><br>
+Create the necessary directories on your server. This administrative page will require the creation of two new directories.<br>
+One, which I'll call <tt><tt>4dm1n</tt></tt>, will house the administrative files themselves.<br>
+The second, <tt><tt>uploads</tt></tt>, should be placed below the Web document directory and have its privileges changed so that PHP can move files into it.
+
+</dpecw1><br>
+<a name="phc034"></a>
+<br><dpecjs><b>*  Step 17</b>
+<br>
+Upload <tt><tt></tt>add_print.php<tt></tt></tt> to your Web server (into the administration folder) and test in your Web browser.&nbsp; 
+<br>
+
+<a name="phc035"></a>
+<br><dpecjs>This administration page adds products to the database. It handles a file upload, inserts the new print into the <tt><tt>prints</tt></tt> table, and even allows for a new artist to be submitted.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type" content= "text/html;</tt><br>
+<tt>charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;Add a Print&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;?php add_print.php</tt><br>
+<tt>// This page allows the administrator to add a print (product).</tt><br>
+<tt>require_once ('../../mysql_connect.php');</tt><br>
+<tt>// Connect to the database.</tt><br>
+<tt>if (isset($_POST['submitted'])) { // Check if the form has been submitted.</tt><br>
+<tt>// Validate the print_name, image, artist (existing or first_name,</tt><br>
+<tt> last_name, middle_name), size, price, and description.</tt><br>
+<tt>// Check for a print name.</tt><br>
+<tt>if (!empty($_POST['print_name'])) {</tt><br>
+<tt>$pn = escape_data($_POST ['print_name']);</tt><br>
+<tt>} else {</tt><br>
+<tt>$pn = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Please enter the print\'s name!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check for an image.</tt><br>
+<tt>if (is_uploaded_file ($_FILES ['image']['tmp_name'])) {</tt><br>
+<tt>if (move_uploaded_file($_FILES ['image']['tmp_name'], "../../</tt><br>
+<tt>uploads/{$_FILES['image']['name']}")) { // Move the file over.</tt><br>
+<tt>echo '&lt;p&gt;The file has been uploaded!&lt;/p&gt;';</tt><br>
+<tt>} else { // Couldn't move the file over.</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt; The file could not be moved.&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>$i = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>$i = $_FILES['image']['name'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$i = FALSE;</tt><br>
+<tt>}</tt><br>
+<tt>// Check for a size (not required).</tt><br>
+<tt>if (!empty($_POST['size'])) {</tt><br>
+<tt>$s = escape_data($_POST['size']);</tt><br>
+<tt>} else {</tt><br>
+<tt>$s = '&lt;i&gt;Size information not available.&lt;/i&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check for a price.</tt><br>
+<tt>if (is_numeric($_POST['price'])) {</tt><br>
+<tt>$p = (float) $_POST['price'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$p = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Please enter the print\'s price!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Check for a description (not required).</tt><br>
+<tt>if (!empty($_POST['description'])) {</tt><br>
+<tt>$d = escape_data($_POST['description']);</tt><br>
+<tt>} else {</tt><br>
+<tt>$d = '&lt;i&gt;No description available.&lt;/i&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Validate the artist.</tt><br>
+<tt>if ($_POST['artist'] == 'new') {</tt><br>
+<tt>// If it's a new artist, add the artist to the database.</tt><br>
+<tt>$query = 'INSERT INTO artists (first_name, middle_name, last_name) </tt><br>
+<tt>VALUES (';</tt><br>
+<tt>if (!empty($_POST['first_name'])) {</tt><br>
+<tt>$query .= "'" . escape_data($_POST['first_name']) . "', ";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query .= 'NULL, ';</tt><br>
+<tt>}</tt><br>
+<tt>if (!empty($_POST['middle_name'])) {</tt><br>
+<tt>$query .= "'" . escape_data($_POST['middle_name']) . "', ";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query .= 'NULL, ';</tt><br>
+<tt>}</tt><br>
+<tt>// Check for a last_name.</tt><br>
+<tt>if (!empty($_POST['last_name'])) {</tt><br>
+<tt>$query .= "'" . escape_data($_POST['last_name']) . "')";</tt><br>
+<tt>// Improved MySQL Version:</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+<tt>$a = mysqli_insert_id($dbc);</tt><br>
+<tt>/* Standard MySQL Version:</tt><br>
+<tt>$result = mysql_query ($query); // Run the query.</tt><br>
+<tt>$a = mysql_insert_id(); // Get the artist ID.</tt><br>
+<tt>*/</tt><br>
+<tt>} else { // No last name value.</tt><br>
+<tt>$a = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Please enter the artist\'s name!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} elseif ( ($_POST['artist'] == 'existing') &amp;&amp; ($_POST['existing'] &gt; 0))</tt><br>
+<tt>{ // Existing artist.</tt><br>
+<tt>$a = (int) $_POST['existing'];</tt><br>
+<tt>} else { // No artist selected.</tt><br>
+<tt>$a = FALSE;</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Please enter or select the print\'s </tt><br>
+<tt>artist!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>if ($pn &amp;&amp; $p &amp;&amp; $a &amp;&amp; $i) { // If everything's OK.</tt><br>
+<tt>// Add the print to the database.</tt><br>
+<tt>$query = "INSERT INTO prints (artist_id, print_name, price, size, </tt><br>
+<tt>description, image_name) VALUES ($a, '$pn', $p, '$s', '$d', '$i')"; </tt><br>
+<tt>if ($result = mysqli_query ($dbc, $query)) { // Worked.</tt><br>
+<tt>echo '&lt;p&gt;The print has been added.&lt;/p&gt;';</tt><br>
+<tt>} else { // If the query did not run OK.</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Your submission could not be </tt><br>
+<tt>processed due to a system error.&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} else { // Failed a test.</tt><br>
+<tt>echo '&lt;p&gt;&lt;font color="red"&gt;Please click "back" and try </tt><br>
+<tt>again.&lt;/font&gt;&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} else { // Display the form.</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;form enctype="multipart/form-data" action="add_print.php" method="post"&gt;</tt><br>
+<tt>&lt;input type="hidden" name="MAX_FILE_SIZE" value="524288" /&gt;</tt><br>
+<tt>&lt;fieldset&gt;&lt;legend&gt;Fill out the form to add a print to the </tt><br>
+<tt>catalog:&lt;/legend&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Print Name:&lt;/b&gt; &lt;input type="text" name="print_name" size="30" maxlength="60" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Image:&lt;/b&gt; &lt;input type="file" name="image" /&gt; &lt;small&gt;The file name </tt><br>
+<tt>should not include spaces or other invalid characters and should have a </tt><br>
+<tt>file extension.&lt;/small&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Artist:&lt;/b&gt;</tt><br>
+<tt>&lt;p&gt;&lt;input type="radio" name="artist" value="existing" /&gt; Existing =&gt;</tt><br>
+<tt>&lt;select name="existing"&gt;&lt;option&gt;Select One&lt;/option&gt;</tt><br>
+<tt>&lt;?php // Retrieve all the artists and add to the pull-down menu.</tt><br>
+<tt>$query = "SELECT artist_id, CONCAT_WS(' ', first_name, middle_name,</tt><br>
+<tt> last_name) AS name FROM artists ORDER BY last_name, first_name ASC";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>while ($row = mysqli_fetch_array ($result, MYSQLI_ASSOC)) {</tt><br>
+<tt>echo "&lt;option value=\"{$row['artist_id']}\"&gt;{$row['name']}&lt;/option&gt;\n";</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc); // Close the database connection.</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;/select&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;</tt><br>
+<tt>&lt;input type="radio" name="artist" value="new" /&gt; New =&gt;</tt><br>
+<tt>First Name: &lt;input type="text" name="first_name" size="10"</tt><br>
+<tt>maxlength="20" /&gt;</tt><br>
+<tt>Middle Name: &lt;input type="text" name="middle_name" size="10"</tt><br>
+<tt>maxlength="20" /&gt;</tt><br>
+<tt>Last Name: &lt;input type="text" name="last_name" size="10"</tt><br>
+<tt>maxlength="30" /&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Price:&lt;/b&gt; &lt;input type="text" name="price" size="10"</tt><br>
+<tt>maxlength="10" /&gt; &lt;small&gt;Do not include the dollar sign or commas.</tt><br>
+<tt>&lt;/small&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Size:&lt;/b&gt; &lt;input type="text" name="size" size="30"</tt><br>
+<tt>maxlength="60"/&gt;&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;textarea name="description" cols="40"&gt;&lt;/textarea&gt; </tt><br>
+<tt>&lt;/fieldset&gt;</tt><br>
+<tt>&lt;div align="center"&gt;&lt;input type="submit" name="submit" value="Submit" /&gt;&lt;/div&gt;</tt><br>
+<tt>&lt;input type="hidden"name="submitted" value="TRUE" /&gt;</tt><br>
+<tt>&lt;/form&gt;</tt><br>
+<tt>&lt;?php</tt><br>
+<tt>} // End of main conditional.</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt>
+</dpeccode><br>
+<a name="phc036"></a>
+<br><b>Complex scripts  <br>  </b>  This is actually the most 
+complicated script used for this sample site. The complexity arises from
+ the artists option (use an existing one or add a new one).  To simplify
+ this aspect of the application, you could create one form for adding 
+artists to the database and a separate one for adding prints (the 
+separate <tt><tt></tt>add_print.php<tt></tt></tt> page would therefore only allow the selection of an existing artist).  <br><br>  <b>MySQL users  <br>  </b>
+  Although I did not do so here for the sake of brevity, I would 
+recommend that separate MySQL users be created for the administrative 
+and the public sides.  The admin user would need <tt><tt></tt>SELECT<tt></tt></tt>, <tt><tt></tt>INSERT<tt></tt></tt>, <tt><tt></tt>UPDATE<tt></tt></tt>, and <tt><tt></tt>DELETE<tt></tt></tt> privileges, while the public one would need only <tt><tt></tt>SELECT<tt></tt></tt> and <tt><tt></tt>INSERT<tt></tt></tt>.  <br><br>  <b>Security  <br>  </b>
+  The administrative pages should be protected in the most secure way 
+possible.  This could entail HTTP authentication using Apache, a login 
+system using sessions or cookies, or even placing the admin pages on 
+another, possibly offline, server (so the site could be remotely managed
+ from just one location).  <br><br>  
+<a name="phc037"></a>
+
+<script language="JavaScript">insertAccQuestion('5','phc037.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc038"></a>
+
+<script language="JavaScript">insertAccQuestion('6','phc038.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc039"></a>
+
+<script language="JavaScript">insertAccQuestion('7','phc039.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc040"></a>
+
+<script language="JavaScript">insertAccQuestion('8','phc040.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc041"></a>
+<br><a name="topic5"></a><h2>Topic 3.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try writing a script for adding items to the MySQL database for your e-commerce site.
+
+</dpecw1><br><dpecw2>
+
+<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Begin by creating a new PHP document with an HTML head.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+Include the database connection script, and check to see if a form has been submitted. <ml_ins_href><ml_data_href>php script which can be used for this purpose. 
+</ml_data_href></ml_ins_href></td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Have your script validate any required fields in the form.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+Have the script type-cast any appropriate fields.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+5
+</td>
+<td>
+Write the command for making the script insert the new records into the database and complete any conditionals.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+6
+</td>
+<td>
+Now that the script has been completed, create the HTML form for handling the inputs.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+7
+</td>
+<td>
+Once the script and HTML forms have been completed, you will need to 
+make sure that you have the necessary directories on your server.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+8
+</td>
+<td>
+Finally, upload the script to your Web server and test it in your Web browser.
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw2><br>
+<a name="phc042"></a>
+<br><dpecw1>
+	
+In this lesson, you learned how to write a script for connecting to the 
+MySQL database. This script will allow you to add or retrieve 
+information from the database without needing to access the database 
+directly.<br>
+You also learned how to write a script for adding items into the MySQL 
+database. This script calls on the connection script to perform its 
+function.
+	
+</dpecw1><br>
+<a name="phd001"></a><br><a name="topic6"></a><h2>Lesson 4. Creating the Public Template</h2><dpecw1>
+
+Before working on the public side of your e-commerce site, you need to 
+create the header and footer files, as well as the index. <br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create the <tt><tt>header.html</tt>, <tt>footer.html</tt></tt> and <tt><tt>index.php</tt></tt> files
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phd002"></a>
+<br><dpecjs><b>* Making <tt></tt></b><tt>
+<br>header.html</tt>
+Before I get into the heart of the public side, I'll need to create the requisite HTML header and footer files.
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //header.html</tt>
+</dpeccode><br>
+<a name="phd003"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Begin the session.
+It's very important that the user's session is maintained across every 
+page, so I'll start the session in the header file. If the session was 
+lost on a single page, then a new session would begin on subsequent 
+pages, and the user's history — the contents of the shopping cart — 
+would be gone.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //header.html</tt><br>
+<tt>session_start();</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phd004"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Create the HTML head.
+The page's title will be set as a PHP variable and printed out within the title tags.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //header.html</tt><br>
+<tt>session_start();</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type"content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+</dpeccode><br>
+<a name="phd005"></a>
+<br><dpecjs><b>* Step 4</b>
+<br>
+Create the top row of the table.
+This layout will use images to create the links for the public pages.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //header.html</tt><br>
+<tt>session_start();</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type"content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;table cellspacing="0"cellpadding="0" border="0"align="center" width="600"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="center" colspan="3"&gt;&lt;img src="images/title.jpg"width="600"</tt><br>
+<tt>&nbsp;&nbsp; height="61"border="0" alt="title"/&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="index.php"&gt;&lt;img src="images/home.jpg"width="200"</tt><br>
+<tt>&nbsp;&nbsp; height="39" border="0" alt="home page"/&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="browse_prints.php"&gt;</tt><br>
+<tt>&lt;img src="images/prints.jpg"width="200" height="39"border="0"</tt><br>
+<tt>&nbsp;&nbsp; alt="view the prints" /&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="view_cart.php"&gt;&lt;img src="images/cart.jpg"width="200"</tt><br>
+<tt>&nbsp;&nbsp; height="39"border="0" alt="view your cart" /&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+</dpeccode><br>
+<a name="phd006"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Start the middle row.
+All of each individual page's content will go in the middle row, so the 
+header file begins this row and the footer file will close it.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php header.html</tt><br>
+<tt>session_start();</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type"content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;table cellspacing="0"cellpadding="0" border="0"align="center" width="600"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="center" colspan="3"&gt;&lt;img src="images/title.jpg"width="600"</tt><br>
+<tt>&nbsp;&nbsp; height="61"border="0" alt="title"/&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="index.php"&gt;&lt;img src="images/home.jpg"width="200"</tt><br>
+<tt>&nbsp;&nbsp; height="39" border="0" alt="home page"/&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="browse_prints.php"&gt;</tt><br>
+<tt>&lt;img src="images/prints.jpg"width="200" height="39"border="0"</tt><br>
+<tt>&nbsp;&nbsp; alt="view the prints" /&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="view_cart.php"&gt;&lt;img src="images/cart.jpg"width="200"</tt><br>
+<tt>&nbsp;&nbsp; height="39"border="0" alt="view your cart" /&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="left" colspan="3"bgcolor="#ffffcc"&gt;&lt;br /&gt;</tt><br>
+</dpeccode><br>
+<a name="phd007"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Save the file as <tt><tt></tt>header.html<tt></tt></tt> and upload to your Web server (create an <tt><tt>includes</tt></tt><i> </i>directory in which to store it).
+
+</dpecw1><br>
+<a name="phd008"></a>
+<br><dpecjs>The header file creates the initial HTML and begins the PHP session.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //header.html</tt><br>
+<tt>// This page begins the session, the HTML page, and the layout table.</tt><br>
+<tt>session_start(); // Start a session.</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+<tt>"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&lt;html xmlns="http://www.w3.org/1999/xhtml"</tt><br>
+<tt>xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&lt;head&gt;</tt><br>
+<tt>&lt;meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+<tt>&lt;title&gt;&lt;?php echo $page_title; ?&gt;</tt><br>
+<tt>&lt;/title&gt;</tt><br>
+<tt>&lt;/head&gt;</tt><br>
+<tt>&lt;body&gt;</tt><br>
+<tt>&lt;table cellspacing="0" cellpadding="0" border="0"</tt><br>
+<tt>&nbsp;&nbsp; align="center" width="600"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="center" colspan="3"&gt;&lt;img src="images/title.jpg" width="600"</tt><br>
+<tt>&nbsp;&nbsp; height="61" border="0" alt="title" /&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="index.php"&gt;&lt;img src="images/home.jpg" width="200"</tt><br>
+<tt>&nbsp;&nbsp; height="39" border="0" alt="home page" /&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="browse_prints.php"&gt; &lt;img src="images/prints.jpg" </tt><br>
+<tt>&nbsp;&nbsp; width="200" height="39" border="0" alt="view the prints" /&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td&gt;&lt;a href="view_cart.php"&gt;</tt><br>
+<tt>&lt;img src="images/cart.jpg" width="200" height="39" border="0" </tt><br>
+<tt>&nbsp;&nbsp; alt="view your cart" /&gt;&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="left" colspan="3" bgcolor="#ffffcc"&gt;&lt;br /&gt;</tt><br>
+<tt>&lt;!- Content starts here! --&gt;</tt>
+</dpeccode><br>
+<a name="phd009"></a>
+<br><dpecjs><b>*  Making <tt></tt></b><tt>
+<br>footer.html</tt>
+Now we'll look at the <tt><tt>footer.html</tt></tt> file.
+<b>* Step 1</b>
+Create a new HTML document in your text editor.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!- footer.html --&gt;</tt>
+</dpeccode><br>
+<a name="phd010"></a>
+<br><dpecjs><b>*  Step 2</b>
+<br>
+Complete the middle row, create the bottom row, and complete the HTML.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!- footer.html --&gt;</tt>
+<br>
+<tt>&lt;br /&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="center" colspan="3" bgcolor="#669966"&gt;&lt;font color=</tt><br>
+<tt>&nbsp;&nbsp; "#ffffff"&gt;© Copyright...&nbsp;&nbsp; &lt;/font&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;/table&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt><br>
+</dpeccode><br>
+<a name="phd011"></a>
+<br><dpecjs><b>*  Step 3</b>
+<br>
+Save the file as <tt><tt></tt>footer.html<tt></tt></tt> and upload to your Web server (also in the <tt><tt>includes</tt></tt> directory).&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;!- footer.html --&gt;</tt><br>
+<tt>&lt;!- Content starts here! --&gt;</tt><br>
+<tt>&lt;br /&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="center" colspan="3" bgcolor="#669966"&gt;&lt;font color=</tt><br>
+<tt>&nbsp;&nbsp; "#ffffff"&gt;© Copyright...&lt;/font&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;/table&gt;</tt><br>
+<tt>&lt;/body&gt;</tt><br>
+<tt>&lt;/html&gt;</tt>
+</dpeccode><br>
+<a name="phd012"></a>
+<br><dpecjs><b>* Making <tt></tt></b><tt>
+<br>index.html</tt>
+Finally, we'll create the <tt><tt>index.html</tt></tt> page.
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //index.php</tt><br>
+<tt>$page_title = 'Make an Impression!';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phd013"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Create the page's content.
+Obviously a real e-commerce site would have some actual content on the 
+main page. You could put lists of recently added items here, highlight 
+specials, or do whatever.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //index.php</tt><br>
+<tt>$page_title = 'Make an Impression!';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;p&gt;Welcome to our site....please use the links above...blah, blah, blah.&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;Welcome to our site....please use the links above...blah, blah, blah.&lt;/p&gt;</tt><br>
+</dpeccode><br>
+<a name="phd014"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Complete the HTML page.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //index.php</tt><br>
+<tt>$page_title = 'Make an Impression!';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;p&gt;Welcome to our site....please use the links above...blah, blah, blah.&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;Welcome to our site....please use the links above...blah, blah, blah.&lt;/p&gt;</tt><br>
+<tt>&lt;?php</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phd015"></a>
+<br><dpecjs><b>*  Step 4</b>
+<br>
+Save the file as <tt><tt></tt>index.php<tt></tt></tt>, upload to your Web server, and test in your Web browser&nbsp; 
+<br>
+
+<a name="phd016"></a>
+<br><dpecjs>This page contains the script for the site's home page.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //index.php</tt><br>
+<tt>// This is the main page for the site.</tt><br>
+<tt>// Set the page title and include the HTML header.</tt><br>
+<tt>$page_title = 'Make an Impression!'; include ('./includes/header.html');</tt><br>
+<tt>?&gt;</tt><br>
+<tt>&lt;p&gt;Welcome to our site....please use the links above...blah, blah, blah.&lt;/p&gt;</tt><br>
+<tt>&lt;p&gt;Welcome to our site....please use the links above...blah, blah, blah.&lt;/p&gt;</tt><br>
+<tt>&lt;?php // Include the HTML footer file. include</tt><br>
+<tt>&nbsp;&nbsp; ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phd017"></a>
+<br><dpecw1>
+	
+Since sessions are key to the functionality of this application, you may
+ want to review the information in the PHP manual to understand all of 
+the session considerations.
+	
+</dpecw1><br>
+<a name="phd021"></a>
+<br><dpecw1>
+	
+In this lesson, you learned about the three scripts you will need for 
+creating the public side of your e-commerce site. First, you learned how
+ the <tt>header.html</tt> script should be written, which will start the user's session and contain the page title. <br>
+You also learned how to create the <tt>footer.html</tt> file, including how to display copyright information in the footer.<br>
+Finally, you learned how to create the <tt>index.php</tt> file, which will be the front page for the site.
+	
+</dpecw1><br>
+<a name="phe001"></a><br><a name="topic7"></a><h2>Lesson 5. The Product Catalog</h2><dpecw1>
+
+In order for customers to purchase items from your e-commerce site, they
+ will need to be able to browse your catalog, as well as receive 
+information about a specific item.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a script to allow users to browse the catalog
+	</li>
+	<li>
+Create a script to allow users to get specific information about a product
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phe002"></a>
+<br><dpecw1>
+
+For customers to be able to purchase products, they'll need to view them
+ first. To this end, I'll create two scripts for accessing the product 
+catalog. The first, <tt>browse_prints.php</tt>, will display a list of 
+the available prints. If a particular artist has been selected, only 
+that artist's work will be shown; otherwise, every print will be listed.
+ <br>
+The second script, <tt>view_print.php</tt>, will be used to display the information for a single print, including the image. On this page customers will find an <tt><tt>Add to Cart</tt></tt><i> </i>link,
+ so that the print may be added to the shopping cart. Because the 
+print's image is stored outside of the Web root directory, <tt>view_print.php</tt> will use a separate script for the purpose of displaying the image.
+
+</dpecw1><br>
+<a name="phe003"></a>
+<br><dpecjs><b>* Making <tt></tt></b><tt>
+<br><tt>browse_prints.php</tt></tt>
+Let's examine the steps for making the <tt>browse_prints.php</tt> page.
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+<ml_ins_href><ml_data_href>html and <tt>mysql_connect.php</tt>.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php //browse_prints.php</tt><br>
+<tt>$page_title = 'Browse the Prints'; include ('./includes/header.html');</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt>
+</dpeccode><br>
+<a name="phe004"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Build the query.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //browse_prints.php</tt><br>
+<tt>$page_title = 'Browse the Prints'; include ('./includes/header.html');</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>if (isset($_GET['aid'])) {</tt><br>
+<tt>$aid = (int) $_GET['aid'];</tt><br>
+<tt>if ($aid &gt; 0) {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ',</tt><br>
+<tt>&nbsp;&nbsp; first_name, middle_name, last_name) AS name, print_name,</tt><br>
+<tt>&nbsp;&nbsp; price, description, print_id FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id =prints.artist_id AND prints.</tt><br>
+<tt>&nbsp;&nbsp; artist_id =$aid ORDER BY prints.print_name";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ',</tt><br>
+<tt>&nbsp;&nbsp; first_name, middle_name, last_name) AS name, print_name,</tt><br>
+<tt>&nbsp;&nbsp; price, description, print_id FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id =prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; ORDER BY artists.last_name ASC, prints.print_name ASC";</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ',</tt><br>
+<tt>&nbsp;&nbsp; first_name, middle_name, last_name) AS name, print_name,</tt><br>
+<tt>&nbsp;&nbsp; price, description, print_id FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id = prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; ORDER BY artists.last_name ASC, prints.print_name ASC";</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phe005"></a>
+<br><dpecw1>
+	
+The query is a standard join across the <tt><tt>artists</tt></tt><i> </i>and <tt><tt>prints</tt></tt><i> </i>tables
+ (to retrieve the artist name information with each print's 
+information). The first time the page is viewed, every print by every 
+artist will be returned. If a user clicks one artist's name, the user 
+will be returned back to this page, but now the URL will be, for 
+example, <tt>browse_prints.php?aid=529</tt>. In that case, the clause <tt>AND prints.artist_id = $aid</tt> is added to the query and the <tt>ORDER BY</tt> is slightly modified so that just that artist's works are displayed. <br>
+So the two different roles of this script — showing every print or just 
+those for an individual artist — are defined by this conditional, while 
+the rest of the script works the same in either case.<br>
+For security purposes, I use type casting on the author ID and make sure
+ that it's a positive integer prior to using it in a query.
+	
+</dpecw1><br>
+<a name="phe006"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Create the table head.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //browse_prints.php</tt><br>
+<tt>$page_title = 'Browse the Prints'; include ('./includes/header.html');</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>if (isset($_GET['aid'])) {</tt><br>
+<tt>$aid = (int) $_GET['aid'];</tt><br>
+<tt>if ($aid &gt; 0) {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ',</tt><br>
+<tt>&nbsp;&nbsp; first_name, middle_name, last_name) AS name, print_name,</tt><br>
+<tt>&nbsp;&nbsp; price, description, print_id FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id =prints.artist_id AND prints.</tt><br>
+<tt>&nbsp;&nbsp; artist_id =$aid ORDER BY prints.print_name";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ',</tt><br>
+<tt>&nbsp;&nbsp; first_name, middle_name, last_name) AS name, print_name,</tt><br>
+<tt>&nbsp;&nbsp; price, description, print_id FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id =prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; ORDER BY artists.last_name ASC, prints.print_name ASC";</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ',</tt><br>
+<tt>&nbsp;&nbsp; first_name, middle_name, last_name) AS name, print_name,</tt><br>
+<tt>&nbsp;&nbsp; price, description, print_id FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id = prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; ORDER BY artists.last_name ASC, prints.print_name ASC";</tt><br>
+<tt>}</tt><br>
+<tt>echo '&lt;table border="0" width="90%" cellspacing="3" cellpadding="3"</tt><br>
+<tt>&nbsp;&nbsp; align="center"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="left" width="20%"&gt; &lt;b&gt;Artist&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="left" width="20%"&gt; &lt;b&gt;Print Name&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="left" width="40%"&gt; &lt;b&gt;Description&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="20%"&gt; &lt;b&gt;Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;';</tt><br>
+</dpeccode><br>
+<a name="phe007"></a>
+<br><dpecjs><b>*  Step 4</b>
+<br>
+Display every returned record.
+I want the page to display the artist's full name, the print name, the 
+description, and the price for each returned record. Further, the 
+artist's name should be linked back to this page (with the artist's ID 
+appended to the URL), and the print name should be linked to <tt>view_print.php</tt>
+ (with the print ID appended to the URL). 
+Remember that if you are not using the Improved MySQL Extension 
+functions, you'll need to change your function calls here.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>while ($row = mysqli_fetch_array ($result, MYSQLI_ASSOC)) {</tt><br>
+<tt>echo "&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;&lt;a href=\"browse_prints. php?aid={$row['artist_id']}\"&gt;</tt><br>
+<tt>&nbsp;&nbsp; {$row['name']}&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;&lt;a href=\"view_print.php?pid={$row['print_id']}\"&gt;</tt><br>
+<tt>&nbsp;&nbsp; {$row['print_name']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;{$row['description']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"right\"&gt;\${$row['price']}&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;\n";</tt><br>
+<tt>}</tt>
+</dpeccode><br>
+<a name="phe008"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Close the table, the database connection, and the HTML page.
+<ml_ins_href><ml_data_href>html.&nbsp; 
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>while ($row = mysqli_fetch_array ($result, MYSQLI_ASSOC)) {</tt><br>
+<tt>echo "&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;&lt;a href=\"browse_prints. php?aid={$row['artist_id']}\"&gt;</tt><br>
+<tt>&nbsp;&nbsp; {$row['name']}&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;&lt;a href=\"view_print.php?pid={$row['print_id']}\"&gt;</tt><br>
+<tt>&nbsp;&nbsp; {$row['print_name']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;{$row['description']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"right\"&gt;\${$row['price']}&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;\n";</tt><br>
+<tt>}</tt><br>
+<tt>echo '&lt;/table&gt;';</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phe009"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Save the file as <tt>browse_prints.php</tt>, upload to your Web server, and test in your Web browser.
+
+</dpecw1><br>
+<a name="phe010"></a>
+<br><dpecjs>The <tt>browse_prints.php</tt> script displays every print in the catalog or every print for a particular artist, depending upon the presence of <tt>$_GET['aid']</tt>.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //browse_prints.php</tt><br>
+<tt>// This page displays the available prints (products).</tt><br>
+<tt>// Set the page title and include the HTML header.</tt><br>
+<tt>$page_title = 'Browse the Prints';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>require_once ('../mysql_connect.php'); // Connect to the database.</tt><br>
+<tt>// Are we looking at a particular artist?</tt><br>
+<tt>if (isset($_GET['aid'])) {</tt><br>
+<tt>$aid = (int) $_GET['aid'];</tt><br>
+<tt>if ($aid &gt; 0) {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ', first_name, middle_name,</tt><br>
+<tt>&nbsp;&nbsp; last_name) AS name, print_name, price, description, print_id</tt><br>
+<tt>&nbsp;&nbsp; FROM artists, prints WHERE artists. artist_id = prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; AND prints.artist_id =$aid ORDER BY prints.print_name";</tt><br>
+<tt>} else {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ', first_name, middle_name,</tt><br>
+<tt>&nbsp;&nbsp; last_name) AS name, print_name, price, description, print_id</tt><br>
+<tt>&nbsp;&nbsp; FROM artists, prints WHERE artists. artist_id = prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; ORDER BY artists.last_name ASC, prints.print_name ASC";</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>$query = "SELECT artists.artist_id, CONCAT_WS(' ', first_name, middle_name,</tt><br>
+<tt>&nbsp;&nbsp; last_name) AS name, print_name, price, description, print_id</tt><br>
+<tt>&nbsp;&nbsp; FROM artists, prints WHERE artists. artist_id = prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; ORDER BY artists.last_name ASC, prints.print_name ASC";</tt><br>
+<tt>}</tt><br>
+<tt>// Create the table head.</tt><br>
+<tt>echo '&lt;table border="0" width="90%" cellspacing="3" cellpadding="3" align="center"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="left" width="20%"&gt;&lt;b&gt;Artist&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="left" width="20%"&gt;&lt;b&gt;Print Name&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="left" width="40%"&gt;&lt;b&gt;Description&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="20%"&gt;&lt;b&gt;Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;';</tt><br>
+<tt>// Display all the prints, linked to URLs.</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {</tt><br>
+<tt>// Display each record.</tt><br>
+<tt>echo " &lt;tr&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;&lt;a href=\"browse_prints.php?aid={$row</tt><br>
+<tt>&nbsp;&nbsp; ['artist_id']}\"&gt;{$row['name']}&lt;/a&gt;&lt;/td&gt;&lt;td align=\"left\"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href=\"view_print.php?pid={$row['print_id']}\"&gt;</tt><br>
+<tt>&nbsp;&nbsp; {$row['print_name']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;{$row['description']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"right\"&gt;\${$row['price']}&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;\n";</tt><br>
+<tt>} // End of while loop.</tt><br>
+<tt>echo '&lt;/table&gt;'; // Close the table.</tt><br>
+<tt>mysqli_close($dbc); // Close the database connection.</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phe011"></a>
+<br><b>Pull-down menus  <br>  </b>  You could easily take the dynamically generated pull-down menu from <tt>add_print.php</tt> and use it as a navigational tool on the public side.  Set the form's action attribute to <tt>browse_print.php</tt>, change the name of the pull-down menu to <tt><tt>aid</tt></tt>, use the get method, and when users select an artist and click Submit, they'll be taken to, for example, <tt><tt>browse_ print.php?aid=5</tt></tt>.  <br><br>  <b>Paginating the results  <br>  </b>  Although I did not do so here, you could paginate the returned results.  <br><br>  <b>Choosing how the prints are displayed  <br>  </b>
+  Another feature you could add to this page is the option to choose how
+ the prints are displayed. By adding links to the column headings (e.g.,
+ to <tt><tt>browse_prints.php?order=price</tt></tt>), you could change the <tt>ORDER BY</tt> in the query and therefore the resulting display.  <br><br>  
+<a name="phe012"></a>
+<br><dpecjs><b>* Making <tt></tt></b><tt>
+<br><tt>view_print.php</tt></tt>
+Now we'll examine the steps for making the page to browse prints.
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+I'll use the <tt>$problem</tt> variable to track whether or not a problem occurred on this page.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //view_print.php</tt><br>
+<tt>$problem = FALSE;</tt>
+</dpeccode><br>
+<a name="phe013"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Validate that a print ID has been passed to this page.
+This script won't work if it does not receive a valid print ID, so I check for the ID's existence first.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //view_print.php</tt><br>
+<tt>$problem = FALSE;</tt><br>
+<tt>if (isset($_GET['pid'])) {</tt><br>
+</dpeccode><br>
+<a name="phe014"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Retrieve the information from the database.
+The query is a join like the one in <tt>browse_prints.php</tt>, but it 
+selects only the information for a particular print. I'm type-casting 
+the print ID as an integer prior to using it in the query for security 
+purposes (so that a malicious user doesn't try to break my query using 
+invalid <tt>$_GET['pid']</tt> values).
+<ml_ins_href><ml_data_href>php.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php //view_print.php</tt><br>
+<tt>$problem = FALSE;</tt><br>
+<tt>if (isset($_GET['pid'])) {</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>$query = "SELECT CONCAT_WS(' ', first_name, middle_name, last_name)</tt><br>
+<tt>&nbsp;&nbsp; AS name, print_name, price, description, size, image_name</tt><br>
+<tt>&nbsp;&nbsp; FROM artists, prints WHERE artists.artist_id =</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;prints.artist_id AND prints.print_id = $pid";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+</dpeccode><br>
+<a name="phe015"></a>
+<br><dpecjs><b>* Step 4</b>
+<br>
+If a record was returned, retrieve the information, set the page title, and include the HTML header.
+The browser window's title will be the name of the print.
+<ml_ins_href><ml_data_href>html.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php //view_print.php</tt><br>
+<tt>$problem = FALSE;</tt><br>
+<tt>if (isset($_GET['pid'])) {</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>$query = "SELECT CONCAT_WS(' ', first_name, middle_name, last_name)</tt><br>
+<tt>&nbsp;&nbsp; AS name, print_name, price, description, size, image_name</tt><br>
+<tt>&nbsp;&nbsp; FROM artists, prints WHERE artists.artist_id =</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;prints.artist_id AND prints.print_id = $pid";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>if (mysqli_num_rows($result) == 1) {</tt><br>
+<tt>$row = mysqli_fetch_array ($result, MYSQLI_ASSOC);</tt><br>
+<tt>$page_title = $row['print_name'];</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+</dpeccode><br>
+<a name="phe016"></a>
+<br><dpecjs><b>* Step 5</b>
+<br>
+Begin displaying the print information.
+The header for the print will be the print's name (in bold), followed by
+ the artist's name, the size of the print, and its price. Finally, a 
+link is displayed giving the customer the option of adding this print to
+ the shopping cart. The shopping cart link is to the <tt>add_cart.php</tt> script, passing it the print ID.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //view_print.php</tt><br>
+<tt>$problem = FALSE;</tt><br>
+<tt>if (isset($_GET['pid'])) {</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>$query = "SELECT CONCAT_WS(' ', first_name, middle_name, last_name)</tt><br>
+<tt>&nbsp;&nbsp; AS name, print_name, price, description, size, image_name</tt><br>
+<tt>&nbsp;&nbsp; FROM artists, prints WHERE artists.artist_id =</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;prints.artist_id AND prints.print_id = $pid";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>if (mysqli_num_rows($result) == 1) {</tt><br>
+<tt>$row = mysqli_fetch_array ($result, MYSQLI_ASSOC);</tt><br>
+<tt>$page_title = $row['print_name'];</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt;</tt><br>
+<tt>&lt;b&gt;{$row['print_name']}&lt;/b&gt; by</tt><br>
+<tt>{$row['name']}</tt><br>
+<tt>&lt;br /&gt;{$row['size']}</tt><br>
+<tt>&lt;br /&gt;\${$row['price']}</tt><br>
+<tt>&lt;a href=\"add_cart.php?pid=$pid\"&gt;Add to Cart&lt;/a&gt;</tt><br>
+<tt>&lt;/div&gt;&lt;br /&gt;";</tt><br>
+</dpeccode><br>
+<a name="phe017"></a>
+<br><dpecjs><b>*  Step 6</b>
+<br>
+Display the image and description.
+This section of the script will first attempt to retrieve the image's dimensions by using the <tt>getimagesize()</tt>
+ function. If it is successful in doing so, the image itself will be 
+displayed. This process is a little unusual in that the source for the 
+image calls the <tt>show_image.php</tt> page. This script, to be written next, retrieves and displays the <tt>$_GET['image']</tt>
+ passed to it.
+If the script could not retrieve the image information (because the 
+image is not on the server or no image was uploaded), a message is 
+displayed instead. Finally, the print's description is added.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if ($image = @getimagesize ("../uploads/{$row['image_name']}")) {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt; &lt;img src=\"show_image.php?</tt><br>
+<tt>&nbsp;&nbsp; image={$row['image_name']}\" $image[3] alt=\"{$row ['print_name']}\"</tt><br>
+<tt>&nbsp;&nbsp; /&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt;No image available.";</tt><br>
+<tt>}</tt><br>
+<tt>echo "&lt;br /&gt;{$row['description']} &lt;/div&gt;"; </tt>
+</dpeccode><br>
+<a name="phe018"></a>
+<br><dpecjs><b>*  Step 7</b>
+<br>
+Complete the two main conditionals.
+The first <tt>else</tt> clause is in case one record is not returned by 
+the query. The second is in case no print ID is passed to this page. 
+Under both circumstances the <tt>$problem</tt> variable is set to <tt>TRUE</tt>, which will be used by the script in the next step.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if ($image = @getimagesize ("../uploads/{$row['image_name']}")) {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt; &lt;img src=\"show_image.php?</tt><br>
+<tt>&nbsp;&nbsp; image={$row['image_name']}\" $image[3] alt=\"{$row ['print_name']}\"</tt><br>
+<tt>&nbsp;&nbsp; /&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt;No image available.";</tt><br>
+<tt>}</tt><br>
+<tt>echo "&lt;br /&gt;{$row['description']} &lt;/div&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>} else {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phe019"></a>
+<br><dpecjs><b>*  Step 8</b>
+<br>
+If a problem occurred, display an error message.
+If the print's information could not be retrieved from the database for 
+whatever reason, an error should be displayed. Because the HTML header 
+would not have already been included if a problem occurred, it must be 
+included here first.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>if ($image = @getimagesize ("../uploads/{$row['image_name']}")) {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt; &lt;img src=\"show_image.php?</tt><br>
+<tt>&nbsp;&nbsp; image={$row['image_name']}\" $image[3] alt=\"{$row ['print_name']}\"</tt><br>
+<tt>&nbsp;&nbsp; /&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt;No image available.";</tt><br>
+<tt>}</tt><br>
+<tt>echo "&lt;br /&gt;{$row['description']} &lt;/div&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>} else {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>if ($problem) {</tt><br>
+<tt>$page_title = 'Error';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>echo '&lt;div align="center"&gt; This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phe020"></a>
+<br><dpecjs><b>*  Step 9</b>
+<br>
+Complete the page.
+<ml_ins_href><ml_data_href>html.&nbsp; 
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>if ($image = @getimagesize ("../uploads/{$row['image_name']}")) {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt; &lt;img src=\"show_image.php?</tt><br>
+<tt>&nbsp;&nbsp; image={$row['image_name']}\" $image[3] alt=\"{$row ['print_name']}\"</tt><br>
+<tt>&nbsp;&nbsp; /&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt;No image available.";</tt><br>
+<tt>}</tt><br>
+<tt>echo "&lt;br /&gt;{$row['description']} &lt;/div&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>} else {</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>if ($problem) {</tt><br>
+<tt>$page_title = 'Error';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>echo '&lt;div align="center"&gt; This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phe021"></a>
+<br><dpecw1>
+
+<b>* Step 10</b><br>
+Save the file as <tt>view_print.php</tt> and upload to your Web server.
+
+</dpecw1><br>
+<a name="phe022"></a>
+<br><dpecjs>The <tt>view_print.php</tt> script shows the details for a particular print. It also includes a link to add the product to the customer's shopping cart.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //view_print.php</tt><br>
+<tt>// This page displays the details for a particular print.</tt><br>
+<tt>$problem = FALSE; // Assume no problem.</tt><br>
+<tt>if (isset($_GET['pid'])) { // Make sure there's a print ID.</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>// Connect to the database.</tt><br>
+<tt>$query = "SELECT CONCAT_WS(' ', first_name, middle_name, last_name)</tt><br>
+<tt>&nbsp;&nbsp; AS name, print_name, price, description, size, image_name</tt><br>
+<tt>&nbsp;&nbsp; FROM artists, prints WHERE artists. artist_id = prints.artist_id</tt><br>
+<tt>&nbsp;&nbsp; AND prints.print_id = $pid";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>if (mysqli_num_rows($result) == 1)</tt><br>
+<tt>&nbsp;&nbsp; { // Good to go!</tt><br>
+<tt>// Fetch the information.</tt><br>
+<tt>$row = mysqli_fetch_array ($result, MYSQLI_ASSOC);</tt><br>
+<tt>// Start the HTML page.</tt><br>
+<tt>$page_title = $row['print_name'];</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>// Display a header.</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt;</tt><br>
+<tt>&lt;b&gt;{$row['print_name']}&lt;/b&gt; by</tt><br>
+<tt>{$row['name']}</tt><br>
+<tt>&lt;br /&gt;{$row['size']}</tt><br>
+<tt>&lt;br /&gt;\${$row['price']}</tt><br>
+<tt>&lt;a href=\"add_cart.php?pid=$pid\"&gt; Add to Cart&lt;/a&gt;</tt><br>
+<tt>&lt;/div&gt;&lt;br /&gt;";</tt><br>
+<tt>// Get the image information and display the image.</tt><br>
+<tt>if ($image = @getimagesize</tt><br>
+<tt>&nbsp;&nbsp; ("../uploads/{$row['image_name']}")) {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt; &lt;img src=\"show_image.php</tt><br>
+<tt>&nbsp;&nbsp; ?image={$row['image_name']}\" $image[3] alt=\"{$row[</tt><br>
+<tt>&nbsp;&nbsp; 'print_name']}\" /&gt;";</tt><br>
+<tt>} else {</tt><br>
+<tt>echo "&lt;div align=\"center\"&gt; No image available.";</tt><br>
+<tt>}</tt><br>
+<tt>echo "&lt;br /&gt;{$row['description']}&lt;/div&gt;";</tt><br>
+<tt>} else { // No record returned from the database.</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc); // Close the database connection.</tt><br>
+<tt>} else { // No print ID.</tt><br>
+<tt>$problem = TRUE;</tt><br>
+<tt>}</tt><br>
+<tt>if ($problem) { // Show an error message.</tt><br>
+<tt>$page_title = 'Error';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>echo '&lt;div align="center"&gt;This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>// Complete the page.</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phe023"></a>
+<br><b>Magic Quotes setting  <br>  </b>  Depending upon the Magic Quotes setting of your PHP installation, you may or may not need to make use of the <tt>stripslashes()</tt> function when displaying the print information in this and the previous script.  <br><br>  <b>Using an image for the <tt><tt>Add to Cart</tt></tt> link  <br>  </b>  Many e-commerce sites use an image for the <tt><tt>Add to Cart</tt></tt><i> </i>link. To do so in this example, replace the text <tt><tt>Add to Cart</tt></tt><i> </i>(within the <tt>&lt;a&gt;</tt> link tag) with the code for the image to be used. The important consideration is that the <tt>add_cart.php</tt> page gets passed the product ID number.  <br><br>  <b>Product availability  <br>  </b>  If you want to show the availability of a product, add an <tt><tt>in_stock</tt></tt> field to the <tt>prints</tt> table. Then display an <tt><tt>Add</tt> <tt>to</tt> <tt>Cart</tt></tt> link or <tt><tt>Product</tt> <tt>Currently</tt> <tt>Out</tt> <tt>of</tt> <tt>Stock</tt></tt> message according to the value in this column for that print.  <br><br>  
+<a name="phe024"></a>
+<br><dpecjs><b>* Writing <tt></tt></b><tt>
+<br><tt>show_image.php</tt></tt>
+Now we'll examine the steps for writing <tt>show_image.php</tt>. 
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt>
+</dpeccode><br>
+<a name="phe025"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Check for an image name.
+Before continuing, I want to ensure that the script received a valid image name, which should be part of the HTML <tt><tt>src</tt></tt><i> </i>attribute for each print in <tt>view_print.php</tt>.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt><br>
+<tt>if (isset($_GET['image'])) {</tt><br>
+</dpeccode><br>
+<a name="phe026"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Check that the image is a file on the server.
+Before attempting to send the image to the Web browser, I want to make 
+sure that it exists and that it is a file (as opposed to a directory). 
+If so, I create a new variable called <tt>$name</tt> that will be used when the image is sent to the Web browser.
+As a security measure, I hard-code the image's full path as a combination of <tt><tt>../uploads</tt></tt><i> </i>and the received image name. Even if someone were to attempt to use this page to see <tt><tt>/path/to/secret/file</tt></tt><tt>,</tt> this script would look for <tt><tt>../uploads//path/to/secret/file</tt></tt><i> </i>(including the double-slash), which is safe. You could also validate the MIME type (<tt><tt>image/jpg</tt>, <tt>image/gif</tt></tt>) of the file.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt><br>
+<tt>if (isset($_GET['image'])) {</tt><br>
+<tt>$image = "../uploads/{$_GET ['image']}";</tt><br>
+<tt>if (file_exists ($image) &amp;&amp; (is_file ($image))) {</tt><br>
+<tt>$name = $_GET['image'];</tt><br>
+</dpeccode><br>
+<a name="phe027"></a>
+<br><dpecjs><b>* Step 4</b>
+<br>
+Complete the two validation conditionals.
+If the image doesn't exist or isn't a file, the first <tt>else</tt> clause comes into effect. If no image name was passed to this script, the second <tt>else</tt> clause applies. In either case, a default image will be used.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt><br>
+<tt>if (isset($_GET['image'])) {</tt><br>
+<tt>$image = "../uploads/{$_GET ['image']}";</tt><br>
+<tt>if (file_exists ($image) &amp;&amp; (is_file ($image))) {</tt><br>
+<tt>$name = $_GET['image'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phe028"></a>
+<br><dpecjs><b>* Step 5</b>
+<br>
+Retrieve the image information.
+To download the file, I'll need to know the file's type and size. I retrieve this information using the <tt>mime_content_type()</tt> and <tt>filesize()</tt> functions. The first function was added in PHP 4.3 but needs to be enabled on Windows in order to work.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt><br>
+<tt>if (isset($_GET['image'])) {</tt><br>
+<tt>$image = "../uploads/{$_GET ['image']}";</tt><br>
+<tt>if (file_exists ($image) &amp;&amp; (is_file ($image))) {</tt><br>
+<tt>$name = $_GET['image'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>$ft = mime_content_type($image);</tt><br>
+<tt>$fs = filesize($image);</tt><br>
+</dpeccode><br>
+<a name="phe029"></a>
+<br><dpecjs><b>* Step 6</b>
+<br>
+Send the file.
+These <tt>header()</tt> calls will send the file data to the Web 
+browser. 
+To revisit the overall syntax, the first line prepares the browser to 
+receive the file, based upon the MIME type. The second line sets the 
+name of the file being sent. The <tt>last header()</tt> function indicates how much data is to be expected. The file data itself is sent using the <tt>readfile()</tt> function, which reads in a file and immediately sends the content to the Web browser.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt><br>
+<tt>if (isset($_GET['image'])) {</tt><br>
+<tt>$image = "../uploads/{$_GET ['image']}";</tt><br>
+<tt>if (file_exists ($image) &amp;&amp; (is_file ($image))) {</tt><br>
+<tt>$name = $_GET['image'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>$ft = mime_content_type($image);</tt><br>
+<tt>$fs = filesize($image);</tt><br>
+<tt>header ("Content-Type: $ft\n");</tt><br>
+<tt>header ("Content-disposition:inline; filename=\"$name\"\n"); </tt><br>
+<tt>header ("Content-Length: $fs\n"); </tt><br>
+<tt>readfile ($image);</tt><br>
+</dpeccode><br>
+<a name="phe030"></a>
+<br><dpecjs><b>* Step 7</b>
+<br>
+Complete the page.
+Notice that this page contains no HTML. It only sends an image file to the Web browser.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt><br>
+<tt>if (isset($_GET['image'])) {</tt><br>
+<tt>$image = "../uploads/{$_GET ['image']}";</tt><br>
+<tt>if (file_exists ($image) &amp;&amp; (is_file ($image))) {</tt><br>
+<tt>$name = $_GET['image'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>$ft = mime_content_type($image);</tt><br>
+<tt>$fs = filesize($image);</tt><br>
+<tt>header ("Content-Type: $ft\n");</tt><br>
+<tt>header ("Content-disposition:inline; filename=\"$name\"\n"); </tt><br>
+<tt>header ("Content-Length: $fs\n"); </tt><br>
+<tt>readfile ($image);</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phe031"></a>
+<br><dpecw1>
+
+<b>* Step 8</b><br>
+Save the file as <tt>show_image.php</tt>, upload to your Web server, and test in your Web browser by viewing any print.
+
+</dpecw1><br>
+<a name="phe032"></a>
+<br><dpecjs>This script is called by <tt>view_print.php</tt> and displays the image stored in the <tt><tt>uploads</tt></tt> directory.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //show_image.php</tt><br>
+<tt>// This pages retrieves and shows an image.</tt><br>
+<tt>// Check for an image name.</tt><br>
+<tt>if (isset($_GET['image'])) {</tt><br>
+<tt>// Full image path:</tt><br>
+<tt>$image = "../uploads/{$_GET['image']}";</tt><br>
+<tt>// Check that the image exists and is a file.</tt><br>
+<tt>if (file_exists ($image) &amp;&amp; (is_file ($image))) {</tt><br>
+<tt>$name = $_GET['image'];</tt><br>
+<tt>} else {</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>} else { // No image name.</tt><br>
+<tt>$image = './images/unavailable.gif';</tt><br>
+<tt>$name = 'unavailable.gif';</tt><br>
+<tt>}</tt><br>
+<tt>// Get the image information.</tt><br>
+<tt>$ft = mime_content_type($image);</tt><br>
+<tt>$fs = filesize($image);</tt><br>
+<tt>// Send the file.</tt><br>
+<tt>header ("Content-Type: $ft\n");</tt><br>
+<tt>header ("Content-disposition: inline;filename=\"$name\"\n");</tt><br>
+<tt>header ("Content-Length: $fs\n");</tt><br>
+<tt>readfile ($image);</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phe033"></a>
+<br><dpecw1>
+	
+If the <tt>view_print.php</tt> page does not show the image for some reason, you'll need to debug the problem by running the <tt>show_image.php</tt> script directly in your Web browser. View the HTML source of <tt>view_print.php</tt> and find the value of the <tt>img</tt> tag's <tt><tt>src</tt></tt><i> </i>attribute. Then use this as your URL. If an error occurred, running <tt>show_image.php</tt> is the best way to find it.
+	
+</dpecw1><br>
+<a name="phe034"></a>
+
+<script language="JavaScript">insertAccQuestion('9','phe034.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phe035"></a>
+
+<script language="JavaScript">insertAccQuestion('10','phe035.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phe036"></a>
+<br><dpecw1>
+	
+In this lesson, you learned how to create a script that will allow users
+ of your e-commerce site to browse your product catalog. Before a 
+customer can purchase a product, that customer needs to be able to view 
+it.<br>
+You also learned how to create a script that will provide specific 
+information about a product from the catalog. This page can include more
+ details than the catalog browser, and will include a link to add the 
+product to the user's shopping cart.
+	
+</dpecw1><br>
+<a name="phf001"></a><br><a name="topic8"></a><h2>Lesson 6. The Shopping Cart</h2><dpecw1>
+
+Once you have created a product catalog, the shopping cart itself can be
+ simple. Using a page to record the product IDs, prices, and quantities 
+in a session will allow the scripts to calculate totals and do 
+everything else required.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a script for adding items to your shopping cart
+	</li>
+	<li>
+Create a script to view or update your shopping cart
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phf002"></a>
+<br><dpecw1>
+
+These next two examples will provide all the necessary functionality for the shopping cart. The first script, <tt>add_cart.php</tt>, will add items to the shopping cart. The second, <tt>view_cart.php</tt>, will both display the contents of the cart and allow the customer to update it.
+
+</dpecw1><br>
+<a name="phf003"></a>
+<br><dpecw1>
+
+<b>* Adding items</b><b>*  </b><br>
+The <tt>add_cart.php</tt> script will take one argument — the ID of the 
+print being purchased — and will use this to update the cart. The cart 
+itself is a session variable, meaning it's accessed through the <tt>$_SESSION['cart']</tt>
+ variable. The cart will be a multidimensional array whose keys will be 
+product IDs. The values of the array elements will themselves be arrays:
+ one element for the quantity and another for the price.<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b> Sample</b>
+
+</th><th class="heading" scope="col">
+<b>$_SESSION['cart']</b>
+
+</th><th class="heading" scope="col">
+<b>Values</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+(index )
+</td>
+<td>
+Quantity
+</td>
+<td>
+Price
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+1
+</td>
+<td>
+54.00
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+568
+</td>
+<td>
+1
+</td>
+<td>
+22.95
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+37
+</td>
+<td>
+1
+</td>
+<td>
+33.50
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw1><br>
+<a name="phf004"></a>
+<br><dpecjs><b>* Creating <tt></tt></b><tt>
+<br><tt>add_cart.php</tt></tt>
+Let's examine the steps for creating the <tt><tt>add_cart.php</tt></tt> page.
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //add_cart.php</tt>
+</dpeccode><br>
+<a name="phf005"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Include the page header and check that a print was selected.
+As with the <tt>view_print.php</tt> script, I do not want to proceed with this script if no print ID has been received.
+<ml_ins_href><ml_data_href>html.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php //add_cart.php</tt><br>
+<tt>$page_title = 'Add to Cart';</tt><br>
+<tt>include ('./includes/header.html'); </tt><br>
+<tt>if (isset ($_GET['pid'])) {</tt><br>
+</dpeccode><br>
+<a name="phf006"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Determine if a copy of this print has already been selected.
+Before adding the current print to the shopping cart (by setting its quantity to <tt>1</tt>),
+ I need to check if a copy is already in the cart.
+For example, if the customer selected print #519 and then decided to 
+order another, the cart should now contain two copies of the print.
+So I first check if the cart has a value for the current print ID. If 
+so, the quantity is determined by adding <tt>1</tt> to that value and a message is displayed.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //add_cart.php</tt><br>
+<tt>$page_title = 'Add to Cart';</tt><br>
+<tt>include ('./includes/header.html'); </tt><br>
+<tt>if (isset ($_GET['pid'])) {</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>if (isset($_SESSION['cart'][$pid])) {</tt><br>
+<tt>$_SESSION['cart'][$pid]['quantity']++;</tt><br>
+<tt>echo '&lt;p&gt;Another copy of the print has been added to your shopping cart.&lt;/p&gt;';</tt><br>
+</dpeccode><br>
+<a name="phf007"></a>
+<br><dpecjs><b>* Step 4</b>
+<br>
+Add the new product to the cart.
+If the product is not currently in the cart, this <tt>else</tt> clause 
+comes into play. Here, the print's price is retrieved from the database 
+using the print ID. If the price is successfully retrieved, a new 
+element is added to the <tt>$_SESSION['cart']</tt> multidimensional array.
+Since each element in the <tt>$_SESSION ['cart']</tt> cart array is itself an array, I use the <tt>array()</tt> function to set the quantity and price. A simple message is then displayed.
+<ml_ins_href><ml_data_href>php.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php //add_cart.php</tt><br>
+<tt>$page_title = 'Add to Cart';</tt><br>
+<tt>include ('./includes/header.html'); </tt><br>
+<tt>if (isset ($_GET['pid'])) {</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>if (isset($_SESSION['cart'][$pid])) {</tt><br>
+<tt>$_SESSION['cart'][$pid]['quantity']++;</tt><br>
+<tt>echo '&lt;p&gt;Another copy of the print has been added to your shopping cart.&lt;/p&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>$query = "SELECT price FROM prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE prints.print_id = $pid";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>if (mysqli_num_rows($result) == 1) {</tt><br>
+<tt>list($price) = mysqli_fetch_array ($result, MYSQLI_NUM);</tt><br>
+<tt>$_SESSION['cart'][$pid] =array</tt><br>
+<tt>&nbsp;&nbsp; ('quantity' =&gt; 1, 'price' =&gt; $price);</tt><br>
+<tt>echo '&lt;p&gt;The print has been added to your shopping cart.&lt;/p&gt;';</tt><br>
+</dpeccode><br>
+<a name="phf008"></a>
+<br><dpecjs><b>* Step 5</b>
+<br>
+Complete the conditionals.
+The first <tt>else</tt> applies if no price could be retrieved from the database, meaning that the submitted print ID is invalid. The second <tt>else</tt> applies if no print ID is received by this page at all.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //add_cart.php</tt><br>
+<tt>$page_title = 'Add to Cart';</tt><br>
+<tt>include ('./includes/header.html'); </tt><br>
+<tt>if (isset ($_GET['pid'])) {</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>if (isset($_SESSION['cart'][$pid])) {</tt><br>
+<tt>$_SESSION['cart'][$pid]['quantity']++;</tt><br>
+<tt>echo '&lt;p&gt;Another copy of the print has been added to your shopping cart.&lt;/p&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>$query = "SELECT price FROM prints WHERE prints.print_id = $pid";</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>if (mysqli_num_rows($result) == 1) {</tt><br>
+<tt>list($price) = mysqli_fetch_array ($result, MYSQLI_NUM);</tt><br>
+<tt>$_SESSION['cart'][$pid] =array ('quantity' =&gt; 1, 'price' =&gt; $price);</tt><br>
+<tt>echo '&lt;p&gt;The print has been added to your shopping cart.&lt;/p&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;div align="center"&gt; This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;div align="center"&gt; This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phf009"></a>
+<br><dpecjs><b>*  Step 6</b>
+<br>
+Include the HTML footer and complete the PHP page.
+<ml_ins_href><ml_data_href>html.&nbsp; 
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>} else {</tt><br>
+<tt>echo '&lt;div align="center"&gt; This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>}</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;div align="center"&gt; This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phf010"></a>
+<br><dpecw1>
+
+<b>* Step 7</b><br>
+Save the file as <tt>add_cart.php</tt>, upload to your Web server, and test in your Web browser (by clicking an <tt><tt>Add to Cart</tt></tt><i> </i>link).
+
+</dpecw1><br>
+<a name="phf011"></a>
+<br><dpecjs>This script adds products to the shopping cart by referencing the product (or print) ID.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //add_cart.php</tt><br>
+<tt>// This page adds prints to the shopping cart.</tt><br>
+<tt>// Set the page title and include the HTML header.</tt><br>
+<tt>$page_title = 'Add to Cart';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>if (isset ($_GET['pid'])) { // Check for a print ID.</tt><br>
+<tt>$pid = (int) $_GET['pid'];</tt><br>
+<tt>// Check if the cart already contains one of these prints,</tt><br>
+<tt>&nbsp;&nbsp; increment the quantity.</tt><br>
+<tt>if (isset($_SESSION['cart'][$pid])) {</tt><br>
+<tt>$_SESSION['cart'][$pid]['quantity']++; // Add another.</tt><br>
+<tt>// Display a message.</tt><br>
+<tt>echo '&lt;p&gt;Another copy of the print has been added to your shopping cart.</tt><br>
+<tt>&nbsp;&nbsp; &lt;/p&gt;';</tt><br>
+<tt>} else { // New product to the cart, get the price information.</tt><br>
+<tt>require_once ('../mysql_connect.php'); // Connect to the database.</tt><br>
+<tt>$query = "SELECT price FROM prints WHERE prints.print_id = $pid";</tt><br>
+<tt>$result = mysqli_query ($dbc,$query);</tt><br>
+<tt>if (mysqli_num_rows($result) == 1){ // Valid print ID.</tt><br>
+<tt>// Fetch the information.</tt><br>
+<tt>list($price) = mysqli_fetch_array ($result, MYSQLI_NUM);</tt><br>
+<tt>// Add to the cart.</tt><br>
+<tt>$_SESSION['cart'][$pid] = array ('quantity' =&gt; 1, 'price' =&gt; $price);</tt><br>
+<tt>// Display a message.</tt><br>
+<tt>echo '&lt;p&gt;The print has been added to your shopping cart.&lt;/p&gt;';</tt><br>
+<tt>} else { // Not a valid print ID.</tt><br>
+<tt>echo '&lt;div align="center"&gt;This page has been accessed in error! &lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>} // End of isset($_SESSION ['cart'][$pid] conditional.</tt><br>
+<tt>} else { // No print ID.</tt><br>
+<tt>echo '&lt;div align="center"&gt;This page has been accessed in error!&lt;/div&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phf012"></a>
+<br><dpecw1>
+	
+If you would rather display the contents of the cart after something's 
+been added, you could combine the functionality of this script with that
+ of <tt>view_cart.php</tt>, written next.<br>
+Similarly, you could easily copy the technique used in <tt>view_print.php</tt> to this script so that it would display the details of the product just added.
+	
+</dpecw1><br>
+<a name="phf013"></a>
+<br><dpecw1>
+
+<b>* Viewing the shopping cart </b><br>
+The <tt>view_cart.php</tt> script will be more complicated than <tt>add_cart.php</tt> because it serves two purposes. First, it will display the contents of the cart in detail.<br>
+Second, it will give the customer the option of updating the cart by 
+changing the quantities of the items therein (or deleting an item by 
+making its quantity <tt>0</tt>). To fulfill both roles, I'll display the cart's contents as a form and have the page submit the form back to itself. <br>
+Finally, this page will link to a <tt>checkout.php</tt> script, intended as the first step in the checkout process. The next lesson discusses what the checkout process involves.
+
+</dpecw1><br>
+<a name="phf014"></a>
+<br><dpecjs><b>* Creating <tt></tt></b><tt>
+<br><tt>view_cart.php</tt></tt>
+Let's examine the steps for creating the <tt><tt>view_cart.php</tt></tt> page.
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+<ml_ins_href><ml_data_href>html.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php //view_cart.php</tt><br>
+<tt>$page_title = 'View Your Shopping Cart';</tt><br>
+<tt>include ('./includes/header.html');</tt>
+</dpeccode><br>
+<a name="phf015"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Update the cart if the form has been submitted.
+If the form has been submitted, then the script needs to update the 
+shopping cart to reflect the entered quantities. These quantities will 
+come in as an array called <tt>$_POST['qty'] </tt> whose index is the print ID and whose value is the new quantity.
+If the new quantity is <tt>0</tt>, then that item should be removed from the cart by unsetting it. If the new quantity is not <tt>0</tt> but is a positive number, then the cart is updated to reflect this. 
+If the quantity is not a number greater than or equal to <tt>0</tt>, 
+then no change will be made to the cart. This will prevent a user from 
+entering a negative number, creating a negative balance due, and getting
+ a refund.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //view_cart.php</tt><br>
+<tt>$page_title = 'View Your Shopping Cart';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>if (isset($_POST['submitted'])) {</tt><br>
+<tt>foreach ($_POST['qty'] as $k =&gt;$v) {</tt><br>
+<tt>$pid = (int) $k;</tt><br>
+<tt>$qty = (int) $v;</tt><br>
+<tt>if ( $qty == 0 ) {</tt><br>
+<tt>unset ($_SESSION['cart'] [$pid]);</tt><br>
+<tt>} else if ( $qty &gt; 0 ) {</tt><br>
+<tt>$_SESSION['cart'][$pid] ['quantity'] = $qty;</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phf016"></a>
+<br><dpecjs><b>* Step 3</b>
+<br>
+Determine if the shopping cart is empty.
+Because the contents of the shopping cart may have just changed (if the 
+form was submitted), I need to check that it's not empty before 
+attempting to display it.
+To do so, I first check that the cart session variable is set (which 
+means that at least one product has been added to it, even if that 
+product has since been removed). Then I loop through the cart, testing 
+each item for a quantity. If at least one item has a quantity, then the 
+cart is not empty.
+To save the hassle of having to access every potential quantity, the 
+first time that a quantity is found, the loop will be exited using <tt>break</tt>.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //view_cart.php</tt><br>
+<tt>$page_title = 'View Your Shopping Cart';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>if (isset($_POST['submitted'])) {</tt><br>
+<tt>foreach ($_POST['qty'] as $k =&gt;$v) {</tt><br>
+<tt>$pid = (int) $k;</tt><br>
+<tt>$qty = (int) $v;</tt><br>
+<tt>if ( $qty == 0 ) {</tt><br>
+<tt>unset ($_SESSION['cart'] [$pid]);</tt><br>
+<tt>} else if ( $qty &gt; 0 ) {</tt><br>
+<tt>$_SESSION['cart'][$pid] ['quantity'] = $qty;</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>$empty = TRUE;</tt><br>
+<tt>if (isset ($_SESSION['cart'])) {</tt><br>
+<tt>foreach ($_SESSION['cart'] as $key =&gt; $value) {</tt><br>
+<tt>if (isset($value)) {</tt><br>
+<tt>$empty = FALSE;</tt><br>
+<tt>break;</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phf017"></a>
+<br><dpecjs><b>* Step 4</b>
+<br>
+If the cart is not empty, create the query to display its contents.
+The query is a fairly standard join. One addition is the use of the <tt>IN</tt>
+ SQL clause. Instead of just retrieving the information for one print, 
+I'll want to retrieve all the information for every print in the 
+shopping cart.
+To do so, I use a list of print IDs in a query like <tt>SELECT… print_id IN (519, 42, 427)…</tt>. I could have also used <tt>SELECT… WHERE print_id=519 OR print_id=42 or print_id=427…</tt>, but that's unnecessarily long-winded.
+<ml_ins_href><ml_data_href>php.
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php //view_cart.php</tt><br>
+<tt>$page_title = 'View Your Shopping Cart';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>if (isset($_POST['submitted'])) {</tt><br>
+<tt>foreach ($_POST['qty'] as $k =&gt;$v) {</tt><br>
+<tt>$pid = (int) $k;</tt><br>
+<tt>$qty = (int) $v;</tt><br>
+<tt>if ( $qty == 0 ) {</tt><br>
+<tt>unset ($_SESSION['cart'] [$pid]);</tt><br>
+<tt>} else if ( $qty &gt; 0 ) {</tt><br>
+<tt>$_SESSION['cart'][$pid] ['quantity'] = $qty;</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>$empty = TRUE;</tt><br>
+<tt>if (isset ($_SESSION['cart'])) {</tt><br>
+<tt>foreach ($_SESSION['cart'] as $key =&gt; $value) {</tt><br>
+<tt>if (isset($value)) {</tt><br>
+<tt>$empty = FALSE;</tt><br>
+<tt>break;</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>}</tt><br>
+<tt>if (!$empty) {</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>$query = "SELECT print_id, CONCAT_WS(' ', first_name, middle_name, last_name)</tt><br>
+<tt>&nbsp;&nbsp; AS name, print_name FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id =prints.artist_id AND prints.print_id</tt><br>
+<tt>&nbsp;&nbsp; IN (";foreach ($_SESSION['cart'] as $pid=&gt; $value) {</tt><br>
+<tt>$query .= $pid . ',';</tt><br>
+<tt>}</tt><br>
+<tt>$query = substr ($query, 0, -1). ') ORDER BY artists.last_name ASC';</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+</dpeccode><br>
+<a name="phf018"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Create the table and begin the HTML form.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>echo '&lt;table border="0" width="90%" cellspacing="3" cellpadding="3"</tt><br>
+<tt>&nbsp;&nbsp; align="center"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="left" width="30%"&gt;&lt;b&gt;Artist&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="left" width="30%"&gt;&lt;b&gt;Print Name&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="10%"&gt;&lt;b&gt;Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="center" width="10%"&gt;&lt;b&gt;Qty&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="10%"&gt;&lt;b&gt;Total Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;form action="view_cart.php"method="post"&gt;</tt><br>
+<tt>';</tt>
+</dpeccode><br>
+<a name="phf019"></a>
+<br><dpecjs><b>*  Step 6</b>
+<br>
+Print out the returned records.
+When displaying the cart, I will also want to calculate the order total, so I initialize a <tt>$total</tt>
+ variable first.
+Then for each returned row (which represents one print), I multiply the 
+price of that item times the quantity to determine the subtotal (the 
+syntax of this is a bit complex because of the multidimensional <tt>$_SESSION['cart']</tt> array). This subtotal is added to the <tt>$total</tt> variable.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>echo '&lt;table border="0" width="90%" cellspacing="3" cellpadding="3"</tt><br>
+<tt>&nbsp;&nbsp; align="center"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="left" width="30%"&gt;&lt;b&gt;Artist&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="left" width="30%"&gt;&lt;b&gt;Print Name&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="10%"&gt;&lt;b&gt;Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="center" width="10%"&gt;&lt;b&gt;Qty&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="10%"&gt;&lt;b&gt;Total Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;form action="view_cart.php"method="post"&gt;</tt><br>
+<tt>';</tt><br>
+<tt>$total = 0;</tt><br>
+<tt>while ($row = mysqli_fetch_array ($result, MYSQLI_ASSOC)) {</tt><br>
+<tt>$subtotal = $_SESSION['cart'] [$row['print_id']]['quantity']</tt><br>
+<tt>&nbsp;&nbsp; * $_SESSION['cart'][$row ['print_id']]['price'];</tt><br>
+<tt>$total += $subtotal;</tt><br>
+<tt>echo "&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;{$row ['name']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;{$row ['print_name']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"right\"&gt;\${$_SESSION ['cart'][$row['print_id']] ['price']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"center\"&gt;&lt;input type=\"text\" size=\"3\"</tt><br>
+<tt>&nbsp;&nbsp; name=\"qty[{$row['print_id']}]\"</tt><br>
+<tt>&nbsp;&nbsp; value=\"{$_SESSION['cart'][$row['print_id']]['quantity']}\"/&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"right\"&gt;$" . number_format ($subtotal, 2) . "&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;\n";</tt><br>
+<tt>}</tt><br>
+</dpeccode><br>
+<a name="phf020"></a>
+<br><dpecjs> Each record is also printed out as a row in the table, with
+ the quantity displayed as a text input type whose value is preset 
+(based upon the quantity value in the session).&nbsp; 
+<br>
+
+<a name="phf021"></a>
+<br><dpecjs><b>*  Step 7</b>
+<br>
+Close the database connection, then complete the table and the form.
+The running order total is displayed in the final row of the table, using the <tt>number_format()</tt> function for formatting.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>echo ' &lt;tr&gt;</tt><br>
+<tt>&lt;td colspan="4" align="right"&gt;&lt;b&gt;Total:&lt;b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right"&gt;$' . number_format ($total, 2) . '&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;/table&gt;&lt;div align="center"&gt;&lt;input type="submit" name="submit"</tt><br>
+<tt>&nbsp;&nbsp; value="Update My Cart" /&gt;</tt><br>
+<tt>&lt;input type="hidden" name="submitted" value="TRUE" /&gt;</tt><br>
+<tt>&lt;/form&gt;&lt;br /&gt;&lt;br /&gt;&lt;a href="checkout.php"&gt;&lt;font size="+2"&gt;</tt><br>
+<tt>&nbsp;&nbsp; Checkout&lt;/font&gt;&lt;/a&gt;&lt;/div&gt;';</tt>
+</dpeccode><br>
+<a name="phf022"></a>
+<br><dpecjs><b>*  Step 8</b>
+<br>
+Finish the main conditional and the PHP page.
+<ml_ins_href><ml_data_href>html.&nbsp; 
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>echo ' &lt;tr&gt;</tt><br>
+<tt>&lt;td colspan="4" align="right"&gt;&lt;b&gt;Total:&lt;b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right"&gt;$' . number_format ($total, 2) . '&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;/table&gt;&lt;div align="center"&gt;&lt;input type="submit" name="submit"</tt><br>
+<tt>&nbsp;&nbsp; value="Update My Cart" /&gt;</tt><br>
+<tt>&lt;input type="hidden" name="submitted" value="TRUE" /&gt;</tt><br>
+<tt>&lt;/form&gt;&lt;br /&gt;&lt;br /&gt;&lt;a href="checkout.php"&gt;&lt;font size="+2"&gt;</tt><br>
+<tt>&nbsp;&nbsp; Checkout&lt;/font&gt;&lt;/a&gt;&lt;/div&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;p&gt;Your cart is currently empty.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phf023"></a>
+<br><dpecjs><b>*  Step 9</b>
+<br>
+Save the file as <tt>view_cart.php</tt>, upload to your Web server, and test in your Web browser. You can remove an item from the cart by setting its quantity to <tt>0</tt> (a note should be added to the page so that the customer knows this).&nbsp; 
+<br>
+
+<a name="phf024"></a>
+<br><dpecjs>The <tt>view_cart.php</tt> script both displays the contents of the shopping cart and allows the user to update the cart's contents.
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php //view_cart.php</tt><br>
+<tt>// This page displays the contents of the shopping cart.</tt><br>
+<tt>// This page also lets the user update the contents of the cart.</tt><br>
+<tt>// Set the page title and include the HTML header.</tt><br>
+<tt>$page_title = 'View Your Shopping Cart';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>// Check if the form has been submitted (to update the cart).</tt><br>
+<tt>if (isset($_POST['submitted']))</tt><br>
+<tt>&nbsp;&nbsp; { // Check if the form has been submitted.</tt><br>
+<tt>// Change any quantities.</tt><br>
+<tt>foreach ($_POST['qty'] as $k =&gt; $v) {</tt><br>
+<tt>// Must be integers!</tt><br>
+<tt>$pid = (int) $k;</tt><br>
+<tt>$qty = (int) $v;</tt><br>
+<tt>if ( $qty == 0 ) { // Delete.</tt><br>
+<tt>unset ($_SESSION['cart'][$pid]);</tt><br>
+<tt>} elseif ( $qty &gt; 0 ) { // Change quantity.</tt><br>
+<tt>$_SESSION['cart'][$pid] ['quantity'] = $qty;</tt><br>
+<tt>}</tt><br>
+<tt>} // End of FOREACH.</tt><br>
+<tt>} // End of SUBMITTED IF.</tt><br>
+<tt>// Check if the shopping cart is empty.</tt><br>
+<tt>$empty = TRUE;</tt><br>
+<tt>if (isset ($_SESSION['cart'])) {</tt><br>
+<tt>foreach ($_SESSION['cart'] as $key =&gt;$value) {</tt><br>
+<tt>if (isset($value)) {</tt><br>
+<tt>$empty = FALSE;</tt><br>
+<tt>break; // Leave the loop.</tt><br>
+<tt>}</tt><br>
+<tt>} // End of FOREACH.</tt><br>
+<tt>} // End of ISSET IF.</tt><br>
+<tt>// Display the cart if it's not empty.</tt><br>
+<tt>if (!$empty) {</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>&nbsp;&nbsp; // Connect to the database.</tt><br>
+<tt>// Retrieve all of the information for the prints in the cart.</tt><br>
+<tt>$query = "SELECT print_id, CONCAT_WS(' ', first_name, middle_name, last_name)</tt><br>
+<tt>&nbsp;&nbsp; AS name, print_name FROM artists, prints</tt><br>
+<tt>&nbsp;&nbsp; WHERE artists.artist_id = prints.artist_id AND prints.print_id </tt><br>
+<tt>&nbsp;&nbsp; IN (";foreach ($_SESSION['cart'] as $pid =&gt;$value) {</tt><br>
+<tt>$query .= $pid . ',';</tt><br>
+<tt>}</tt><br>
+<tt>$query = substr ($query, 0, -1) . ') ORDER BY artists.last_name ASC';</tt><br>
+<tt>$result = mysqli_query ($dbc, $query);</tt><br>
+<tt>// Create a table and a form.</tt><br>
+<tt>echo '&lt;table border="0" width="90%" cellspacing="3" cellpadding="3"</tt><br>
+<tt>&nbsp;&nbsp; align="center"&gt;</tt><br>
+<tt>&lt;tr&gt;</tt><br>
+<tt>&lt;td align="left" width="30%"&gt;&lt;b&gt;Artist&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="left" width="30%"&gt;&lt;b&gt;Print Name&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="10%"&gt;&lt;b&gt;Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="center" width="10%"&gt;&lt;b&gt;Qty&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right" width="10%"&gt;&lt;b&gt;Total Price&lt;/b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;form action="view_cart.php" method="post"&gt;</tt><br>
+<tt> ';</tt><br>
+<tt>// Print each item.</tt><br>
+<tt>$total = 0; // Total cost of the order.</tt><br>
+<tt>while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {</tt><br>
+<tt>// Calculate the total and subtotals.</tt><br>
+<tt>$subtotal = $_SESSION['cart'][$row</tt><br>
+<tt>&nbsp;&nbsp; ['print_id']]['quantity'] *</tt><br>
+<tt>&nbsp;&nbsp; $_SESSION['cart'][$row ['print_id']]['price'];</tt><br>
+<tt>$total += $subtotal;</tt><br>
+<tt>// Print the row.</tt><br>
+<tt>echo " &lt;tr&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;{$row['name']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"left\"&gt;{$row['print_name']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"right\"&gt;\${$_SESSION['cart'][$row['print_id']] ['price']}&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"center\"&gt;&lt;input type=\"text\" size=\"3\"</tt><br>
+<tt>&nbsp;&nbsp; name=\"qty[{$row['print_id']}]\"</tt><br>
+<tt>&nbsp;&nbsp; value=\"{$_SESSION['cart'][$row['print_id']]['quantity']}\" /&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align=\"right\"&gt;$" . number_format ($subtotal, 2) . "&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;\n";</tt><br>
+<tt>} // End of the WHILE loop.</tt><br>
+<tt>mysqli_close($dbc); // Close the database connection.</tt><br>
+<tt>// Print the footer, close the table, and the form.</tt><br>
+<tt>echo ' &lt;tr&gt;</tt><br>
+<tt>&lt;td colspan="4" align="right"&gt;&lt;b&gt; Total:&lt;b&gt;&lt;/td&gt;</tt><br>
+<tt>&lt;td align="right"&gt;$' . number_format ($total, 2) . '&lt;/td&gt;</tt><br>
+<tt>&lt;/tr&gt;</tt><br>
+<tt>&lt;/table&gt;&lt;div align="center"&gt;&lt;input type="submit" name="submit"</tt><br>
+<tt>&nbsp;&nbsp; value="Update My Cart" /&gt;</tt><br>
+<tt>&lt;input type="hidden" name="submitted"value="TRUE" /&gt;</tt><br>
+<tt>&lt;/form&gt;&lt;br /&gt;&lt;br /&gt;&lt;a href="checkout.php"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;font size="+2"&gt;Checkout&lt;/font&gt;&lt;/a&gt;&lt;/div&gt;';</tt><br>
+<tt>} else {</tt><br>
+<tt>echo '&lt;p&gt;Your cart is currently empty.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phf025"></a>
+<br><b>More complex applications  <br>  </b>  On more complex Web 
+applications, I would be inclined to write a function strictly for the 
+purpose of displaying a cart's contents (since several pages might do 
+so).  <br><br>  <b>Security  <br>  </b>  The key to a secure e-commerce 
+application is to watch how data is being sent and used. For example, it
+ would be far less secure to place a product's price in the URL where it
+ could easily be changed.  <br><br>  
+<a name="phf028"></a>
+
+<script language="JavaScript">insertAccQuestion('11','phf028.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phf029"></a>
+<br><a name="topic9"></a><h2>Topic 6.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try creating a script for adding an item to a customer's shopping cart for your e-commerce site.<br>
+<ml_ins_href><ml_data_href>php, <tt>header.html</tt> and <tt>footer.html</tt>, which you can use to finish this script.
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpecw2>
+
+<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Create a new php document. Begin the document with the page header and check to see if an item was already selected.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+If an item was selected, have the script check to see if a copy of that 
+item has already been selected. When the script finds an existing copy 
+of the item, it should simply add <tt>1</tt> to the quantity of that item. If there is no existing copy of the item, then the script should add the item to the cart. 
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Complete the conditionals, include the HTML footer and complete the PHP 
+page. This script will add items to a customer's shopping cart. You will
+ still need to create a script for viewing and updating the cart.
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw2><br>
+<a name="phf030"></a>
+<br><br><b>* Exercise 2</b><dpecw1>
+
+<br>
+Try creating a script for allowing customers to view or update their shopping cart for your e-commerce site.<br>
+<ml_ins_href><ml_data_href>php, <tt>header.html</tt> and <tt>footer.html</tt>, which you can to finish this script.
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpecw2>
+
+<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Create a new PHP document. Have the script update the cart if the form has been submitted.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+Use the <tt>$empty</tt> variable to determine if the shopping cart is empty. If the cart is not empty, create the query to display its contents.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Create an HTML table to display the contents of the cart, asking the 
+cart to print out the returned records to the cart. Initialize the <tt>$total</tt> variable so that the cart can calculate the order total.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+Close the database connection, then complete the table and the form. Finish the main conditional and the PHP page.
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw2><br>
+<a name="phf031"></a>
+<br><dpecw1>
+	
+In this lesson, you learned how to create a script that will add items 
+to your users' shopping carts. This script will take one argument, the 
+ID of the item being purchased, and use it to update the cart. The cart 
+itself will be a session variable.<br>
+You also learned how to create a script that lets users view their 
+shopping carts. This script is more complicated because it has to 
+display the contents of the cart in detail, and must allow the user to 
+change quantities of the items. This requires that the cart's contents 
+be displayed as a form which is then submitted back to itself when 
+changes are made.
+	
+</dpecw1><br>
+<a name="phg001"></a><br><a name="topic10"></a><h2>Lesson 7. Recording the Orders</h2><dpecw1>
+
+After users have filled their shopping carts, they need to finish their 
+orders, and arrangements must be made for payment and delivery of their 
+orders.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a page for users to submit their orders
+	</li>
+	<li>
+Explain the aspects of your e-commerce site that are beyond the scope of this course
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phg002"></a>
+<br><dpecw1>
+
+After displaying all the products as a catalog, and after users have 
+filled up their shopping carts, there are three final steps:<br>
+<ul>
+	<li>
+Checking the user out
+	</li>
+	<li>
+Recording the order in the database
+	</li>
+	<li>
+Fulfilling the order
+	</li>
+</ul>
+<br>
+Ironically, the most important part — checking out (i.e., taking the 
+customer's money) — could not be adequately demonstrated in this lesson,
+ as it's so particular to each individual site. So what I've done 
+instead is given an overview of that process at the end of the lesson.
+
+</dpecw1><br>
+<a name="phg003"></a>
+<br><dpecw1>
+
+Similarly, the act of fulfilling the order is beyond the scope of this 
+lesson. For physical products, this means that the order will need to be
+ packaged and shipped. Then the order in the database would be marked as
+ shipped by noting the shipping date. This concept shouldn't be too hard
+ for you to grasp. 
+
+</dpecw1><br>
+<a name="phg004"></a>
+<br><dpecw1>
+
+What I can adequately show in this lesson is how the order information 
+would be stored in the database. To ensure that the order is completely 
+and correctly entered into both the <tt><tt>orders</tt></tt> and <tt><tt>order_contents</tt></tt> tables, I'll use transactions. <br>
+This script, <tt><tt></tt>submit_order.php<tt></tt></tt>, represents the final step the customer would see in the e-commerce process.
+
+</dpecw1><br>
+<a name="phg005"></a>
+<br><dpecjs><b>*  Creating <tt></tt></b><tt>
+<br><tt>submit_order.php</tt></tt>
+Let's examine the steps for creating <tt>submit_order.php</tt>.
+<b>* Step 1</b>
+Create a new PHP document in your text editor.
+<ml_ins_href><ml_data_href>html.&nbsp; 
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php submit_order.php</tt><br>
+<tt>$page_title = 'Order Confirmation';</tt><br>
+<tt>include ('./includes/header.html');</tt>
+</dpeccode><br>
+<a name="phg006"></a>
+<br><dpecjs><b>*  Step 2</b>
+<br>
+Create two temporary variables.
+To enter the orders into the database, this page needs two additional 
+pieces of information: the customer's identification number (which is 
+the <tt><tt>customer_id</tt></tt> from the <tt><tt>customers</tt></tt> 
+table) and the total of the order.
+The first would presumably be determined when the customer logged in (it
+ would probably be stored in the session). The second value may also be 
+stored in a session (after tax and shipping are factored in) or may be 
+received by this page from the billing process. But as I don't have 
+immediate access to either value, having skipped those steps, I'll 
+create these two variables to fake it.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php submit_order.php</tt><br>
+<tt>$page_title = 'Order Confirmation';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>$customer = 1;</tt><br>
+<tt>$total = 178.93;</tt><br>
+</dpeccode><br>
+<a name="phg007"></a>
+<br><dpecjs><b>*  Step 3</b>
+<br>
+Include the database connection and turn off MySQL's autocommit mode. 
+The <tt><tt></tt>mysqli_autocommit()<tt></tt></tt> function can turn 
+MySQL's autocommit feature on or off. Since I'll want to use a 
+transaction to ensure that the entire order is entered properly, I'll 
+turn off autocommit first.
+<ml_ins_href><ml_data_href>php.&nbsp; 
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>&lt;?php submit_order.php</tt><br>
+<tt>$page_title = 'Order Confirmation';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>$customer = 1;</tt><br>
+<tt>$total = 178.93;</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>mysqli_autocommit($dbc, FALSE);</tt><br>
+</dpeccode><br>
+<a name="phg008"></a>
+<br><dpecjs><b>*  Step 4</b>
+<br>
+Add the order to the <tt><tt>orders</tt></tt><i> </i>table.
+This query is very simple, entering only the customer's ID number and the total amount of the order into the <tt><tt>orders</tt> </tt>table. The <tt><tt>order_date</tt> </tt>field in the table will automatically be set to the current date and time, as it's a <tt><tt></tt>TIMESTAMP<tt></tt></tt> column.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php submit_order.php</tt><br>
+<tt>$page_title = 'Order Confirmation';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>$customer = 1;</tt><br>
+<tt>$total = 178.93;</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>mysqli_autocommit($dbc, FALSE);</tt><br>
+<tt>$query = "INSERT INTO orders (customer_id, total)</tt><br>
+<tt>&nbsp;&nbsp; VALUES ($customer, $total)";</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+<tt>if (mysqli_affected_rows($dbc) == 1) {</tt><br>
+</dpeccode><br>
+<a name="phg009"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Retrieve the order ID and insert the order contents into the database.
+The <tt><tt>order_id</tt></tt><i> </i>value from the <tt><tt>orders</tt></tt><i> </i>table is needed in the <tt><tt>order_contents</tt></tt><i> </i>table to relate the two.
+This value, the <tt><tt>print_id</tt></tt>, the quantity ordered, and the price are all entered as individual records in the <tt><tt>order_contents</tt></tt><i> </i>table.
+By looping through the shopping cart, I can dynamically build up a query. &nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php submit_order.php</tt><br>
+<tt>$page_title = 'Order Confirmation';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>$customer = 1;</tt><br>
+<tt>$total = 178.93;</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>mysqli_autocommit($dbc, FALSE);</tt><br>
+<tt>$query = "INSERT INTO orders (customer_id, total)</tt><br>
+<tt>&nbsp;&nbsp; VALUES ($customer, $total)";</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+<tt>if (mysqli_affected_rows($dbc) == 1) {</tt><br>
+<tt>$oid = mysqli_insert_id($dbc);</tt><br>
+<tt>$query = "INSERT INTO order_contents (order_id, print_id, quantity, price)</tt><br>
+<tt>&nbsp;&nbsp; VALUES ";</tt><br>
+<tt>foreach ($_SESSION['cart'] as $pid=&gt; $value) {</tt><br>
+<tt>$query .= "($oid, $pid, {$value ['quantity']}, {$value['price']}), ";</tt><br>
+<tt>}</tt><br>
+<tt>$query = substr($query, 0, -2);</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+</dpeccode><br>
+<a name="phg010"></a>
+<br><dpecw1>
+	
+If you have any problems with this or the other queries in this script, 
+use your standard MySQL debugging techniques: print out the query using 
+PHP, print out the MySQL error, and run the query using another 
+interface, like the mysql client.
+	
+</dpecw1><br>
+<a name="phg011"></a>
+<br><dpecjs><b>*  Step 6</b>
+<br>
+Report on the success of the transaction.
+The conditional checks to see if as many records were entered into the 
+database as exist in the shopping cart. In short: did each product get 
+inserted into the <tt><tt>order_contents</tt></tt><i> </i>table?
+If so, then the transaction is complete and can be committed. Then the 
+shopping cart is emptied and the user is thanked. Logically you'd want 
+to send a confirmation email to the customer here as well.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php submit_order.php</tt><br>
+<tt>$page_title = 'Order Confirmation';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>$customer = 1;</tt><br>
+<tt>$total = 178.93;</tt><br>
+<tt>require_once ('../mysql_connect.php');</tt><br>
+<tt>mysqli_autocommit($dbc, FALSE);</tt><br>
+<tt>$query = "INSERT INTO orders (customer_id, total)</tt><br>
+<tt>&nbsp;&nbsp; VALUES ($customer, $total)";</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+<tt>if (mysqli_affected_rows($dbc) == 1) {</tt><br>
+<tt>$oid = mysqli_insert_id($dbc);</tt><br>
+<tt>$query = "INSERT INTO order_contents (order_id, print_id, quantity, price)</tt><br>
+<tt>&nbsp;&nbsp; VALUES ";</tt><br>
+<tt>foreach ($_SESSION['cart'] as $pid=&gt; $value) {</tt><br>
+<tt>$query .= "($oid, $pid, {$value ['quantity']}, {$value['price']}), ";</tt><br>
+<tt>}</tt><br>
+<tt>$query = substr($query, 0, -2);</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+<tt>if (mysqli_affected_rows($dbc)== count($_SESSION['cart']))</tt><br>
+<tt>{mysqli_commit($dbc); mysqli_close($dbc); unset($_SESSION['cart']);</tt><br>
+<tt>echo '&lt;p&gt;Thank you for your order. You will be notified when</tt><br>
+<tt>&nbsp;&nbsp; the items ship.&lt;/p&gt;';</tt><br>
+</dpeccode><br>
+<a name="phg012"></a>
+<br><dpecjs><b>*  Step 7</b>
+<br>
+Handle any MySQL problems.
+The first <tt>else</tt> clause applies if the correct number of records were not inserted into the <tt><tt>order_contents</tt></tt> table. The second <tt><tt></tt>else<tt></tt></tt> clause applies if the original <tt><tt>orders</tt></tt> table query fails. In either case, the entire transaction should be undone, so the <tt><tt></tt>mysqli_rollback()<tt></tt></tt> function is called. &nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>} else { mysqli_rollback($dbc); mysqli_close($dbc);</tt><br>
+<tt>echo '&lt;p&gt;Your order could not be processed due to a system error.</tt><br>
+<tt>&nbsp;&nbsp; You will be contacted in order to have the problem fixed.</tt><br>
+<tt>&nbsp;&nbsp; We apologize for the inconvenience.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} else { mysqli_rollback($dbc); mysqli_close($dbc);</tt><br>
+<tt>echo '&lt;p&gt;Your order could not be processed due to a system error.</tt><br>
+<tt>&nbsp;&nbsp; You will be contacted in order to have the problem fixed.</tt><br>
+<tt>&nbsp;&nbsp; We apologize for the inconvenience. &lt;/p&gt;';</tt><br>
+<tt>}</tt>
+</dpeccode><br>
+<a name="phg013"></a>
+<br><dpecw1>
+	
+If a problem occurs at this point of the process, it's rather serious 
+because the customer has been charged but no record of that order has 
+made it into the database.<br>
+This shouldn't happen, but just in case, you should write all the data 
+to a text file and/or email all of it to the site's administrator or do 
+something<i> </i>that will create a record of this order. If you don't, you'll have some very irate customers on your hands.
+	
+</dpecw1><br>
+<a name="phg014"></a>
+<br><dpecjs><b>*  Step 8</b>
+<br>
+Complete the page.
+<ml_ins_href><ml_data_href>html.&nbsp; 
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<tt>} else { mysqli_rollback($dbc); mysqli_close($dbc);</tt><br>
+<tt>echo '&lt;p&gt;Your order could not be processed due to a system error.</tt><br>
+<tt>&nbsp;&nbsp; You will be contacted in order to have the problem fixed.</tt><br>
+<tt>&nbsp;&nbsp; We apologize for the inconvenience.&lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>} else { mysqli_rollback($dbc); mysqli_close($dbc);</tt><br>
+<tt>echo '&lt;p&gt;Your order could not be processed due to a system error.</tt><br>
+<tt>&nbsp;&nbsp; You will be contacted in order to have the problem fixed.</tt><br>
+<tt>&nbsp;&nbsp; We apologize for the inconvenience. &lt;/p&gt;';</tt><br>
+<tt>}</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt><br>
+</dpeccode><br>
+<a name="phg015"></a>
+<br><dpecjs><b>*  Step 9</b>
+<br>
+Save the file as <tt><tt></tt>submit_order.php<tt></tt></tt>, upload to 
+your Web server, and test in your Web browser. 
+Because there's no direct link to this script, you'll need to fill up 
+your shopping cart and then manually change the URL in the Web browser 
+to <tt><tt></tt>http://<i>your.domain.here</i>/submit_order.php<tt></tt></tt>.&nbsp; 
+<br>
+
+<a name="phg016"></a>
+<br><b>Real variables  <br>  </b>  On a live, working site, you should assign the <tt><tt></tt>$customer<tt></tt></tt> and <tt><tt></tt>$total<tt></tt></tt> variables real values for this script to work.  <br><br>  <b>Testing  <br>  </b>  For testing purposes, you could also change the <tt><tt>Checkout</tt></tt><i> </i>link on <tt><tt></tt>view_cart.php<tt></tt></tt> so that it points to <tt><tt></tt>submit_order.php<tt></tt></tt>. Then you could more easily go from the one step to the other.  <br><br>  <b>PHP and credit card processing  <br>  </b>  PHP has the ability to work directly with some common credit card processing systems (e.g., Cybercash or Verisign).  <br><br>  
+<a name="phg017"></a>
+<br><dpecjs> The final script in the e-commerce application records the 
+order information in the database. It uses transactions to ensure that 
+the whole order gets submitted properly.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>&lt;?php submit_order.php</tt><br>
+<tt>// This page inserts the order information into the table.</tt><br>
+<tt>// This page would come after the billing process.</tt><br>
+<tt>// This page assumes that the billing process worked</tt><br>
+<tt>&nbsp;&nbsp; (the money has been taken).</tt><br>
+<tt>// Set the page title and include the HTML header.</tt><br>
+<tt>$page_title = 'Order Confirmation';</tt><br>
+<tt>include ('./includes/header.html');</tt><br>
+<tt>// Assume that the customer is logged in and that this page has access</tt><br>
+<tt>&nbsp;&nbsp; to the customer's ID.</tt><br>
+<tt>$customer = 1; // Temporary.</tt><br>
+<tt>// Assume that this page receives the order total.</tt><br>
+<tt>$total = 178.93; // Temporary.</tt><br>
+<tt>require_once ('../mysql_connect.php'); // Connect to the database.</tt><br>
+<tt>// Turn autocommit off.</tt><br>
+<tt>mysqli_autocommit($dbc, FALSE);</tt><br>
+<tt>// Add the order to the orders table.</tt><br>
+<tt>$query = "INSERT INTO orders (customer_id, total) VALUES</tt><br>
+<tt>&nbsp;&nbsp; ($customer, $total)";</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+<tt>if (mysqli_affected_rows($dbc) == 1) {</tt><br>
+<tt>// Need the order ID.</tt><br>
+<tt>$oid = mysqli_insert_id($dbc);</tt><br>
+<tt>// Insert the specific order contents into the database.</tt><br>
+<tt>$query = "INSERT INTO order_contents (order_id, print_id, quantity, price)</tt><br>
+<tt>&nbsp;&nbsp; VALUES ";</tt><br>
+<tt>foreach ($_SESSION['cart'] as $pid =&gt; $value) {</tt><br>
+<tt>$query .= "($oid, $pid, {$value['quantity']}, {$value['price']}), ";</tt><br>
+<tt>}</tt><br>
+<tt>$query = substr($query, 0, -2); // Chop off last two characters.</tt><br>
+<tt>$result = mysqli_query($dbc, $query);</tt><br>
+<tt>// Report on the success.</tt><br>
+<tt>if (mysqli_affected_rows($dbc) == count($_SESSION['cart'])) { // Whohoo!</tt><br>
+<tt>// Commit the transaction.</tt><br>
+<tt>mysqli_commit($dbc);</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>// Clear the cart.</tt><br>
+<tt>unset($_SESSION['cart']);</tt><br>
+<tt>// Message to the customer.</tt><br>
+<tt>echo '&lt;p&gt;Thank you for your order.</tt><br>
+<tt>&nbsp;&nbsp; You will be notified when the items ship.&lt;/p&gt;';</tt><br>
+<tt>// Send emails and do whatever else.</tt><br>
+<tt>} else { // Rollback and report the problem.</tt><br>
+<tt>mysqli_rollback($dbc);</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>echo '&lt;p&gt;Your order could not be processed due to a system error.</tt><br>
+<tt>&nbsp;&nbsp; You will be contacted in order to have the problem fixed.</tt><br>
+<tt>&nbsp;&nbsp; We apologize for the inconvenience.&lt;/p&gt;';</tt><br>
+<tt>// Send the order information to the administrator.</tt><br>
+<tt>}</tt><br>
+<tt>} else { // Rollback and report the problem.</tt><br>
+<tt>mysqli_rollback($dbc);</tt><br>
+<tt>mysqli_close($dbc);</tt><br>
+<tt>echo '&lt;p&gt;Your order could not be processed due to a system error.</tt><br>
+<tt>&nbsp;&nbsp; You will be contacted in order to have the problem fixed.</tt><br>
+<tt>&nbsp;&nbsp; We apologize for the inconvenience.&lt;/p&gt;';</tt><br>
+<tt>// Send the order information to the administrator.</tt><br>
+<tt>}</tt><br>
+<tt>include ('./includes/footer.html');</tt><br>
+<tt>?&gt;</tt>
+</dpeccode><br>
+<a name="phg018"></a>
+<br><dpecw1>
+
+<b>* The Checkout Process</b><br>
+The checkout process (which I will not discuss in detail) involves three steps:<br>
+<ul>
+	<li>
+Confirm the order.
+	</li>
+	<li>
+Confirm/submit the billing and shipping information.
+	</li>
+	<li>
+Process the billing information. 
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phg019"></a>
+<br><dpecw1>
+
+Steps 1 and 2 should be easy enough for intermediate programmers to 
+complete on their own. In all likelihood, most of the data in Step 2 
+would come from the <tt><tt>customers</tt></tt><i> </i>table, after the user has registered and logged in. 
+
+</dpecw1><br>
+<a name="phg020"></a>
+<br><dpecw1>
+
+Step 3 is the trickiest one and could not be adequately addressed in any
+ sample lesson. The particulars of this step vary greatly depending upon
+ how the billing is being handled and by whom.<br>
+To make it more complex, the laws are different depending upon whether 
+the product being sold is to be shipped later or is immediately 
+delivered (like access to a Web site or a downloadable file). 
+
+</dpecw1><br>
+<a name="phg021"></a>
+<br><dpecw1>
+
+Most small to medium-sized e-commerce sites use a third party to handle the financial transactions.<br>
+Normally this involves sending the billing information, the order total,
+ and a store number (a reference to the e-commerce site itself) to 
+another Web site. This site will handle the actual billing process, 
+debiting the customer and crediting the store. Then a result code will 
+be sent back to the e-commerce site, which would be programmed to react 
+accordingly.<br>
+In such cases, the third-party handling the billing will provide the 
+developer with the appropriate code and instructions to interface with 
+their system.
+
+</dpecw1><br>
+<a name="phg022"></a>
+
+<script language="JavaScript">insertAccQuestion('12','phg022.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phg023"></a>
+
+<script language="JavaScript">insertAccQuestion('13','phg023.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phg024"></a>
+
+<script language="JavaScript">insertAccQuestion('14','phg024.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phg025"></a>
+
+<script language="JavaScript">insertAccQuestion('15','phg025.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phg026"></a>
+<br><dpecw1>
+	
+In this lesson, you learned how to create a checkout page for your 
+e-commerce site. This page will place the order into your MySQL 
+database.<br>
+You also learned that there are other elements of completing your 
+customer's order. This includes collecting money, which can be handled 
+in many different fashions depending on what type of payment you will 
+accept, and the actual delivery of the product to the customer.
+	
+</dpecw1><br>
+<a name="phh001"></a>
+<br><a name="topic11"></a><h2>Lesson 8. Course in Review</h2><dpecw1>
+
+This lesson allows you an opportunity to review the principles and practices you have learned in this course.<br>
+It reviews the material presented in this course through questions and activities.
+
+</dpecw1><br>
+<a name="phh002"></a>
+
+<script language="JavaScript">insertAccQuestion('16','phh002.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phh003"></a>
+
+<script language="JavaScript">insertAccQuestion('17','phh003.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phh004"></a>
+
+<script language="JavaScript">insertAccQuestion('18','phh004.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phh005"></a>
+
+<script language="JavaScript">insertAccQuestion('19','phh005.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phh007"></a>
+
+<script language="JavaScript">insertAccQuestion('20','phh007.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<script language="JavaScript">
+<!--
+writeCopyrightInfo();
+var totalTopics =11;
+//-->
+</script><br><br><center>© 2006 MindLeaders, Inc. All Rights Reserved.
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+</center></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></dpecjs></body></html>

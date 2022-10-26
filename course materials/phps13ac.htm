@@ -1,0 +1,1910 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+</head><body><mledit by="insert_name" date="insert_date" note="insert_note"></mledit>
+
+<script language="JavaScript" src="phps13ac_files/mlclientpage.js"></script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript" src="phps13ac_files/site.js"></script><script language="Javascript" src="phps13ac_files/resource_strings.js"></script><script language="Javascript" src="phps13ac_files/special_cases.js"></script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript">var ThisPage=new MlPage();</script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<title>PHP and MySQL: Content Management Example</title>
+
+<script language="JavaScript">var crsAcronym="phps13";</script>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<script language="JavaScript" src="phps13ac_files/access.js"></script><script language="Javascript" src="phps13ac_files/params.js"></script><script language="Javascript" src="phps13ac_files/courseware.js"></script><script language="Javascript" src="phps13ac_files/phps13.js"></script><script language="Javascript" src="phps13ac_files/printbut.js"></script><table width="97%"><tbody><tr><td align="right"><div id="printButton" class="printbut" onclick="javascript:printPage();" onmouseover="this.style.backgroundPosition='-48px -24px';" onmouseout="this.style.backgroundPosition='-48px 0px';" title="Print"></div></td></tr></tbody></table>
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+
+<!--<DPECTPL>access</DPECTPL>-->
+
+<h1>PHP and MySQL: Content Management Example</h1>
+<script language="JavaScript">
+var numAccQuestions =14;
+writeAccIntro();
+</script>You can print this text-only version of this course for future reference.<br>&nbsp;<br> If you wish to use the accessible version of our courses, which includes questions in text-only format, click <b>Text Only</b> on the log on page, and then enter your user ID and password from the Accessibility Log On page.
+<noscript><P>Your browser does not support script tags. Please update your system with a browser that supports them.</P></noscript>
+
+<hr>
+<a name="skipped">
+</a><a name="pha001"></a>
+<br><a name="topic1"></a><h2>Lesson 1. Course Introduction</h2><dpecw1>
+
+This course will demonstrate a sample content management site. The 
+application will manage both URLs and files, which users can add, 
+display, and access. Also included are detailed instructions for 
+creating an administrative side to the site as well.<br>
+Although the focus in this course is on a specific example, a few new 
+functions and techniques will also be taught. The new functions include <tt>mysql_insert_id()</tt>, <tt>serialize()</tt>, <tt>urlencode()</tt>, <tt>array_diff()</tt>, and <tt>list()</tt>.
+
+</dpecw1><br>
+<a name="phb001"></a><br><a name="topic2"></a><h2>Lesson 2. Creating the Template</h2><dpecw1>
+
+Once you are ready to create your content management site it is helpful 
+to employ a common template to standardize the HTML components.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a header file for your site that can encompass both CSS and tables
+	</li>
+	<li>
+Create a footer file that will provide closure for the HTML page
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phb002"></a>
+<br><dpecw1>
+
+The first step in developing a content management site is to create a template system to handle the HTML design. <br>
+The end result will use tables and some Cascading Style Sheets (CSS).
+
+</dpecw1><br>
+<a name="phb003"></a>
+<br><dpecw1>
+
+<b>* Creating the Header — Step 1</b><br>
+Create a new HTML document in your text editor, <tt>header.html</tt>. Notice that you will use PHP to print out a page-specific title between the HTML title tags.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;meta http-equiv="content-type"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt>
+<br>
+</dpeccode><br>
+<a name="phb004"></a>
+<br><dpecjs><b>* Step 2</b>
+<br>
+Create the CSS code. For this application, we're going to use some CSS 
+to adjust the formatting of the text. Because there's not a lot of CSS 
+data to consider, we can store it directly in the <tt>&lt;HEAD&gt;</tt> of the HTML code, rather than in a separate file.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;style type="text/css" media="screen"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; body { background-color: #ffffff; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .content {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; background-color: #f5f5f5;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 10px; padding-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; padding-bottom: 10px; padding-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 10px; margin-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; margin-bottom: 10px; margin-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:link { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:visited { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:hover { color: #cccccc; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; td {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; vertical-align: top;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .title {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-size: 24px; font-weight: normal; color: #ffffff;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 5px; margin-bottom: 5px; margin-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 5px; padding-bottom: 5px; padding-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/style&gt; </tt><br>
+</dpeccode><br>
+<a name="phb005"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Complete the HTML head and create the first row of the layout table. The
+ basic layout of the site will be a table with three rows: the title 
+row, another row containing the navigation links and the content, and a 
+third row for the copyright.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;table width="90%" border="0" cellspacing="10" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="0" align="center"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td colspan="2" bgcolor="#003366"&gt;&lt;p class="title"&gt;Content</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Management Site&lt;/p&gt;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+</dpeccode><br>
+<a name="phb006"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Create the navigation section and begin the content cell.
+
+</dpecw1><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" nowrap="nowrap"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;b&gt;&lt;a href="index.php" class="navlink"&gt;Home&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_urls.php" class="navlink"&gt;View URLs&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_url.php" class="navlink"&gt;Add a URL&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_files.php" class="navlink"&gt;View Files&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_file.php" class="navlink"&gt;Add a File&lt;/a&gt;&lt;/b&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" class="content"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- Script header.html --&gt;</tt><br>
+</dpeccode><br>
+<a name="phb007"></a>
+<br><dpecjs><b>*  Step 5</b>
+<br>
+Save the file as <tt>header.html</tt> and upload to your Web server (into an <tt>includes</tt> directory). The header file begins the HTML layout and includes the necessary CSS code. 
+<ml_ins_href><ml_data_href>html file in its entirety.&nbsp; 
+<br>
+
+<br><a name="phb007a"></a>
+<br><dpecjs></dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;meta http-equiv="content-type"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;style type="text/css" media="screen"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; body { background-color: #ffffff; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .content {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; background-color: #f5f5f5;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 10px; padding-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; padding-bottom: 10px; padding-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 10px; margin-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; margin-bottom: 10px; margin-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:link { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:visited { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:hover { color: #cccccc; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; td {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; vertical-align: top;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .title {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-size: 24px; font-weight: normal; color: #ffffff;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 5px; margin-bottom: 5px; margin-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 5px; padding-bottom: 5px; padding-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/style&gt; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;table width="90%" border="0" cellspacing="10" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="0" align="center"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td colspan="2" bgcolor="#003366"&gt;&lt;p class="title"&gt;Content</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Management Site&lt;/p&gt;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" nowrap="nowrap"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;b&gt;&lt;a href="index.php" class="navlink"&gt;Home&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_urls.php" class="navlink"&gt;View URLs&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_url.php" class="navlink"&gt;Add a URL&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_files.php" class="navlink"&gt;View Files&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_file.php" class="navlink"&gt;Add a File&lt;/a&gt;&lt;/b&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" class="content"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- Script header.html --&gt;</tt>
+</dpeccode><br><br>
+<a name="phb008"></a>
+<br><dpecw1>
+
+<b>* Creating the Footer — Step 1</b><br>
+Once the header is complete it's time to create the <tt>footer.html</tt> file. Start a new HTML document in your text editor.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!- footer.html --&gt;</tt>
+<tt>&nbsp;&nbsp; &lt;!- End of Content --&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td&gt;&nbsp;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td align="center"&gt;© 2005 John Smith, Inc.&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/table&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt><br>
+</dpeccode><br>
+<a name="phb009"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Complete the middle table row. All of the page's content is stored in the middle row, which was begun in <tt>header.html</tt>. This code will complete that row before creating the third, final row.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!- footer.html --&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- End of Content --&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td&gt;&nbsp;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td align="center"&gt;© 2005 John Smith, Inc.&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/table&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt><br>
+</dpeccode><br>
+<a name="phb010"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Make the bottom row and complete the HTML page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!- footer.html --&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- End of Content --&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td&gt;&nbsp;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td align="center"&gt;© 2005 John Smith, Inc.&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt>
+<br>
+<tt>&nbsp;&nbsp; &lt;/table&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt><br>
+</dpeccode><br>
+<a name="phb011"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Save the file as <tt>footer.html</tt> and upload to your Web server (into the <tt>includes</tt> directory). The footer file concludes the layout and the HTML page as a whole.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!- footer.html --&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- End of Content --&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td&gt;&nbsp;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td align="center"&gt;© 2005 John Smith, Inc.&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/table&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt><br>
+</dpeccode><br>
+<a name="phb012"></a>
+
+<script language="JavaScript">insertAccQuestion('1','phb012.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phb014"></a>
+<br><a name="topic3"></a><h2>Topic 2.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try creating and modifying a header file in a text editor.<br>
+<ml_ins_href><ml_data_href>
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpecw2>
+
+<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Open the supplied file <tt>header.html</tt> in your text editor.<br>
+<ml_ins_href><ml_data_href>
+</ml_data_href></ml_ins_href></td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+In the <tt>&lt;HEAD&gt;</tt> section of the code, modify the color values associated with the CSS settings.<br>
+Some examples would be the background color value or the navigation link values.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Save the file.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+Open it in a browser window to test the results. <ml_ins_href><ml_data_href>
+</ml_data_href></ml_ins_href></td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw2><br>
+<br><a name="phb014a"></a>
+<br><dpecjs></dpecjs><br><dpeccode>
+<tt>&nbsp;&nbsp; &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;meta http-equiv="content-type"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;style type="text/css" media="screen"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; body { background-color: #ffffff; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .content {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; background-color: #b2b2cc;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 10px; padding-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; padding-bottom: 10px; padding-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 10px; margin-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; margin-bottom: 10px; margin-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:link { color: #3a3a5e; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:visited { color: #3d5060; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:hover { color: #fce597; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; td {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; vertical-align: top;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .title {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-size: 24px; font-weight: normal; color: #fcd965;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 5px; margin-bottom: 5px; margin-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 5px; padding-bottom: 5px; padding-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/style&gt; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;table width="90%" border="0" cellspacing="10" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="0" align="center"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td colspan="2" bgcolor="#53527e"&gt;&lt;p class="title"&gt; Content</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Management Site&lt;/p&gt;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" nowrap="nowrap"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;b&gt;&lt;a href="index.php" class="navlink"&gt;Home&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_urls.php" class="navlink"&gt;View URLs&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_url.php" class="navlink"&gt;Add a URL&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_files.php" class="navlink"&gt;View Files&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_file.php" class="navlink"&gt;Add a File&lt;/a&gt;&lt;/b&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" class="content"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- Script header.html --&gt;</tt>
+</dpeccode><br><br>
+<a name="phb015"></a>
+<br><dpecw1>
+	
+In this lesson, you learned to create a header file that can include CSS
+ and tables, reducing the number of files your content management site 
+requires.<br>
+In addition, you learned to create a footer file that concludes the layout of the HTML page as a whole.
+	
+</dpecw1><br>
+<a name="phc001"></a><br><a name="topic4"></a><h2>Lesson 3. Creating the Basic Pages</h2><dpecw1>
+
+Once you begin creating your content management site, the need for a 
+home page and secure database interactions becomes extremely important.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a home page for your content management site
+	</li>
+	<li>
+Create a script for interaction between your Web interface and a database
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phc002"></a>
+<br><dpecw1>
+
+Before we get into the heart of the Web application, the content management itself, we need to create two pages. One will be <tt>index.php</tt> and will act as the home page for the site. The second will be <tt>mysql_connect.php</tt>, a script that connects to MySQL and selects the database to be used.
+
+</dpecw1><br>
+<a name="phc003"></a>
+<br><dpecw1>
+
+<b>* Step 1</b><br>
+The first step in creating a new Web page is to start a new PHP script in your text editor, <tt>index.php</tt>.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # index.php</tt><br>
+<tt>&nbsp;&nbsp; // This is the main page for the site.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HMTL header.</tt><br>
+</dpeccode><br>
+<a name="phc004"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Set the page title and include the HTML header.<br>
+The <tt>header.html</tt> file is included, which will start output buffering, begin the session, and create the initial part of the HTML layout. <ml_ins_href><ml_data_href>
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # index.php</tt><br>
+<tt>&nbsp;&nbsp; // This is the main page for the site.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HMTL header.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'Content Management Site';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt>
+<br>
+</dpeccode><br>
+<br><a name="phc004a"></a>
+<br><dpecw1>
+	
+<dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;meta http-equiv="content-type"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;style type="text/css" media="screen"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; body { background-color: #ffffff; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .content {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; background-color: #f5f5f5;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 10px; padding-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; padding-bottom: 10px; padding-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 10px; margin-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; margin-bottom: 10px; margin-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:link { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:visited { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:hover { color: #cccccc; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; td {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; vertical-align: top;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .title {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-size: 24px; font-weight: normal; color: #ffffff;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 5px; margin-bottom: 5px; margin-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 5px; padding-bottom: 5px; padding-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/style&gt; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;table width="90%" border="0" cellspacing="10" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="0" align="center"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td colspan="2" bgcolor="#003366"&gt;&lt;p class="title"&gt;Content</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Management Site&lt;/p&gt;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" nowrap="nowrap"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;b&gt;&lt;a href="index.php" class="navlink"&gt;Home&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_urls.php" class="navlink"&gt;View URLs&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_url.php" class="navlink"&gt;Add a URL&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_files.php" class="navlink"&gt;View Files&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_file.php" class="navlink"&gt;Add a File&lt;/a&gt;&lt;/b&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" class="content"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- Script header.html --&gt;</tt>
+</dpeccode>
+	
+</dpecw1><br><br>
+<a name="phc005"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Create the content. Obviously, you'll want to put more useful content on your home page, but we're using spam<i> </i>as filler here.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # index.php</tt><br>
+<tt>&nbsp;&nbsp; // This is the main page for the site.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HMTL header.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'Content Management Site';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;p&gt;Spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam spam.&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;p&gt;Spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam spam.&lt;/p&gt; </tt>
+<br>
+</dpeccode><br>
+<a name="phc006"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Require the HTML footer.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # index.php</tt><br>
+<tt>&nbsp;&nbsp; // This is the main page for the site.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HMTL header.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'Content Management Site';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;p&gt;Spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam spam.&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;p&gt;Spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam spam.&lt;/p&gt; </tt><br>
+<tt>&nbsp;&nbsp; &lt;?php</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/footer.html');</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt>
+<br>
+</dpeccode><br>
+<a name="phc007"></a>
+<br><dpecw1>
+
+Save the file as <tt>index.php</tt>, upload to your Web server, in the main <tt>html</tt><i> </i>directory and test in a Web browser.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # index.php</tt><br>
+<tt>&nbsp;&nbsp; // This is the main page for the site.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HMTL header.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'Content Management Site';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;p&gt;Spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam spam.&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>&lt;p&gt;Spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam</tt><br>
+<tt>&nbsp;&nbsp; </tt>&nbsp;&nbsp;&nbsp;&nbsp;<tt>spam spam spam spam spam spam spam spam spam.&lt;/p&gt; </tt><br>
+<tt>&nbsp;&nbsp;&lt;?php</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/footer.html');</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+</dpeccode><br>
+<a name="phc008"></a>
+<br><dpecw1>
+
+<b>* More Content Management </b><br>
+This content management example deals with two specific kinds of 
+content: files and lists of URLs. However, content management systems 
+(CMS) normally handle a third type of information: general Web content. <br>
+Many CMS tools provide an interface to dynamically generate the text and/or images presented on specific pages. 
+
+</dpecw1><br>
+<a name="phc009"></a>
+<br><dpecw1>
+
+Having a Web page's content be dynamically driven is just a matter of 
+storing text in a database table, somehow indicating what text belongs 
+to what page on the public side. <br>
+To place the text there in the first place, create a simple form with a 
+large text area. Validate the text area upon submission and address HTML
+ code and special characters, as warranted. The dynamic page can then 
+pull the data out of the database and place it into the template where 
+appropriate. 
+
+</dpecw1><br>
+<a name="phc010"></a>
+<br><dpecjs> If you have multiple pages based upon the same template but
+ using different values — say several pages of book reviews — pass the 
+templated page the ID for the specific record in the database. 
+If you want to dynamically add images to a page, store the image's name 
+in the database, store the file itself on the server, and dynamically 
+create the HTML for the image on the public page.&nbsp; 
+<br>
+
+<a name="phc011"></a>
+<br><dpecw1>
+
+<b>* Step 1</b><br>
+In order to make <tt>mysql_connect.php</tt>, first create a new PHP script in your text editor.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # mysql_connect.php</tt><br>
+<tt>&nbsp;&nbsp; // This file contains the database access information.</tt><br>
+<tt>&nbsp;&nbsp; // This file also establishes a connection to MySQL and selects the database.</tt><br>
+<tt>&nbsp;&nbsp; // This file also defines the escape_data() function.</tt><br>
+</dpeccode><br>
+<a name="phc012"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Set the database information as constants. For security's sake, the MySQL user for this application should have <tt>INSERT</tt>, <tt>SELECT</tt>, <tt>UPDATE</tt>, and <tt>DELETE</tt> privileges only, and just for the content database.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # mysql_connect.php</tt><br>
+<tt>&nbsp;&nbsp; // This file contains the database access information.</tt><br>
+<tt>&nbsp;&nbsp; // This file also establishes a connection to MySQL and selects the database.</tt><br>
+<tt>&nbsp;&nbsp; // This file also defines the escape_data() function.</tt><br>
+<tt>&nbsp;&nbsp; // Set the database access information as constants.</tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_USER', 'username'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_PASSWORD', 'password'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_HOST', 'localhost'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_NAME', 'content'); </tt>
+<br>
+</dpeccode><br>
+<a name="phc013"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Connect to MySQL and select the database. This application will have basic error management, using the <tt>mysql_error()</tt>
+ function. You won't want to display MySQL errors to the general public,
+ so it's a good idea to use more elaborate error handling techniques.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # mysql_connect.php</tt><br>
+<tt>&nbsp;&nbsp; // Set the database access information as constants.</tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_USER', 'username'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_PASSWORD', 'password'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_HOST', 'localhost'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_NAME', 'content'); </tt><br>
+<tt>&nbsp;&nbsp; // Make the connection.</tt><br>
+<tt>&nbsp;&nbsp; $dbc = @mysql_connect (DB_HOST, DB_USER, DB_PASSWORD) OR die</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('Could not connect to MySQL: ' . mysql_error() );</tt><br>
+<tt>&nbsp;&nbsp; // Select the database.</tt><br>
+<tt>&nbsp;&nbsp; @mysql_select_db (DB_NAME) OR die ('Could not select</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; the database: ' . mysql_error() ); </tt>
+<br>
+</dpeccode><br>
+<a name="phc014"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Define the <tt>escape_data()</tt> function. This function will be used 
+to handle submitted form values, so that inserting those values into the
+ database will not break the queries.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; // Make the connection</tt><br>
+<tt>&nbsp;&nbsp; $dbc = @mysql_connect (DB_HOST, DB_USER, DB_PASSWORD) OR die</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('Could not connect to MySQL: ' . mysql_error() );</tt><br>
+<tt>&nbsp;&nbsp; // Select the database.</tt><br>
+<tt>&nbsp;&nbsp; @mysql_select_db (DB_NAME) OR die ('Could not select</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; the database: ' . mysql_error() ); </tt><br>
+<tt>&nbsp;&nbsp; // Create a function for escaping the data.</tt><br>
+<tt>&nbsp;&nbsp; function escape_data ($data) {</tt>
+<br>
+</dpeccode><br>
+<a name="phc015"></a>
+<br><dpecw1>
+
+The function expects to receive one argument, assigned to <tt>$data</tt>. If Magic Quotes are on, as determined using the <tt>ini_get()</tt> function, the <tt>stripslashes()</tt> function is applied to avoid over-escaping the data. 
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; // Create a function for escaping the data.</tt><br>
+<tt>&nbsp;&nbsp; function escape_data ($data) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Address Magic Quotes</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (ini_get('magic_quotes_gpc')) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = stripslashes($data);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt>
+<br>
+</dpeccode><br>
+<a name="phc016"></a>
+<br><dpecw1>
+
+A check is made to see if the <tt>mysql_real_escape_string()</tt> is available (it was added in PHP 4.3). If yes, then the function is used (requiring a database connection, <tt>$dbc</tt>). If the function is unavailable, the older <tt>mysql_escape_string()</tt> function is called (it does not require a database connection). The well-groomed data is then returned by the function.
+
+</dpecw1><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = stripslashes($data);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for mysql_real_escape_string() support.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (function_exists('mysql_real_escape_string')) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; global $dbc;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = mysql_real_escape_string(trim($data), $dbc);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = mysql_escape_string (trim($data));</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>// Return the escaped value.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; return $data;</tt>
+<br>
+<tt>&nbsp;&nbsp; } // End of function.</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+</dpeccode><br>
+<a name="phc017"></a>
+<br><dpecw1>
+
+<b>* Step 5</b><br>
+Complete the PHP page. This script connects to MySQL, selects the <tt>content</tt> database, and defines the <tt>escape_data()</tt> function, used for sanctifying submitted text
+
+</dpecw1><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = stripslashes($data);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for mysql_real_escape_string() support.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (function_exists('mysql_real_escape_string')) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; global $dbc;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = mysql_real_escape_string(trim($data), $dbc);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = mysql_escape_string (trim($data));</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>// Return the escaped value.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; return $data;</tt>
+<br>
+<tt>&nbsp;&nbsp; } // End of function.</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+</dpeccode><br>
+<a name="phc018"></a>
+<br><dpecjs><b>* Step 6</b>
+<br>
+Save the file as <tt>mysql_connect.php</tt> and upload to your Web server
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # mysql_connect.php</tt><br>
+<tt>&nbsp;&nbsp; // Set the database access information as constants.</tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_USER', 'username'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_PASSWORD', 'password'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_HOST', 'localhost'); </tt><br>
+<tt>&nbsp;&nbsp; DEFINE ('DB_NAME', 'content'); </tt><br>
+<tt>&nbsp;&nbsp; // Make the connection.</tt><br>
+<tt>&nbsp;&nbsp; $dbc = @mysql_connect (DB_HOST, DB_USER, DB_PASSWORD) OR die</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; ('Could not connect to MySQL: ' . mysql_error() );</tt><br>
+<tt>&nbsp;&nbsp; // Select the database.</tt><br>
+<tt>&nbsp;&nbsp; @mysql_select_db (DB_NAME) OR die ('Could not select</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; the database: ' . mysql_error() ); </tt><br>
+<tt>&nbsp;&nbsp; // Create a function for escaping the data.</tt><br>
+<tt>&nbsp;&nbsp; function escape_data ($data) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Address Magic Quotes</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (ini_get('magic_quotes_gpc')) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = stripslashes($data);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for mysql_real_escape_string() support.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (function_exists('mysql_real_escape_string')) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; global $dbc;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = mysql_real_escape_string(trim($data), $dbc);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $data = mysql_escape_string (trim($data));</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>// Return the escaped value.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; return $data;</tt><br>
+<tt>&nbsp;&nbsp; } // End of function.</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+</dpeccode><br>
+<a name="phc020"></a>
+
+<script language="JavaScript">insertAccQuestion('2','phc020.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phc022"></a>
+<br><a name="topic5"></a><h2>Topic 3.1 Exercises</h2><br><b>* Exercise 1</b><dpecw1>
+
+<br>
+Try creating your own <tt>index.php</tt> script to act as a home page for your content management site.
+
+</dpecw1><br><dpecw2>
+
+<br>
+<ml_ins_table>
+<table summary="Take these steps in the order indicated" width="92%" border="1" cellpadding="4" cellspacing="0">
+	<tbody><tr valign="top">
+<th class="heading" scope="col">
+<b>Step</b>
+
+</th><th class="heading" scope="col">
+<b>Action</b>
+
+	</th></tr>
+	<tr valign="top">
+<td>
+1
+</td>
+<td>
+Open a new PHP script in your text editor.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+2
+</td>
+<td>
+Set the page title and be sure to include a <tt>header.html</tt> file.<br>
+The <tt>header.html</tt> file is included, which will start output buffering, begin the session, and create the initial part of the HTML layout. <ml_ins_href><ml_data_href>
+</ml_data_href></ml_ins_href></td>
+	</tr>
+	<tr valign="top">
+<td>
+3
+</td>
+<td>
+Title the page and add some content. <i>"What I did over my summer vacation..."</i> is a good start.
+</td>
+	</tr>
+	<tr valign="top">
+<td>
+4
+</td>
+<td>
+Include a <tt>footer.html</tt> file reference in the closing of the script.<br>
+The <tt>footer.html</tt> file will complete the HTML layout (primarily the menu bar on the right side of the page) and conclude the output buffering. <ml_ins_href><ml_data_href>  
+</ml_data_href></ml_ins_href></td>
+	</tr>
+	<tr valign="top">
+<td>
+5
+</td>
+<td>
+Save the file as <tt>index.php</tt>, upload to your Web server and test in a Web browser
+</td>
+	</tr>
+</tbody></table>
+</ml_ins_table>
+
+</dpecw2><br>
+<br><a name="phc022a"></a>
+<br><dpecjs></dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;meta http-equiv="content-type"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;style type="text/css" media="screen"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; body { background-color: #ffffff; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .content {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; background-color: #f5f5f5;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 10px; padding-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; padding-bottom: 10px; padding-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 10px; margin-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; margin-bottom: 10px; margin-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:link { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:visited { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:hover { color: #cccccc; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; td {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; vertical-align: top;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .title {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-size: 24px; font-weight: normal; color: #ffffff;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 5px; margin-bottom: 5px; margin-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 5px; padding-bottom: 5px; padding-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/style&gt; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;table width="90%" border="0" cellspacing="10" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="0" align="center"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td colspan="2" bgcolor="#003366"&gt;&lt;p class="title"&gt; Content</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Management Site&lt;/p&gt;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" nowrap="nowrap"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;b&gt;&lt;a href="index.php" class="navlink"&gt;Home&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_urls.php" class="navlink"&gt;View URLs&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_url.php" class="navlink"&gt;Add a URL&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_files.php" class="navlink"&gt;View Files&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_file.php" class="navlink"&gt;Add a File&lt;/a&gt;&lt;/b&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" class="content"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- Script header.html --&gt;</tt>
+</dpeccode><br><br>
+<br><a name="phc022b"></a>
+<br><dpecjs></dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!- footer.html --&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- End of Content --&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td&gt;&nbsp;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td align="center"&gt;© 2005 John Smith, Inc.&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/table&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt>
+</dpeccode><br><br>
+<a name="phc023"></a>
+<br><dpecw1>
+	
+In this lesson, you learned what steps are needed to build a home page using the newly created <tt>index.php</tt> script for your content management site.<br>
+In addition, you learned to create a script that will allow for 
+interaction between your Web interface and a particular database, 
+utilizing the <tt>mysql_connect.php</tt> script.
+	
+</dpecw1><br>
+<a name="phd001"></a><br><a name="topic6"></a><h2>Lesson 4. Managing URLs</h2><dpecw1>
+
+In order for your content management site to function, maintain, and 
+manage data, there needs to be a way for tables and fields to update 
+automatically through the use of PHP scripts.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a script to allow for URL properties to be added to your database tables
+	</li>
+	<li>
+Determine the appropriate fix for errors reported during troubleshooting
+	</li>
+	<li>
+Create a sticky HTML form
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phd002"></a>
+<br><dpecw1>
+
+<b>* Adding URLs </b><br>
+The next script to be developed will allow users to add URLs to the 
+database. This portion of the content management site relies upon three 
+tables in the <tt>content</tt> database: <tt>urls</tt>, <tt>url_categories</tt>, and <tt>url_associations</tt>.<br>
+The <tt>add_url.php</tt> script will be one of the most complicated ones
+ in the whole Web application on account of the normalized database 
+structure. The script's form will take a URL, a URL title (or name), a 
+description, and the categories with which it should be associated. 
+
+</dpecw1><br>
+<a name="phd003"></a>
+<br><dpecjs><b>*  Database Scheme</b>
+<br>
+The database example we are using is called <tt>content</tt>. It 
+contains three normalized tables that are defined for handling URLs (the
+ complex structure allows for a URL to be categorized under multiple 
+types). We can now add an <tt>uploads</tt> table to manage the files, complete structure for the database can be created with the following code. 
+Remember that you can always list the tables in a database using the SQL command <tt>SHOW TABLES</tt>. To confirm the structure of a table, use <tt>DESCRIBE</tt> <tt><i></i></tt><i><i><tt>tablename</tt></i></i>.&nbsp; 
+<br>
+</dpecjs><br><dpeccode>
+<tt>CREATE TABLE uploads (</tt><br>
+<tt>upload_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT, file_name VARCHAR(30) NOT NULL,</tt><br>
+<tt>file_size INT(6) UNSIGNED NOT NULL, file_type VARCHAR(30) NOT NULL, 
+description VARCHAR(100) DEFAULT NULL, date_entered TIMESTAMP,</tt><br>
+<tt>PRIMARY KEY (upload_id), KEY (file_name),</tt><br>
+<tt>KEY (date_entered)</tt><br>
+<tt>)</tt><br>
+<tt>CREATE TABLE urls (</tt><br>
+<tt>url_id SMALLINT(4) UNSIGNED NOT NULL AUTO_INCREMENT, url VARCHAR(60) NOT NULL,</tt><br>
+<tt>title VARCHAR(60) NOT NULL, description TINYTEXT NOT NULL, PRIMARY KEY (url_id)</tt><br>
+<tt>)</tt><br>
+<tt>CREATE TABLE url_categories (</tt><br>
+<tt>url_category_id TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT, category VARCHAR(20) NOT NULL,</tt><br>
+<tt>PRIMARY KEY (url_category_id)</tt><br>
+<tt>)</tt><br>
+<tt>CREATE TABLE url_associations (</tt><br>
+<tt>ua_id SMALLINT(4) UNSIGNED NOT NULL AUTO_INCREMENT, url_id 
+SMALLINT(4) UNSIGNED NOT NULL, url_category_id TINYINT(3) UNSIGNED NOT 
+NULL, date_submitted TIMESTAMP,</tt><br>
+<tt>approved CHAR(1) DEFAULT 'N' NOT NULL, PRIMARY KEY (ua_id)</tt><br>
+<tt>) </tt><br>
+<br>
+</dpeccode><br>
+<a name="phd004"></a>
+<br><dpecw1>
+
+Upon receiving the form, the URL, URL title, and description values will be added to the <tt>urls</tt><i> </i>table. Then the primary key from that table (<tt>url_id</tt>) will be used along with the <tt>url_category_id</tt> values to add the record (or records, if multiple categories were selected) to the <tt>url_associations</tt> table. <br>
+To determine the <tt>url_id</tt> for the just-added URL, we'll use the new <tt>mysql_insert_id()</tt> function.
+
+</dpecw1><br><dpecw2>
+
+Whenever a query is run on a table that contains an automatically 
+incremented field (normally this is the primary key), MySQL will use the
+ next logical value for that field. The <tt>mysql_insert_id()</tt> function will return that value.
+
+</dpecw2><br>
+<a name="phd005"></a>
+<br><dpecw1>
+
+<b>* Step 1</b><br>
+Let's begin by creating a new PHP document in your text editor, <tt>add_url.php</tt>.
+ Both the form itself and the handling of the form require a database 
+connection, so the connection script is included almost immediately. 
+Remember to change the path of your require statement if your connection
+ script is not stored in the directory above this file.<br>
+The <tt>header.html</tt> file is included, which will start output buffering, begin the session, and create the initial part of the HTML layout. <ml_ins_href><ml_data_href><br>
+<b>Note:</b> If you experience a fatal error when attempting to connect 
+to your MySQL server, you should modify the require_once( ) as 
+require_once ('./mysql_connect.php'); 
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # add_url.php</tt><br>
+<tt>&nbsp;&nbsp; // This page allows users to add URLs to the database.</tt><br>
+<br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HTML header.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'Add a URL';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; require_once ('../mysql_connect.php'); // Connect to the database.</tt><br>
+</dpeccode><br>
+<br><a name="phd005a"></a>
+<br><dpecjs></dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;meta http-equiv="content-type"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;style type="text/css" media="screen"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; body { background-color: #ffffff; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .content {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; background-color: #f5f5f5;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 10px; padding-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; padding-bottom: 10px; padding-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 10px; margin-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; margin-bottom: 10px; margin-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:link { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:visited { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:hover { color: #cccccc; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; td {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; vertical-align: top;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .title {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-size: 24px; font-weight: normal; color: #ffffff;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 5px; margin-bottom: 5px; margin-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 5px; padding-bottom: 5px; padding-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/style&gt; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;table width="90%" border="0" cellspacing="10" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="0" align="center"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td colspan="2" bgcolor="#003366"&gt;&lt;p class="title"&gt; Content</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Management Site&lt;/p&gt;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" nowrap="nowrap"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;b&gt;&lt;a href="index.php" class="navlink"&gt;Home&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_urls.php" class="navlink"&gt;View URLs&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_url.php" class="navlink"&gt;Add a URL&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_files.php" class="navlink"&gt;View Files&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_file.php" class="navlink"&gt;Add a File&lt;/a&gt;&lt;/b&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" class="content"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- Script header.html --&gt;</tt>
+</dpeccode><br><br>
+<a name="phd006"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Check if the form has been submitted. As this page will both display and handle the form, a hidden form input, named <tt>submitted</tt>, will be used to determine if the form needs to be handled. 
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # add_url.php</tt><br>
+<tt>&nbsp;&nbsp; // This page allows users to add URLs to the database.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HTML header.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'Add a URL';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; require_once ('./mysql_connect.php'); // Connect to the database.</tt><br>
+<tt>&nbsp;&nbsp; if (isset($_POST['submitted'])) { </tt><br>
+</dpeccode><br>
+<a name="phd007"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Validate a submitted URL. A regular expression is used to validate the 
+URL. If a valid URL is not submitted, or if any field is not filled out,
+ an error message will be displayed. 
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; require_once ('./mysql_connect.php'); // Connect to the database.</tt><br>
+<tt>&nbsp;&nbsp; if (isset($_POST['submitted'])) { </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a URL.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (eregi ('^([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; $_POST['url'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $u = escape_data($_POST['url']);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $u = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a valid URL!&lt;/font&gt;&lt;/p&gt;';</tt>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+</dpeccode><br>
+<a name="phd008"></a>
+<br><dpecjs><b>* Step 4</b>
+<br>
+Validate the URL's title and description. These two form inputs are just
+ checked for a value. If they aren't empty, each value is run through 
+the <tt>escape_data()</tt> function and assigned to a new variable. If a value is empty, an error message is displayed and the new variable is given a <tt>FALSE</tt> value.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a valid URL!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a URL title.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (!empty($_POST['title'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $t = escape_data($_POST['title']);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $t = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a URL name/title!&lt;/font&gt;&lt;/p&gt;';</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a description.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (!empty($_POST['description'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $d = escape_data($_POST['description']);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $d = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a description!&lt;/font&gt;&lt;/p&gt;';</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } </tt><br>
+<br>
+</dpeccode><br>
+<a name="phd009"></a>
+<br><dpecjs><b>* Step 5</b>
+<br>
+Check that a category has been selected. The user will be given the 
+option of submitting a URL in several categories, based upon the 
+available types set in the <tt>url_categories</tt> table. These will be listed in a select box, whose name will be <tt>types[]</tt>.
+&nbsp;If at least one of the categories is selected, then <tt>$_POST['types']</tt>
+ will be set and be of an array type. The user must select at least one 
+category for the URL to be filed under. The select box is populated 
+using the <tt>url_categories</tt> table.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a description.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (!empty($_POST['description'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $d = escape_data($_POST['description']);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $d = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a description!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a category.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (isset($_POST['types']) &amp;&amp; (is_array($_POST['types']))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $type = TRUE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $type = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please select at least one category!&lt;/font&gt;&lt;/p&gt;';</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+<br>
+<br>
+</dpeccode><br>
+<a name="phd010"></a>
+<br><dpecjs><b>* Step 6</b>
+<br>
+If everything's okay, add the URL to the <tt>urls</tt><i> </i>table. Because of the structure of the database, the URL itself must be added to the <tt>urls</tt><i> </i>table before an entry can be made into the <tt>url_associations</tt> table. 
+The error suppression operator (<tt>@</tt>) is used to avoid ugly error messages. This query will add the URL and then return the <tt>url_id</tt> (the auto-incremented primary key for the table), using the <tt>mysql_insert_id()</tt> function. This value can then be used in the second query, step 7. 
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a category.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (isset($_POST['types']) &amp;&amp; (is_array($_POST['types']))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $type = TRUE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $type = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please select at least one category!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if ($u &amp;&amp; $t &amp;&amp; $d &amp;&amp; $type) { // If everything's OK.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; //Add the URL to the table.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = "INSERT INTO urls(url, title, description) VALUES('$u', '$t', '$d')";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $result = @mysql_query ($query); // Run the query.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $uid = @mysql_insert_id(); //Get the url ID.</tt>
+<br>
+<br>
+<br>
+</dpeccode><br>
+<a name="phd011"></a>
+<br><dpecjs><b>* Step 7</b>
+<br>
+Build the <tt>url_associations</tt> <tt>INSERT</tt> query. If the <tt>$uid</tt> value was retrieved, it's safe.th the second query (adding the record to the <tt>url_associations</tt> table). To do so, begin defining the query. First assign the initial part to the <tt>$query</tt> variable. Then loop through every chosen category, adding a record to the query for each. Finally, use the <tt>substr()</tt> function to chop off the last two characters (the comma and the space) from the query. 
+The resulting query will be something along the lines of <tt>INSERT INTO url_associations (url_id, url_category_id, approved) VALUES (23, 3, 'Y'), (23, 7, 'Y')</tt>.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $uid = @mysql_insert_id(); //Get the url ID.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if ($uid &gt; 0) { // New URL has been added.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Make the URL associations.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; //Build the query.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = 'INSERT INTO url_associations </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; (url_id, url_category_id, approved) VALUES ';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; foreach ($_POST['types'] as $v) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query .= "($uid, $v, 'Y'), ";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = substr ($query, 0, -2); // Chop off the last comma and space.</tt><br>
+<br>
+<br>
+</dpeccode><br>
+<a name="phd012"></a>
+<br><dpecjs><b>* Step 8</b>
+<br>
+Run the second query and report upon the results. After running the 
+query, the conditional checks to see if the number of affected rows is 
+equal to the number of selected URL categories, <tt>count($_ POST['types'])</tt>. If so, the user is thanked and the <tt>$_POST</tt> array is reset so that the sticky form does not reshow the values. 
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = substr ($query, 0, -2); // Chop off the last comma and space.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $result = @mysql_query ($query); // Run the query.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (mysql_affected_rows() == count</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; ($_POST['types'])) { // Query ran OK.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;b&gt;Thank you for your submission!&lt;/b&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $_POST = array(); // Reset values.</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else { // If second query did not run OK.</tt><br>
+<br>
+<br>
+</dpeccode><br>
+<a name="phd013"></a>
+<br><dpecjs>If a problem occurred, three things happen.
+First, a generic, public message is printed. Second, a debugging 
+message, containing both the MySQL error and the query itself, is 
+printed for the developer's benefit. Finally, the URL is removed from 
+the <tt>urls</tt><i> </i>table because if no association could be made 
+between the URL and a specific category (or categories), the URL itself 
+is not needed.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $_POST = array(); // Reset values.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else { // If second query did no run OK.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Your submission could not be processed</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; due to a system error. We apologize for any</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; inconvenience.&lt;/font&gt;&lt;/p&gt;'; // Public message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;' . mysql_error() . '&lt;br /&gt;&lt;br /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query . '&lt;/font&gt;&lt;/p&gt;'; // Debugging message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Delete the URL from the urls table.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = "DELETE FROM urls WHERE url_id=$uid";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; @mysql_query ($query); // Run the query.</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } // End of mysql_affected_rows() IF.</tt><br>
+<br>
+<br>
+</dpeccode><br>
+<a name="phd014"></a>
+<br><dpecjs><b>* Step 9</b>
+<br>
+Complete the remaining two conditionals. The first <tt>else</tt> clause applies if the <tt>urls</tt> <tt>INSERT</tt>
+ query does not run properly. Again, a public message and a debugging 
+message are both included in this script, although the debugging one 
+should never be displayed to the public at large. The second <tt>else</tt> clause applies if the user failed to fill out the form completely.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } // End of mysql_affected_rows() IF.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else { // If first query did no run OK.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Your submission could not be processed</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; due to a system error. We apologize for any</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; inconvenience.&lt;/font&gt;&lt;/p&gt;'; // Public message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;' . mysql_error() . '&lt;br /&gt;&lt;br /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query . '&lt;/font&gt;&lt;/p&gt;'; // Debugging message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else { // If one of the data tests fails.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please try again.&lt;/font&gt;&lt;/p&gt;';</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; } // End of the main submitted conditional.</tt><br>
+<tt>&nbsp;&nbsp; // --------- DISPLAY THE FORM ---------</tt><br>
+<br>
+</dpeccode><br>
+<a name="phd015"></a>
+<br><dpecjs><b>* Step 10</b>
+<br>
+Begin defining the HTML form. The form itself has four inputs. The first
+ two are text inputs, and the third is a text area. For sake of 
+consistency, each of these inputs uses the same name and maximum size as
+ the corresponding field in the database.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; } // End of the main submitted conditional.</tt><br>
+<tt>&nbsp;&nbsp; // --------- DISPLAY THE FORM ---------</tt><br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;form action="add_url.php" method="post"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;fieldset&gt;&lt;legend&gt;Fill out the form to submit a URL:&lt;/legend&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;URL:&lt;/b&gt; &lt;input type="text" name="url" size="60" maxlength="60" value="&lt;?php</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; if (isset($_POST['url'])) echo $_POST['url']; ?&gt;" /&gt;&lt;br /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;small&gt;Do NOT include the initial &lt;i&gt;http://&lt;/i&gt;.&lt;/small&gt;&lt;/p&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;URL Name/Title:&lt;/b&gt; &lt;input type="text" name="title" size="60" </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="60" value="&lt;?php if (isset($_POST['title'])) echo</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; $_POST['title']; ?&gt;" /&gt;&lt;/p&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;textarea name="description" cols="40" rows="5"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;?php if (isset($_POST['description'])) echo</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; $_POST['description']; ?&gt;&lt;/textarea&gt;&lt;/p&gt; </tt><br>
+<br>
+</dpeccode><br>
+<a name="phd016"></a>
+<br><dpecw1>
+
+The HTML form is sticky, remembering previously entered values. Each 
+input recalls the previously submitted value, in case an error occurs. 
+This is accomplished by setting the value attributes of text inputs and 
+printing a value between the text area tags. <br>
+If you have Magic Quotes enabled, you'll want to use the <tt>stripslashes()</tt> function here as well.
+
+</dpecw1><br>
+<a name="phd017"></a>
+<br><dpecjs><b>* Step 11</b>
+<br>
+Create the categories select box. The easiest way to allow for a URL to 
+be associated with multiple categories is to use a select box that 
+accepts multiple selections. The initial select tag — <tt>&lt;select name="types[]" multiple="multiple" size="5"&gt;</tt> — accomplishes that. You need to also use an array as your select name (<tt>types[]</tt>) so that an array of values will be passed to PHP.
+<br>
+</dpecjs><br><dpeccode>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;textarea name="description" cols="40" rows="5"&gt;&lt;?php </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; if (isset($_POST['description'])) echo $_POST['description']; ?&gt;&lt;/textarea&gt;&lt;/p&gt; </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Category/Categories:&lt;/b&gt; &lt;select name="types[]" multiple=</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; "multiple" size="5"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;?php // Create the pull-down menu information.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = "SELECT * FROM url_categories ORDER BY category ASC";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $result = @mysql_query ($query);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; while ($row = mysql_fetch_array ($result, MYSQL_NUM)) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo "&lt;option value=\"$row[0]\"";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Make sticky if necesary.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>if (isset($_POST['types']) &amp;&amp; (in_array($row[0], $_POST ['types']))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo ' selected="selected"';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo "&gt;$row[1]&lt;/option&gt;\n";</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/select&gt;&lt;/p&gt; </tt><br>
+<br>
+</dpeccode><br>
+<a name="phd018"></a>
+<br><dpecjs>To populate the options, a query retrieves all of the records from the <tt>url_categories</tt> table. The next hurdle is to make this menu sticky. 
+To do so, the code <tt>selected="selected"</tt> needs to be added to the proper options as follows. This can be accomplished by checking if the <tt>$_POST['types']</tt> variable is set, meaning that the form has been submitted, and if the current category ID value is in <tt>$_POST['types']</tt>.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;URL Name/Title&lt;/b&gt; &lt;input type="text" name="title" size="60" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="60" value="" /&gt;&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Description&lt;/b&gt; &lt;textarea 
+name="description" cols="40" rows="5"&gt;&lt;/textarea&gt;&lt;/p&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Category/Categories:&lt;/b&gt; &lt;select name="types[]" multiple="multiple" size="5"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="3"&gt;Code Libraries&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="6" selected="selected"&gt;General Database&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="5" General MySQL&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="1" selected="selected"&gt;General PHP&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="1" Programming&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="1" Web Development&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/select&gt;&lt;/p&gt;</tt><br>
+<br>
+<br>
+</dpeccode><br>
+<a name="phd019"></a>
+<br><dpecjs><b>* Step 12</b>
+<br>
+Complete the form and the page. Again, the hidden input is used to 
+determine when the form has been submitted. Finally, the database 
+connection is closed and the footer file is included.
+The footer file will complete the HTML layout and conclude the output 
+buffering. <ml_ins_href><ml_data_href>  
+<br>
+</ml_data_href></ml_ins_href></dpecjs><br><dpeccode>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/select&gt;&lt;/p&gt; </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/fieldset&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;input type="hidden" name="submitted" value="TRUE" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;div align="center"&gt;&lt;input type="submit" name="submit" value="Submit" /&gt;&lt;/div&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/form&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;?php mysql_close();</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/footer.html');</tt>
+<tt>&nbsp;&nbsp; ?&gt; </tt><br>
+<br>
+<br>
+</dpeccode><br>
+<br><a name="phd019a"></a>
+<br><dpecjs></dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!- footer.html --&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- End of Content --&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td&gt;&nbsp;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td align="center"&gt;© 2005 John Smith, Inc.&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/table&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/html&gt;</tt>
+</dpeccode><br><br>
+<a name="phd020"></a>
+<br><dpecjs><b>* Step 13</b>
+<br>
+Save the file as <tt>add_url.php</tt>, upload to your Web server, and 
+test in your Web browser. If the URL submission process worked, a 
+message is displayed and the form is shown again. This script allows 
+users to add URLs, associated with specific categories, to the database.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # add_url.php</tt><br>
+<tt>&nbsp;&nbsp; // This page allows users to add URLs to the database.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HTML header.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'Add a URL';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; require_once ('./mysql_connect.php'); // Connect to the database.</tt><br>
+<tt>&nbsp;&nbsp; if (isset($_POST['submitted'])) { </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a URL.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (eregi ('^([[:alnum:]\-\.])+(\.)([[:alnum:]]){2,4}([[:alnum:]/+=%&amp;_\.~?\-]*)$',</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; $_POST['url'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $u = escape_data($_POST['url']);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $u = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a valid URL!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a URL title.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (!empty($_POST['title'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $t = escape_data($_POST['title']);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $t = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a URL name/title!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a description.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (!empty($_POST['description'])) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $d = escape_data($_POST['description']);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $d = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please enter a description!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Check for a category.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (isset($_POST['types']) &amp;&amp; (is_array($_POST['types']))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $type = TRUE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $type = FALSE;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please select at least one category!&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if ($u &amp;&amp; $t &amp;&amp; $d &amp;&amp; $type) { // If everything's OK.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; //Add the URL to the table.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = "INSERT INTO urls(url, title, description) VALUES('$u', '$t', '$d')";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $result = @mysql_query ($query); // Run the query.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $uid = @mysql_insert_id(); //Get the url ID.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if ($uid &gt; 0) { // New URL has been added.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Make the URL associations.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; //Build the query.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = 'INSERT INTO url_associations </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; (url_id, url_category_id, approved) VALUES ';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; foreach ($_POST['types'] as $v) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query .= "($uid, $v, 'Y'), ";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = substr ($query, 0, -2); // Chop off the last comma and space.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $result = @mysql_query ($query); // Run the query.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (mysql_affected_rows() == count</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; ($_POST['types'])) { // Query ran OK.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;b&gt;Thank you for your submission!&lt;/b&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $_POST = array(); // Reset values.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else { // If second query did not run OK.</tt>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Your submission could not be processed</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; due to a system error. We apologize for any</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; inconvenience.&lt;/font&gt;&lt;/p&gt;'; // Public message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;' . mysql_error() . '&lt;br /&gt;&lt;br /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query . '&lt;/font&gt;&lt;/p&gt;'; // Debugging message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Delete the URL from the urls table.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = "DELETE FROM urls WHERE url_id=$uid";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; @mysql_query ($query); // Run the query.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } // End of mysql_affected_rows() IF.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else { // If first query did no run OK.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Your submission could not be processed</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; due to a system error. We apologize for any</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; inconvenience.&lt;/font&gt;&lt;/p&gt;'; // Public message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;' . mysql_error() . '&lt;br /&gt;&lt;br /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Query: ' . $query . '&lt;/font&gt;&lt;/p&gt;'; // Debugging message.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; } else { // If one of the data tests fails.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo '&lt;p&gt;&lt;font color="red"&gt;Please try again.&lt;/font&gt;&lt;/p&gt;';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; } // End of the main submitted conditional.</tt><br>
+<tt>&nbsp;&nbsp; // --------- DISPLAY THE FORM ---------</tt>
+<br>
+<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;form action="add_url.php" method="post"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;fieldset&gt;&lt;legend&gt;Fill out the form to submit a URL:&lt;/legend&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;URL:&lt;/b&gt; &lt;input type="text" name="url" size="60" maxlength="60" value="&lt;?php</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; if (isset($_POST['url'])) echo $_POST['url']; ?&gt;" /&gt;&lt;br /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;small&gt;Do NOT include the initial &lt;i&gt;http://&lt;/i&gt;.&lt;/small&gt;&lt;/p&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;URL Name/Title:&lt;/b&gt; &lt;input type="text" name="title" size="60" </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; maxlength="60" value="&lt;?php if (isset($_POST['title'])) echo</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; $_POST['title']; ?&gt;" /&gt;&lt;/p&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Description:&lt;/b&gt; &lt;textarea name="description" cols="40" rows="5"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; &lt;?php if (isset($_POST['description'])) echo</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; $_POST['description']; ?&gt;&lt;/textarea&gt;&lt;/p&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;p&gt;&lt;b&gt;Category/Categories:&lt;/b&gt; &lt;select name="types[]" multiple=</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; "multiple" size="5"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;?php // Create the pull-down menu information.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $query = "SELECT * FROM url_categories ORDER BY category ASC";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; $result = @mysql_query ($query);</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; while ($row = mysql_fetch_array ($result, MYSQL_NUM)) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo "&lt;option value=\"$row[0]\"";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; // Make sticky if necesary.</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; if (isset($_POST['types']) &amp;&amp; (in_array($row[0], $_POST ['types']))) {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo ' selected="selected"';</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; echo "&gt;$row[1]&lt;/option&gt;\n";</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; ?&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/select&gt;&lt;/p&gt; </tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/fieldset&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;input type="hidden" name="submitted" value="TRUE" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;div align="center"&gt;&lt;input type="submit" name="submit" value="Submit" /&gt;&lt;/div&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/form&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;?php mysql_close();</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/footer.html');</tt><br>
+<tt>&nbsp;&nbsp; ?&gt; </tt>
+</dpeccode><br>
+<a name="phd021"></a>
+<br><b>Removing Tags  <br>  </b>  If you want to deny the use of HTML in submitted values, the <tt>strip_tags()</tt> function can be used to remove all HTML and PHP tags.  <br><br>  <b>Unique URLs  <br>  </b>
+  Another alteration you could make to this script would be a check 
+ensuring that a URL is not already in the database. Theoretically, the 
+rows in the <tt>urls</tt> table should all be unique.  <br><br>  <b>Individual Connections  <br>  </b>  The <tt>mysql_insert_id()</tt>
+ function is specific to each individual connection (interaction with a 
+database). For this reason, you need not be concerned with the wrong 
+value being returned even if this script were being run simultaneously 
+by several different users.  <br><br>  <b>Same Function - Different Name  <br>  </b>  The <tt>mysql_insert_id()</tt> function is the PHP equivalent of MySQL's <tt>LAST_insert_ID()</tt> function.  <br><br>  
+<a name="phd022"></a>
+
+<script language="JavaScript">insertAccQuestion('3','phd022.htm',true)</script>
+<noscript>Please download a browser that supports JavaScript.<BR></noscript>
+<a name="phd025"></a>
+<br><dpecw1>
+	
+In this lesson, you learned the steps needed to create <tt>add_url.php</tt>, a complex script that will allow for URLs, URL categories, and URL associations to be added to your database tables.<br>
+In addition, you learned to determine the appropriate fix for errors 
+reported during troubleshooting, specifically during the URL submission 
+process.<br>
+Lastly, you learned of an additional code enhancement that can be added 
+to your script, allowing for a sticky HTML form to be created.
+	
+</dpecw1><br>
+<a name="phe001"></a><br><a name="topic7"></a><h2>Lesson 5. The list() Function</h2><dpecw1>
+
+A content management site can be an effective and engaging experience 
+for the user. However, allowing for the site administrator to enjoy the 
+same ease of use is important as well.<br>
+After completing this lesson, you should be able to:<br>
+<ul>
+	<li>
+Create a PHP script for the administrator to allow for updates and enhancements
+	</li>
+	<li>
+Build an HMTL form with menus and a submit button to allow database interaction
+	</li>
+</ul>
+
+</dpecw1><br>
+<a name="phe002"></a>
+<br><dpecw1>
+
+<b>* Viewing Submitted URLs</b><br>
+The script designed for viewing URLs will have two aspects to it: an 
+upper portion that displays a pull-down menu of available categories and
+ a lower portion that displays all of the links for a particular 
+category. <br>
+The first time a user accesses the page, no URLs are displayed.
+
+</dpecw1><br>
+<a name="phe003"></a>
+<br><dpecw1>
+
+Once a user selects a category and submits the form, the page is 
+displayed again listing the URLs for that category, all while the 
+pull-down menu will still be available. This page will also provide 
+links to future scripts that you will eventually need to add. <br>
+Obviously this is the kind of link you would provide in order to 
+administer a site; the ability to edit a URL would not be a publicly 
+available feature.
+
+</dpecw1><br>
+<a name="phe004"></a>
+<br><dpecw1>
+
+<b>* Step 1</b><br>
+Let's get started by creating a new PHP document in your text editor.<br>
+The <tt>header.html</tt> file is included, which will start output buffering, begin the session, and create the initial part of the HTML layout. <ml_ins_href><ml_data_href>
+
+</ml_data_href></ml_ins_href></dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # view_urls.php</tt><br>
+<tt>&nbsp;&nbsp; // This page displays the URLs listed in the database.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HTML headers.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'View URLs';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; require_once ('./mysql_connect.php');// Connect to the database.</tt><br>
+</dpeccode><br>
+<br><a name="phe004a"></a>
+<br><dpecjs></dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;head&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;meta http-equiv="content-type"</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; content="text/html; charset=iso-8859-1" /&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;title&gt;&lt;?php echo $page_title;?&gt;&lt;/title&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;style type="text/css" media="screen"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; body { background-color: #ffffff; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .content {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; background-color: #f5f5f5;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 10px; padding-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; padding-bottom: 10px; padding-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 10px; margin-right: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; margin-bottom: 10px; margin-left: 10px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:link { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:visited { color: #003366; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; a.navlink:hover { color: #cccccc; text-decoration: none; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; td {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; vertical-align: top;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; .title {</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; font-size: 24px; font-weight: normal; color: #ffffff;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; margin-top: 5px; margin-bottom: 5px; margin-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; padding-top: 5px; padding-bottom: 5px; padding-left: 20px;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; }</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/style&gt; </tt><br>
+<tt>&nbsp;&nbsp; &lt;/head&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;body&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;table width="90%" border="0" cellspacing="10" </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="0" align="center"&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td colspan="2" bgcolor="#003366"&gt;&lt;p class="title"&gt; Content</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp; Management Site&lt;/p&gt;&lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" nowrap="nowrap"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;b&gt;&lt;a href="index.php" class="navlink"&gt;Home&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_urls.php" class="navlink"&gt;View URLs&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_url.php" class="navlink"&gt;Add a URL&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="view_files.php" class="navlink"&gt;View Files&lt;/a&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;a href="add_file.php" class="navlink"&gt;Add a File&lt;/a&gt;&lt;/b&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;/td&gt;</tt><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<tt>&nbsp;&nbsp; &lt;td valign="top" class="content"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;!- Script header.html --&gt;</tt>
+</dpeccode><br><br>
+<a name="phe005"></a>
+<br><dpecw1>
+
+<b>* Step 2</b><br>
+Begin the HTML form. Upon first arriving at the page, you'll want to 
+show a form that is just a pull-down menu and a submit button. Here, 
+we've begun the HTML for the form. Notice that the form uses the <tt>GET</tt> method and is submitted back to this same page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;?php # view_urls.php</tt><br>
+<tt>&nbsp;&nbsp; // This page displays the URLs listed in the database.</tt><br>
+<tt>&nbsp;&nbsp; // Set the page title and include the HTML headers.</tt><br>
+<tt>&nbsp;&nbsp; $page_title = 'View URLs';</tt><br>
+<tt>&nbsp;&nbsp; include ('./includes/header.html');</tt><br>
+<tt>&nbsp;&nbsp; require_once ('./mysql_connect.php');// Connect to the database.</tt><br>
+<tt>&nbsp;&nbsp; // Create a form allowing the user to select a URL category to view.</tt><br>
+<tt>&nbsp;&nbsp; echo '&lt;div align="center"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;form method="get" action="view_urls.php"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;select name="type"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="NULL"&gt;Choose a Category:&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; ';</tt>
+<br>
+</dpeccode><br>
+<a name="phe006"></a>
+<br><dpecw1>
+
+<b>* Step 3</b><br>
+Retrieve all of the available URL categories, adding each to the 
+pull-down menu. This code will retrieve every URL type from the <tt>url_categories</tt> table and use the returned records to create the HTML code for the pull-down menu.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; // Create a form allowing the user to select a URL category to view.</tt><br>
+<tt>&nbsp;&nbsp; echo '&lt;div align="center"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;form method="get" action="view_urls.php"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;select name="type"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;option value="NULL"&gt;Choose a Category:&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; '; </tt><br>
+<tt>&nbsp;&nbsp; // Retrieve and display the available categories.</tt><br>
+<tt>&nbsp;&nbsp; $query = 'SELECT * FROM url_categories ORDER BY category ASC';</tt><br>
+<tt>&nbsp;&nbsp; $result = mysql_query ($query);</tt><br>
+<tt>&nbsp;&nbsp; while ($row = mysql_fetch_array($result, MYSQL_NUM)) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo "&lt;option value=\"$row[0] \"&gt;$row[1]&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; ";</tt>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;}</tt><br>
+</dpeccode><br>
+<a name="phe007"></a>
+<br><dpecw1>
+
+<b>* Step 4</b><br>
+Complete the HTML form.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; // Retrieve and display the available categories.</tt><br>
+<tt>&nbsp;&nbsp; $query = 'SELECT * FROM url_categories ORDER BY category ASC';</tt><br>
+<tt>&nbsp;&nbsp; $result = mysql_query ($query);</tt><br>
+<tt>&nbsp;&nbsp; while ($row = mysql_fetch_array($result, MYSQL_NUM)) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo "&lt;option value=\"$row[0] \"&gt;$row[1]&lt;/option&gt;</tt><br>
+<tt>&nbsp;&nbsp; ";</tt><br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; // Complete the form.</tt><br>
+<tt>&nbsp;&nbsp; echo '&lt;/select&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;input type="submit" name="submit" value="Go!"&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/form&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;/div&gt;</tt><br>
+<tt>&nbsp;&nbsp; ';</tt><br>
+</dpeccode><br>
+<a name="phe008"></a>
+<br><dpecjs><b>* Step 5</b>
+<br>
+Check if a category has been selected and retrieve the information for 
+that category. If a category has already been selected (in which case, 
+it will have been appended to the URL and available through the <tt>$_GET</tt> array), the URLs for that category should be retrieved.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; &lt;/div&gt;</tt><br>
+<tt>&nbsp;&nbsp; ';</tt><br>
+<tt>&nbsp;&nbsp; // Retrieve the URLs for a particular category, if selected.</tt><br>
+<tt>&nbsp;&nbsp; // Make sure the type is an integer.</tt><br>
+<tt>&nbsp;&nbsp; if (isset($_GET['type'])) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $type = (int) $_GET['type'];</tt><br>
+<tt>&nbsp;&nbsp; } else {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $type = 0;</tt><br>
+<tt>&nbsp;&nbsp; }</tt>
+<br>
+<tt>&nbsp;&nbsp; if ($type &gt; 0) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Get the current type name.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $query = "SELECT category FROM url_categories WHERE url_category_id=$type";</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $result = mysql_query ($query);</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; list ($category) = mysql_fetch_array ($result, MYSQL_NUM);</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo "&lt;hr /&gt;&lt;div 
+align=\"center\"&gt;&lt;b&gt;$category Links&lt;/b&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;small&gt;(All links will open in their own window.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recently added links are listed first.)&lt;/small&gt;&lt;/div&gt;\n";</tt><br>
+</dpeccode><br>
+<a name="phe009"></a>
+<br><dpecw1>
+
+The first step is to use typecasting and a conditional to ensure that <tt>$type</tt> is a positive integer before using it in a query. Then retrieve the name of the specific category selected using the <tt>list()</tt> function. This value is displayed as a header for the page.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp; }</tt><br>
+<tt>&nbsp;&nbsp; if ($type &gt; 0) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Get the current type name.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $query = "SELECT category FROM url_categories WHERE url_category_id=$type";</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $result = mysql_query ($query);</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; list ($category) = mysql_fetch_array ($result, MYSQL_NUM);</tt>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo "&lt;hr /&gt;&lt;div 
+align=\"center\"&gt;&lt;b&gt;$category Links&lt;/b&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;small&gt;(All links will open in their own window.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recently added links are listed first.)&lt;/small&gt;&lt;/div&gt;\n";</tt><br>
+</dpeccode><br>
+<a name="phe010"></a>
+<br><dpecw1>
+
+<b>* Step 6</b><br>
+Initialize a <tt>$first</tt> variable and query the database. The <tt>$first</tt>
+ variable will be used for two purposes. First, it will indicate that 
+the HTML table should be started before displaying the first record. 
+Second, it will be used to test whether or not there were any URLs 
+returned by the query. The query itself is a <tt>JOIN</tt> on two tables, using the URL category in a <tt>WHERE</tt> condition.
+
+</dpecw1><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo "&lt;hr /&gt;&lt;div 
+align=\"center\"&gt;&lt;b&gt;$category Links&lt;/b&gt;&lt;br /&gt;</tt><br>
+<tt>&nbsp;&nbsp; &lt;small&gt;(All links will open in their own window.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp; Recently added links are listed first.)&lt;/small&gt;&lt;/div&gt;\n"; </tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $first = TRUE; // Initialize the variable.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Query the database.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $query = "SELECT u.url_id, url, title, description FROM</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; urls AS u, url_associations AS ua WHERE u.url_id = ua.url_id</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AND ua.url_category_id=$type AND ua.approved = 'Y' ORDER</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BY date_submitted DESC";</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $result = mysql_query ($query);</tt>
+<br>
+</dpeccode><br>
+<a name="phe011"></a>
+<br><dpecjs><b>* Step 7</b>
+<br>
+Print out all of the returned records. The <tt>while </tt>loop will return every record retrieved by the query. Within the <tt>while</tt> loop, each record is printed in a three-column table. 
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $result = mysql_query ($query);</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while ($row = mysql_fetch_array ($result, MYSQL_ASSOC)) {</tt>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // If this is the first record, create the table header.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ($first) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ echo '&lt;table border="0" width="100%" cellspacing="3"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="3" align="center"&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td 
+align="right" width="40%"&gt;&lt;font 
+size="+1"&gt;Link&lt;/font&gt;&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td align="left" width="50%"&gt;&lt;font size="+1"&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description&lt;/font&gt;&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td align="center" width="10%"&gt; &lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/tr&gt;';</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ $first = FALSE; // One record has been returned.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } // End of $first IF.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Display each record.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo " &lt;tr&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &lt;td align=\"right\"&gt;&lt;a href=\"http://{$row['url']}\"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ target=\"_new\"&gt;{$row['title']}&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &lt;td align=\"left\"&gt;{$row['description']}&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &lt;td align=\"center\"&gt;&lt;a href=\"edit_url.php?</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ uid={$row['url_id']}\"&gt;edit&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/tr&gt;\n";</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } // End of the while loop.</tt><br>
+</dpeccode><br>
+<a name="phe012"></a>
+<br><dpecjs>The first column is the URL name, printed as a link to the 
+actual URL. The second column is the description. And the third is an 
+edit link, which passes the URL ID to an <tt>edit_url.php</tt> page.
+<br>
+</dpecjs><br><dpeccode>
+<br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $result = mysql_query ($query);</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while ($row = mysql_fetch_array ($result, MYSQL_ASSOC)) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // If this is the first record, create the table header.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ($first) {</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ echo '&lt;table border="0" width="100%" cellspacing="3"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cellpadding="3" align="center"&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td 
+align="right" width="40%"&gt;&lt;font 
+size="+1"&gt;Link&lt;/font&gt;&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td align="left" width="50%"&gt;&lt;font size="+1"&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description&lt;/font&gt;&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td align="center" width="10%"&gt; &lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/tr&gt;';</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ $first = FALSE; // One record has been returned.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } // End of $first IF.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Display each record.</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo " &lt;tr&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &lt;td align=\"right\"&gt;&lt;a href=\"http://{$row['url']}\"</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ target=\"_new\"&gt;{$row['title']}&lt;/a&gt;&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &lt;td align=\"left\"&gt;{$row['description']}&lt;/td&gt;</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ &lt;td align=\"center\"&gt;&lt;a href=\"edit_url.php?</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ uid={$row['url_id']}\"&gt;edit&lt;/a&gt;&lt;/td&gt;</tt>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/tr&gt;\n";</tt><br>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } // End of the while loop.</tt><br>
+</dpeccode><br>
+<a name="phe013"></a>
+<br><dpecjs>Before the first record is displayed, the table and table header will be sent to the browser. This occurs if <tt>$first</tt> is <tt>TRUE</tt>, which it will be the first time that the loop is executed. The variable is then set to <tt>FALSE</tt>, to prevent the table header from </dpecjs></dpecjs></ml_data_href></ml_ins_href></dpecjs></body></html>
