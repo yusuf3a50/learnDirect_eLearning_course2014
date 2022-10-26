@@ -14,3 +14,5 @@
 12. [Extended Topics](certificates/12%20Extended%20Topics.pdf)
 13. [Content Management Example](certificates/13%20Content%20Management%20Example.pdf)
 14. [User Registration Example](certificates/14%20User%20Registration%20Example.pdf)
+
+N.B. The certificates show Surname, Firstname and additionally my surname was different at the time than on 2022
